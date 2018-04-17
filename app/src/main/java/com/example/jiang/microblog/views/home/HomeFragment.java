@@ -47,8 +47,10 @@ public class HomeFragment extends BaseFragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
 
+        //初始化数据
         Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
         microblogList = microblog.getStatuses();
+
         showList(true, false);
         handlerDownPullUpdate();
         return view;
@@ -157,25 +159,15 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-
     @Override
     public void onSuccess(Object object) {
-        Microblog microblog = (Microblog) object;
-        microblogList = microblog.getStatuses();
-//        adapter = new HomeRecyclerAdapter(microblogList, context, true);
-//        recyclerView.setAdapter(adapter);
-//        layoutManager = new GridLayoutManager(context, 1);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        Log.e("onSuccess", "onSuccess");
-
+        Log.e("onSuccess", object.toString());
     }
 
     @Override
     public void onError(String result) {
         Log.e("onError", result);
     }
-
 
 }
 
