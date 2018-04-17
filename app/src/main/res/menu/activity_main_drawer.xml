@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all"
+            android:icon="@drawable/ic_attachment_black"
+            android:title="全部" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_favorite_border"
+            android:title="收藏" />
+        <item
+            android:id="@+id/nav_original"
+            android:icon="@drawable/ic_menu_send"
+            android:title="原创" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="相册" />
+    </group>
+
+    <item android:title="System">
+        <menu>
+            <item
+                android:id="@+id/nav_skin"
+                android:icon="@drawable/ic_android_black"
+                android:title="皮肤" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_setting"
+                android:title="设置" />
+            <item
+                android:id="@+id/nav_switch_account"
+                android:icon="@drawable/ic_change_account_black"
+                android:title="切换账号" />
+            <item
+                android:id="@+id/nav_quit"
+                android:icon="@drawable/ic_quie_black"
+                android:title="退出" />
+        </menu>
+    </item>
+</menu>

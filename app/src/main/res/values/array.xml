@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="title">
+        <item>微博</item>
+        <item>热门 </item>
+        <item>好友</item>
+        <item>互相关注</item>
+    </string-array>
+</resources>
