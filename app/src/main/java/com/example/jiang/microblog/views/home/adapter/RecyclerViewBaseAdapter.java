@@ -15,7 +15,7 @@ import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.IntentKey;
 import com.example.jiang.microblog.base.TimeFormat;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.views.activity.InfomationActivity;
+import com.example.jiang.microblog.views.profile.ProfileActivity;
 import com.example.jiang.microblog.views.activity.ShowPictureActivity;
 import com.example.jiang.microblog.views.comment.CommentActivity;
 import com.google.gson.Gson;
@@ -244,7 +244,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, InfomationActivity.class);
+                    Intent intent = new Intent(context, ProfileActivity.class);
                     intent.putExtra(IntentKey.ACCOUNT_ID, id);
                     context.startActivity(intent);
                 }

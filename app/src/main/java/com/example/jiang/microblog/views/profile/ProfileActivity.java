@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.activity;
+package com.example.jiang.microblog.views.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,15 +20,17 @@ import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.IntentKey;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-import com.example.jiang.microblog.views.activity.adapter.ViewPagerAdapter;
-import com.example.jiang.microblog.views.profile.ProfileFragment;
+import com.example.jiang.microblog.views.profile.adapter.InfoViewPagerAdapter;
+import com.example.jiang.microblog.views.profile.fragment.AlbumFragment;
+import com.example.jiang.microblog.views.profile.fragment.MicroblogFragment;
+import com.example.jiang.microblog.views.profile.fragment.ProfileFragment;
 import com.example.jiang.microblog.widget.GlideRoundTransform;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfomationActivity extends BaseActivity implements MicroblogContract.View {
+public class ProfileActivity extends BaseActivity implements MicroblogContract.View {
 
     private MicroblogContract.Presenter presenter;
 
@@ -36,57 +38,47 @@ public class InfomationActivity extends BaseActivity implements MicroblogContrac
     private FloatingActionButton fab;
     private CollapsingToolbarLayout coll;
     private ImageView background;
-
+    //导航栏标题
+    private List<String> navList;
     //底部导航栏
     private TabLayout tabLayout;
     //页面切换viewPager控件
     private ViewPager viewPager;
-
+    //BaseFragment
     private List<BaseFragment> fragmentList;
-    private ViewPagerAdapter viewPagerAdapter;
+    //PagerAdapter
+    private InfoViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_infomation);
+        setContentView(R.layout.activity_profile);
         initViews();
         initEvents();
+        initTab();
         getRequestInfomation();
+    }
 
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
+    private void initTab() {
+        navList = new ArrayList<>();
+        navList.add("关于");
+        navList.add("微博(123)");
+        navList.add("相册");
         //添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new ProfileFragment());
-        fragmentList.add(new ProfileFragment());
-        fragmentList.add(new ProfileFragment());
+        fragmentList.add(new MicroblogFragment());
+        fragmentList.add(new AlbumFragment());
         //初始化viewpager适配器
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList);
+        viewPagerAdapter = new InfoViewPagerAdapter(getSupportFragmentManager(), fragmentList,navList);
         viewPager.setAdapter(viewPagerAdapter);
-        //设置隐藏和显示之和的fragment总数数
-        viewPager.setOffscreenPageLimit(3);
-
-        //设置固定的
-//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        //设置下划线宽度
-        tabLayout.setSelectedTabIndicatorHeight(1);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE );
+        tabLayout.setSelectedTabIndicatorHeight(2);
         ViewCompat.setElevation(tabLayout, 10);
         tabLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < fragmentList.size(); i++) {
-            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
-            if (itemTab != null && i == 0) {
-                itemTab.setCustomView(R.layout.tabber_home_icon);
-            } else if (itemTab != null && i == 1) {
-                itemTab.setCustomView(R.layout.tabber_message_icon);
-            } else {
-                itemTab.setCustomView(R.layout.tabber_discover_icon);
-            }
-        }
-        tabLayout.getTabAt(0).getCustomView().setSelected(true);
-
     }
+
     /**
      * 请求得到用户信息
      */
@@ -109,6 +101,9 @@ public class InfomationActivity extends BaseActivity implements MicroblogContrac
         coll = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         coll.setTitle(" ");
         background = (ImageView) findViewById(R.id.background);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setOffscreenPageLimit(3);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
     }
 
     /**

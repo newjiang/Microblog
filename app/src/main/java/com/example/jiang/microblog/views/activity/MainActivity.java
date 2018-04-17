@@ -26,8 +26,8 @@ import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
-import com.example.jiang.microblog.views.GoodbyeActivity;
-import com.example.jiang.microblog.views.activity.adapter.ViewPagerAdapter;
+import com.example.jiang.microblog.GoodbyeActivity;
+import com.example.jiang.microblog.views.activity.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.views.discover.DiscoverFragment;
 import com.example.jiang.microblog.views.home.HomeFragment;
 import com.example.jiang.microblog.views.message.MessageFragment;
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
     private TextView homeAccountIntroduction;
 
     private List<BaseFragment> fragmentList;
-    private ViewPagerAdapter viewPagerAdapter;
+    private MainViewPagerAdapter mainViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +121,8 @@ homeAccountIntroduction.setText("认真你就输了");
         fragmentList.add(new MessageFragment());
         fragmentList.add(new DiscoverFragment());
         //初始化viewpager适配器
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList);
-        viewPager.setAdapter(viewPagerAdapter);
+        mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(mainViewPagerAdapter);
         //设置隐藏和显示之和的fragment总数数
         viewPager.setOffscreenPageLimit(3);
     }

@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views;
+package com.example.jiang.microblog;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.ActivityController;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.views.activity.LoginActivity;

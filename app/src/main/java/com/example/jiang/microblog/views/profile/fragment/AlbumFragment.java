@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.profile;
+package com.example.jiang.microblog.views.profile.fragment;
 
 import android.util.Log;
 import android.view.View;
@@ -11,18 +11,18 @@ import com.example.jiang.microblog.mvp.contract.MicroblogContract;
  * Created by jiang on 2018/4/14.
  */
 
-public class ProfileFragment extends BaseFragment implements MicroblogContract.View {
-    private static final String TAG = ProfileFragment.class.getSimpleName();
+public class AlbumFragment extends BaseFragment implements MicroblogContract.View {
+    private static final String TAG = AlbumFragment.class.getSimpleName();
     @Override
     public View initView() {
-        Log.e(TAG, "ProfileFragment...view...init...");
-        View view = View.inflate(context, R.layout.fragment_profile, null);
+        Log.e(TAG, TAG + "...view...init...");
+        View view = View.inflate(context, R.layout.fragment_album, null);
         return view;
     }
     @Override
     public void initData() {
         super.initData();
-        Log.e(TAG, "ProfileFragment...data...init...");
+        Log.e(TAG, TAG + "...data...init...");
     }
     @Override
     public void onSuccess(Object object) {

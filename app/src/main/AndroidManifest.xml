@@ -42,11 +42,11 @@
 
         <activity android:name=".views.activity.ShowPictureActivity" />
         <activity
-            android:name=".views.activity.InfomationActivity"
+            android:name=".views.profile.ProfileActivity"
             android:label="@string/title_activity_infomation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.comment.CommentActivity" />
-        <activity android:name=".views.GoodbyeActivity"></activity>
+        <activity android:name=".GoodbyeActivity"></activity>
     </application>
 
 </manifest>
