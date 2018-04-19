@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.comment;
+package com.example.jiang.microblog.views.comment.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -141,6 +141,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
                 break;
             case R.id.image_comment_send:
                 Toast.makeText(getActivity(), commentEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                dataCallback.setCommentText(commentEditText.getText().toString());
                 commentEditText.setText("");
                 dismiss();
                 break;
@@ -160,4 +161,5 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         dataCallback.setCommentText(commentEditText.getText().toString());
         super.onCancel(dialog);
     }
+
 }

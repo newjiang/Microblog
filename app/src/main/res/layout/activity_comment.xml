@@ -5,32 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.jiang.microblog.views.comment.CommentActivity">
-
-    <include layout="@layout/home_microblog_view"/>
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:elevation="8dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/account_header"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/img_avatar"/>
-
-        <TextView
-            android:id="@+id/tv_comment_fake_button"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="添加评论..."
-            android:textColorHint="#88888888"
-            android:textColor="#212121"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:ellipsize="end"/>
-    </LinearLayout>
+            android:layout_height="match_parent">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="45dp">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/home_microblog_view"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/comment_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+            </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff"
+                android:elevation="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/account_header"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/img_avatar"/>
+
+                <TextView
+                    android:id="@+id/tv_comment_fake_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="添加评论..."
+                    android:textColorHint="#88888888"
+                    android:textColor="#212121"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

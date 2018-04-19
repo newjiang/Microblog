@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +18,14 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.IntentKey;
 import com.example.jiang.microblog.base.TimeFormat;
+import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.views.activity.ShowPictureActivity;
+import com.example.jiang.microblog.views.comment.adapter.CommentAdapter;
+import com.example.jiang.microblog.views.comment.fragment.CommentDialogFragment;
+import com.example.jiang.microblog.views.comment.fragment.DialogFragmentDataCallback;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -36,36 +43,43 @@ import static com.example.jiang.microblog.R.id.microblog_user_name;
 
 public class CommentActivity extends AppCompatActivity implements
         MicroblogContract.View, View.OnClickListener, DialogFragmentDataCallback {
-        //TODO 用户头像
-        private CircleImageView userProfile;
-        //TODO 用户名字
-        private TextView username;
-        //TODO 删除
-        private TextView delete;
-        //TODO 微博文字内容
-        private TextView content;
-        //TODO 微博配图
-        private NineGridImageView picture;
-        //TODO 发布时间
-        private TextView time;
-        //TODO 来源
-        private TextView from;
-        //TODO 点赞数
-        private TextView like;
-        //TODO 转发数
-        private TextView redirect;
-        //TODO 评论数
-        private TextView comment;
-        //TODO 点赞图标
-        private ImageView likeImage;
-        //TODO 转发图标
-        private ImageView redirectImage;
-        //TODO 评论图标
-        private ImageView commentImage;
-        //TODO 评论提示文本
-        private TextView commentTextView;
-        //TODO 该微博内容
-        private Microblog.StatusesBean bean;
+    //TODO 用户头像
+    private CircleImageView userProfile;
+    //TODO 用户名字
+    private TextView username;
+    //TODO 删除
+    private TextView delete;
+    //TODO 微博文字内容
+    private TextView content;
+    //TODO 微博配图
+    private NineGridImageView picture;
+    //TODO 发布时间
+    private TextView time;
+    //TODO 来源
+    private TextView from;
+    //TODO 点赞数
+    private TextView like;
+    //TODO 转发数
+    private TextView redirect;
+    //TODO 评论数
+    private TextView comment;
+    //TODO 点赞图标
+    private ImageView likeImage;
+    //TODO 转发图标
+    private ImageView redirectImage;
+    //TODO 评论图标
+    private ImageView commentImage;
+    //TODO 评论提示文本
+    private TextView commentTextView;
+    //TODO 微博评论的RecyclerView
+    private RecyclerView commentRecyclerview;
+
+    private CommentAdapter adapter;
+
+    //TODO 该微博内容
+    private Microblog.StatusesBean bean;
+    //TODO 该微博评论内容
+    private List<Comment.CommentsBean> comments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +87,12 @@ public class CommentActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_comment);
         Intent intent = getIntent();
         String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
-        Log.e("MicroblogActivity", json);
         Gson gson = new Gson();
         bean = gson.fromJson(json, Microblog.StatusesBean.class);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         initViews();
         initDatas();
     }
@@ -110,6 +122,16 @@ public class CommentActivity extends AppCompatActivity implements
         picture.setAdapter(new NineImageAdapter());
         //TODO 微博配图数据源
         picture.setImagesData(bean.getPic_urls());
+
+        comments = new ArrayList<>();
+        Gson gson = new Gson();
+        Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
+        comments = comment.getComments();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        commentRecyclerview.setLayoutManager(layoutManager);
+        adapter = new CommentAdapter(CommentActivity.this, comments);
+        commentRecyclerview.setAdapter(adapter);
     }
 
     private void initViews() {
@@ -142,6 +164,11 @@ public class CommentActivity extends AppCompatActivity implements
         commentImage = (ImageView) findViewById(R.id.comments_count_iv);
 
         commentTextView.setOnClickListener(this);
+
+        commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
+
+
+
     }
 
     @Override
@@ -163,6 +190,7 @@ public class CommentActivity extends AppCompatActivity implements
 
     @Override
     public void setCommentText(String commentTextTemp) {
+        Log.e("setCommentText", commentTextTemp);
         commentTextView.setText(commentTextTemp);
     }
 
@@ -214,6 +242,7 @@ public class CommentActivity extends AppCompatActivity implements
             return f;
         }
     }
+
     /**
      * 九宫格图片适配器
      */
