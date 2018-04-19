@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.jiang.microblog.views.comment.CommentActivity">
+
+    <include layout="@layout/home_microblog_view"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -13,6 +15,7 @@
         android:elevation="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/account_header"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="10dp"

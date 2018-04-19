@@ -27,9 +27,9 @@ import com.example.jiang.microblog.R;
 public class CommentDialogFragment extends DialogFragment implements View.OnClickListener{
 
     private EditText commentEditText;
-    private ImageView photoButton;
-    private ImageView atButton;
-    private ImageView sendButton;
+    private ImageView albumButton;
+    private ImageView atImage;
+    private ImageView sendCommemt;
     private InputMethodManager inputMethodManager;
     private DialogFragmentDataCallback dataCallback;
 
@@ -59,18 +59,18 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         }
 
         commentEditText = (EditText) mDialog.findViewById(R.id.edit_comment);
-        photoButton = (ImageView) mDialog.findViewById(R.id.image_btn_photo);
-        atButton = (ImageView) mDialog.findViewById(R.id.image_btn_at);
-        sendButton = (ImageView) mDialog.findViewById(R.id.image_btn_comment_send);
+        albumButton = (ImageView) mDialog.findViewById(R.id.image_photo);
+        atImage = (ImageView) mDialog.findViewById(R.id.image_at);
+        sendCommemt = (ImageView) mDialog.findViewById(R.id.image_comment_send);
 
         fillEditText();
         setSoftKeyboard();
 
         commentEditText.addTextChangedListener(mTextWatcher);
-        photoButton.setOnClickListener(this);
-        atButton.setOnClickListener(this);
+        albumButton.setOnClickListener(this);
+        atImage.setOnClickListener(this);
 
-        sendButton.setOnClickListener(this);
+        sendCommemt.setOnClickListener(this);
 
         return mDialog;
     }
@@ -80,8 +80,8 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         commentEditText.setText(dataCallback.getCommentText());
         commentEditText.setSelection(dataCallback.getCommentText().length());
         if (dataCallback.getCommentText().length() == 0) {
-            sendButton.setEnabled(false);
-            sendButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.iconCover));
+            sendCommemt.setEnabled(false);
+            sendCommemt.setColorFilter(ContextCompat.getColor(getActivity(), R.color.iconCover));
         }
     }
 
@@ -90,7 +90,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         commentEditText.setFocusableInTouchMode(true);
         commentEditText.requestFocus();
 
-        //为 commentEditText 设置监听器，在 DialogFragment 绘制完后立即呼出软键盘，呼出成功后即注销
+        //TODO 为commentEditText 设置监听器，在 DialogFragment 绘制完后立即呼出软键盘，呼出成功后即注销
         commentEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -120,12 +120,12 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         @Override
         public void afterTextChanged(Editable s) {
             if (temp.length() > 0) {
-                sendButton.setEnabled(true);
-                sendButton.setClickable(true);
-                sendButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                sendCommemt.setEnabled(true);
+                sendCommemt.setClickable(true);
+                sendCommemt.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
             } else {
-                sendButton.setEnabled(false);
-                sendButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.iconCover));
+                sendCommemt.setEnabled(false);
+                sendCommemt.setColorFilter(ContextCompat.getColor(getActivity(), R.color.iconCover));
             }
         }
     };
@@ -133,13 +133,13 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_btn_photo:
+            case R.id.image_photo:
                 Toast.makeText(getActivity(), "点击了图片", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.image_btn_at:
+            case R.id.image_at:
                 Toast.makeText(getActivity(), "点击了@", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.image_btn_comment_send:
+            case R.id.image_comment_send:
                 Toast.makeText(getActivity(), commentEditText.getText().toString(), Toast.LENGTH_SHORT).show();
                 commentEditText.setText("");
                 dismiss();

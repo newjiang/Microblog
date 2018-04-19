@@ -20,11 +20,15 @@
             android:title="相册" />
     </group>
 
-    <item android:title="System">
+    <item android:title="系统中心">
         <menu>
             <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_about_black"
+                android:title="关于" />
+            <item
                 android:id="@+id/nav_skin"
-                android:icon="@drawable/ic_android_black"
+                android:icon="@drawable/ic_widgets_black"
                 android:title="皮肤" />
             <item
                 android:id="@+id/nav_setting"

@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.activity;
+package com.example.jiang.microblog.views.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,8 @@ import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.GoodbyeActivity;
-import com.example.jiang.microblog.views.activity.adapter.MainViewPagerAdapter;
+import com.example.jiang.microblog.views.main.adapter.MainViewPagerAdapter;
+import com.example.jiang.microblog.views.compose.ComposeActivity;
 import com.example.jiang.microblog.views.discover.DiscoverFragment;
 import com.example.jiang.microblog.views.home.HomeFragment;
 import com.example.jiang.microblog.views.message.MessageFragment;
@@ -42,29 +43,29 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
 
     private MicroblogContract.Presenter presenter;
 
-    //发布微博按钮
+    //TODO　发布微博按钮
     private CircleImageView composeMicroblog;
-    //信息导航栏
+    //TODO　信息导航栏
     private NavigationView navigationView;
-    //旋转效果
+    //TODO　旋转效果
     private ActionBarDrawerToggle toggle;
-    //底部导航栏
+    //TODO　底部导航栏
     private TabLayout tabLayout;
-    //页面切换viewPager控件
+    //TODO　页面切换viewPager控件
     private ViewPager viewPager;
-    //抽屉侧滑栏
+    //TODO　抽屉侧滑栏
     private DrawerLayout drawer;
-    //Toolbar
+    //TODO　Toolbar
     private Toolbar toolbar;
-    //下拉框
+    //TODO　下拉框
     private Spinner spinner;
-    //导航界面头部
+    //TODO　导航界面头部
     private View headerView;
-    //用户头像
+    //TODO　用户头像
     private CircleImageView homeAccountIcon;
-    //用户呢称
+    //TODO　用户呢称
     private TextView homeAccountName;
-    //用户简介
+    //TODO　用户简介
     private TextView homeAccountIntroduction;
 
     private List<BaseFragment> fragmentList;
@@ -78,8 +79,8 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         initEvents();
         initTabs();
         presenter = new MicroblogPresenter(this);
-        //请求获取用户信息
-        //presenter.getProfile(token.getUid(),token.getToken());
+        //TODO　请求获取用户信息
+        //TODO　presenter.getProfile(token.getUid(),token.getToken());
 
     }
 
@@ -109,21 +110,22 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         homeAccountIcon = (CircleImageView) headerView.findViewById(R.id.home_account_icon);
         homeAccountName = (TextView) headerView.findViewById(R.id.home_account_name);
         homeAccountIntroduction = (TextView) headerView.findViewById(R.id.home_account_introduction);
-//设置用户信息
-Glide.with(MainActivity.this).load("http://wx4.sinaimg.cn/thumbnail/94a4cd03gy1fnib1yur6xj20hs0hsjvb.jpg").into(homeAccountIcon);
-//homeAccountIcon.setImageResource(R.drawable.ic_android_black);
-homeAccountName.setText("new新健");
-homeAccountIntroduction.setText("认真你就输了");
-
-        //添加fragment
+/*－－－－－－－－－－－－－－－－－－－－－－－－*/
+        //TODO　设置用户信息
+        Glide.with(MainActivity.this).load("http://TODO　wx4.sinaimg.cn/thumbnail/94a4cd03gy1fnib1yur6xj20hs0hsjvb.jpg").into(homeAccountIcon);
+        //TODO　homeAccountIcon.setImageResource(R.drawable.ic_android_black);
+        homeAccountName.setText("new新健");
+        homeAccountIntroduction.setText("认真你就输了");
+/*－－－－－－－－－－－－－－－－－－－－－－－－*/
+        //TODO　添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
         fragmentList.add(new MessageFragment());
         fragmentList.add(new DiscoverFragment());
-        //初始化viewpager适配器
+        //TODO　初始化viewpager适配器
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(mainViewPagerAdapter);
-        //设置隐藏和显示之和的fragment总数数
+        //TODO　设置隐藏和显示之和的fragment总数数
         viewPager.setOffscreenPageLimit(3);
     }
 
@@ -133,14 +135,15 @@ homeAccountIntroduction.setText("认真你就输了");
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        //下拉框事件
+        //TODO　下拉框事件
         spinnerEvent();
-        //viewPager滑动监听事件
+        //TODO　viewPager滑动监听事件
         viewPagerEvent();
         composeMicroblog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "发发发", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -152,7 +155,7 @@ homeAccountIntroduction.setText("认真你就输了");
         String[] mItems = getResources().getStringArray(R.array.title);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_style, mItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
+        //TODO　绑定 Adapter到控件
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -200,22 +203,24 @@ homeAccountIntroduction.setText("认真你就输了");
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.nav_all) {
+        if (id == R.id.nav_all) {//TODO　全部
             Toast.makeText(this, "全部", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_gallery) {//TODO　相册
             Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_favorite) {
+        } else if (id == R.id.nav_favorite) {//TODO　收藏
             Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_original) {
+        } else if (id == R.id.nav_original) {//TODO　原创
             Toast.makeText(this, "原创", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_skin) {
+        } else if (id == R.id.nav_about) {//TODO　关于
+            Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_skin) {//TODO　皮肤
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_setting) {
+        } else if (id == R.id.nav_setting) {//TODO　设置
             Toast.makeText(this, "设置", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_switch_account) {
+        } else if (id == R.id.nav_switch_account) {//TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
-        }else if (id == R.id.nav_quit) {
+        }else if (id == R.id.nav_quit) {//TODO　退出
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

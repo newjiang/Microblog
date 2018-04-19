@@ -23,7 +23,7 @@ public class App extends Application {
         super.onCreate();
         this.context = getApplicationContext();
         LitePalApplication.initialize(context);
-        //获取token
+        //TODO 获取token
         token = AccessTokenKeeper.readAccessToken(context);
     }
     public static Context getContext() {

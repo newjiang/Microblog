@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.activity.adapter;
+package com.example.jiang.microblog.views.main.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activity.MainActivity"
+            android:name=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.activity.LoginActivity" />
         <!--
@@ -46,7 +46,8 @@
             android:label="@string/title_activity_infomation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.comment.CommentActivity" />
-        <activity android:name=".GoodbyeActivity"></activity>
+        <activity android:name=".GoodbyeActivity" />
+        <activity android:name=".views.compose.ComposeActivity"></activity>
     </application>
 
 </manifest>

@@ -12,12 +12,13 @@ import android.view.View;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.json.Down;
+import com.example.jiang.microblog.json.MicroblogJson;
+import com.example.jiang.microblog.json.Up;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-import com.example.jiang.microblog.test.MicroblogJson;
 import com.example.jiang.microblog.views.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.views.home.adapter.RecyclerViewBaseAdapter;
 import com.google.gson.Gson;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,6 @@ import java.util.List;
  */
 
 public class HomeFragment extends BaseFragment {
-
-    private Oauth2AccessToken token;
 
     private MicroblogContract.Presenter presenter;
 
@@ -40,6 +39,8 @@ public class HomeFragment extends BaseFragment {
 
     List<Microblog.StatusesBean> microblogList = new ArrayList<>();
 
+    int down = 1;
+    int up = 1;
 
     @Override
     public View initView() {
@@ -66,17 +67,14 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //在这里面去执行刷新数据的操作
-                /**
-                 * 当我们在顶部,下拉的时候 ,这个方法就会被出发
-                 * 但是,这个方法是MainThread是主线程,不可以执行耗时操作。
-                 * 一般来说,我们去请求数据在开一个线程去获取
-                 * //这里面演示的话,我直接添加一条数据
-                 */
+
                 //添加数据
-                Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                List<Microblog.StatusesBean> statuses = microblog.getStatuses();
-                microblogList.add(0, statuses.get(1));
+                Microblog.StatusesBean microblog
+                        = new Gson().fromJson(Down.JSON, Microblog.StatusesBean.class);
+                microblog.setText("下下下下下下下下下下 NO." + down);
+                //TODO 添加的条数
+                down++;
+                microblogList.add(0, microblog);
                 //更新UI
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -85,7 +83,7 @@ public class HomeFragment extends BaseFragment {
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                     }
-                }, 3000);
+                }, 2000);
             }
         });
     }
@@ -127,11 +125,12 @@ public class HomeFragment extends BaseFragment {
                         @Override
                         public void run() {
 
-                            Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                            List<Microblog.StatusesBean> statuses = microblog.getStatuses();
-                            for (Microblog.StatusesBean s : statuses) {
-                                microblogList.add(s);
-                            }
+                            Microblog.StatusesBean microblog
+                                    = new Gson().fromJson(Up.JSON, Microblog.StatusesBean.class);
+                            microblog.setText("上上上上上上上上上上 NO." + up);
+                            //TODO 添加的条数
+                            up++;
+                            microblogList.add(microblog);
                             //这里要做两件事,一件是让刷新停止,另外一件则是要更新列表
                             adapter.notifyDataSetChanged();
 

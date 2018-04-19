@@ -156,5 +156,6 @@
     <color name="background_my_material_grey">#ededed</color>
     <color name="iconCover">#cc979797</color>
     <color name="iconCoverDark">#cc393939</color>
+    <color name="iconTransparent">#00000000</color>
 
 </resources>

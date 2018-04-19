@@ -19,6 +19,7 @@ import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.IntentKey;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.views.profile.adapter.InfoViewPagerAdapter;
 import com.example.jiang.microblog.views.profile.fragment.AlbumFragment;
@@ -38,15 +39,15 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     private FloatingActionButton fab;
     private CollapsingToolbarLayout coll;
     private ImageView background;
-    //导航栏标题
+    //TODO 导航栏标题
     private List<String> navList;
-    //底部导航栏
+    //TODO 底部导航栏
     private TabLayout tabLayout;
-    //页面切换viewPager控件
+    //TODO 页面切换viewPager控件
     private ViewPager viewPager;
-    //BaseFragment
+    //TODO BaseFragment
     private List<BaseFragment> fragmentList;
-    //PagerAdapter
+    //TODO PagerAdapter
     private InfoViewPagerAdapter viewPagerAdapter;
 
     @Override
@@ -65,12 +66,12 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         navList.add("关于");
         navList.add("微博(123)");
         navList.add("相册");
-        //添加fragment
+        //TODO 添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new ProfileFragment());
         fragmentList.add(new MicroblogFragment());
         fragmentList.add(new AlbumFragment());
-        //初始化viewpager适配器
+        //TODO 初始化viewpager适配器
         viewPagerAdapter = new InfoViewPagerAdapter(getSupportFragmentManager(), fragmentList,navList);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE );
@@ -85,12 +86,13 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     private void getRequestInfomation() {
         Intent intent = getIntent();
         long id = intent.getLongExtra(IntentKey.ACCOUNT_ID, 0);
-//        presenter = new MicroblogPresenter(this);
-//        presenter.getProfile(String.valueOf(id), App.getToken().getToken());
-
-        coll.setTitle("new新健");
-        Glide.with(this).load(R.mipmap.ic_launcher).transform(new GlideRoundTransform(this, 50)).into(fab);
-        Glide.with(this).load("http://ww1.sinaimg.cn/crop.0.0.640.640.640/9d44112bjw1f1xl1c10tuj20hs0hs0tw.jpg").into(background);
+        //TODO presenter = new MicroblogPresenter(this);
+        //TODO presenter.getProfile(String.valueOf(id), App.getToken().getToken());
+        User user = new Gson().fromJson(UserJson.JSON, User.class);
+        coll.setTitle(user.getName());
+        Glide.with(this).load(user.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
+        Glide.with(this).load(user.getCover_image_phone()
+        ).into(background);
     }
     /**
      * 初始化控件
@@ -133,9 +135,11 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         String s = new Gson().toJson(user);
         Log.e("onSuccess", s);
         coll.setTitle(user.getName());
-//        Glide.with(this).load(user.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
-//        Glide.with(this).load(user.getCover_image_phone()).into(background);
+        //TODO Glide.with(this).load(user.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
+        //TODO Glide.with(this).load(user.getCover_image_phone()).into(background);
         coll.setTitle(user.getName());
+
+
         Glide.with(this).load(R.mipmap.ic_launcher).transform(new GlideRoundTransform(this, 50)).into(fab);
         Glide.with(this).load(R.drawable.icon_compose).into(background);
     }

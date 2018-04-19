@@ -1,6 +1,7 @@
 package com.example.jiang.microblog;
 
 import com.example.jiang.microblog.base.TimeFormat;
+import com.example.jiang.microblog.json.Up;
 
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
     @Test
-    public void test(){
+    public void testTime(){
         Date d = new Date("Sun Apr 15 19:35:46 +0800 2011");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
         String f = TimeFormat.format(d);
@@ -31,4 +32,23 @@ public class ExampleUnitTest {
             System.out.println(f);
         }
     }
+
+    @Test
+    public void testJson() {
+        //TODO 微博
+//        System.out.println(MicroblogJson.JSON);
+        //TODO 评论
+//        System.out.println("微博"+CommentJson.JSON);
+       //TODO 用户
+//        System.out.println("用户" + UserJson.JSON);
+
+//        User user = new Gson().fromJson(UserJson.JSON, User.class);
+
+        System.out.println(Up.JSON);
+
+//        Microblog.StatusesBean microblog = new Gson().fromJson(Down.JSON, Microblog.StatusesBean.class);
+//        System.out.println(microblog.toString());
+    }
+
+
 }

@@ -16,12 +16,12 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
     private Context context;
 
-    //普通的条目类型
+    //TODO 普通的条目类型
     public static final int TYPE_NORMAL = 0;
-    //加载更多
+    //TODO 加载更多
     public static final int TYPE_LOADER_MORE = 1;
 
-    private OnRefreshListener mUpPullRefreshListener;
+    private OnRefreshListener refreshListener;
 
     public ListViewAdapter(Context context, List<Microblog.StatusesBean> data) {
         super(context,data);
@@ -44,12 +44,12 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
     @Override
     protected View getSubView(ViewGroup parent, int viewType) {
         View view;
-        //根据类型来创建view
+        //TODO 根据类型来创建view
         if (viewType == TYPE_NORMAL) {
-            //
+            //TODO 加载微博内容
             view = View.inflate(parent.getContext(), R.layout.home_microblog_view, null);
         } else {
-            //这个是加载更多的
+            //TODO 这个是加载更多的
             view = View.inflate(parent.getContext(), R.layout.item_list_loader_more, null);
         }
 
@@ -67,7 +67,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
-            //在这里设置数据
+            //TODO 在这里设置数据
             ((InnerHolder) holder).setData(mData.get(position), position);
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
             ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
@@ -80,7 +80,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
     public int getItemViewType(int position) {
 
         if (position == getItemCount() - 1) {
-            //最后一个则返回加载更多、
+            //TODO 最后一个则返回加载更多
             return TYPE_LOADER_MORE;
         }
 
@@ -91,10 +91,10 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
      * 设置刷的监听的接口
      */
     public void setOnRefreshListener(OnRefreshListener listener) {
-        this.mUpPullRefreshListener = listener;
+        this.refreshListener = listener;
     }
 
-    //定义接口
+    //TODO 定义接口
     public interface OnRefreshListener {
         void onUpPullRefresh(LoaderMoreHolder loaderMoreHolder);
     }
@@ -105,19 +105,19 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         public static final int LOADER_STATE_RELOAD = 1;
         public static final int LOADER_STATE_NORMAL = 2;
 
-        private LinearLayout mLading;
+        private LinearLayout linearLayout;
         private TextView mReLoad;
 
         public LoaderMoreHolder(View itemView) {
             super(itemView);
 
-            mLading = (LinearLayout) itemView.findViewById(R.id.loading);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.loading);
             mReLoad = (TextView) itemView.findViewById(R.id.reload);
 
             mReLoad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //这里面要去触发加载数据
+                    //TODO 这里面要去触发加载数据
                     update(LOADER_STATE_LOADING);
                 }
             });
@@ -126,14 +126,14 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
         public void update(int state) {
 
-            //重置控件的状态
-            mLading.setVisibility(View.GONE);
+            //TODO 重置控件的状态
+            linearLayout.setVisibility(View.GONE);
             mReLoad.setVisibility(View.GONE);
 
             switch (state) {
                 case LOADER_STATE_LOADING:
-                    mLading.setVisibility(View.VISIBLE);
-                    //触发加载数据
+                    linearLayout.setVisibility(View.VISIBLE);
+                    //TODO 触发加载数据
                     startLoaderMore();
                     break;
 
@@ -142,15 +142,15 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
                     break;
 
                 case LOADER_STATE_NORMAL:
-                    mLading.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.GONE);
                     mReLoad.setVisibility(View.GONE);
                     break;
             }
         }
 
         private void startLoaderMore() {
-            if (mUpPullRefreshListener != null) {
-                mUpPullRefreshListener.onUpPullRefresh(this);
+            if (refreshListener != null) {
+                refreshListener.onUpPullRefresh(this);
             }
         }
     }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_compose"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.jiang.microblog.views.compose.ComposeActivity">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="10dp"
+        android:gravity="top|left"
+        android:hint="说点什么..."
+        android:textColor="#AAAAAA"
+        android:background="@null"/>
+
+    <GridView
+        android:id="@+id/gw"
+        android:numColumns="5"
+        android:columnWidth="66dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom">
+        <ImageView
+            android:id="@+id/tupian"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_photo"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+
+        <ImageView
+            android:id="@+id/atpian"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tupian"
+            android:padding="2dp"
+            android:src="@drawable/ic_at"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+
+        <ImageView
+            android:id="@+id/fasong"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_send"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+    </RelativeLayout>
+</LinearLayout>

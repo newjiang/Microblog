@@ -14,7 +14,7 @@ import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
-import com.example.jiang.microblog.test.MicroblogJson;
+import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.views.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.views.home.adapter.RecyclerViewBaseAdapter;
 import com.google.gson.Gson;

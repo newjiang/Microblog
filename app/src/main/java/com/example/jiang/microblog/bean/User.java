@@ -511,9 +511,6 @@ public class User extends DataSupport implements Serializable{
     }
 
     public static class InsecurityBean {
-        /**
-         * sexual_content : false
-         */
 
         private boolean sexual_content;
 
@@ -527,51 +524,11 @@ public class User extends DataSupport implements Serializable{
     }
 
     public static class StatusBean {
-        /**
-         * created_at : Fri Jan 05 10:03:43 +0800 2018
-         * id : 4192770396306931
-         * mid : 4192770396306931
-         * idstr : 4192770396306931
-         * can_edit : false
-         * text : 这是一条来自新健微博的分享！
-         * textLength : 28
-         * source_allowclick : 0
-         * source_type : 1
-         * source : <a href="http://app.weibo.com/t/feed/1YBe9V" rel="nofollow">未通过审核应用</a>
-         * favorited : false
-         * truncated : false
-         * in_reply_to_status_id :
-         * in_reply_to_user_id :
-         * in_reply_to_screen_name :
-         * pic_urls : []
-         * geo : null
-         * is_paid : false
-         * mblog_vip_type : 0
-         * reposts_count : 0
-         * comments_count : 0
-         * attitudes_count : 0
-         * pending_approval_count : 0
-         * isLongText : false
-         * mlevel : 0
-         * visible : {"type":0,"list_id":0}
-         * biz_feature : 0
-         * hasActionTypeCard : 0
-         * darwin_tags : []
-         * hot_weibo_tags : []
-         * text_tag_tips : []
-         * userType : 0
-         * more_info_type : 0
-         * positive_recom_flag : 0
-         * content_auth : 0
-         * gif_ids :
-         * is_show_bulletin : 2
-         * comment_manage_info : {"comment_permission_type":-1,"approval_comment_type":0}
-         */
 
         private String created_at;
         private long id;
-        private String mid;
         private String idstr;
+        private String mid;
         private boolean can_edit;
         private String text;
         private int textLength;
@@ -583,6 +540,9 @@ public class User extends DataSupport implements Serializable{
         private String in_reply_to_status_id;
         private String in_reply_to_user_id;
         private String in_reply_to_screen_name;
+        private String thumbnail_pic;
+        private String bmiddle_pic;
+        private String original_pic;
         private Object geo;
         private boolean is_paid;
         private int mblog_vip_type;
@@ -593,7 +553,7 @@ public class User extends DataSupport implements Serializable{
         private boolean isLongText;
         private int mlevel;
         private VisibleBean visible;
-        private int biz_feature;
+        private long biz_feature;
         private int hasActionTypeCard;
         private int userType;
         private int more_info_type;
@@ -602,7 +562,8 @@ public class User extends DataSupport implements Serializable{
         private String gif_ids;
         private int is_show_bulletin;
         private CommentManageInfoBean comment_manage_info;
-        private List<?> pic_urls;
+        private List<PicUrlsBean> pic_urls;
+        private List<AnnotationsBean> annotations;
         private List<?> darwin_tags;
         private List<?> hot_weibo_tags;
         private List<?> text_tag_tips;
@@ -623,20 +584,20 @@ public class User extends DataSupport implements Serializable{
             this.id = id;
         }
 
-        public String getMid() {
-            return mid;
-        }
-
-        public void setMid(String mid) {
-            this.mid = mid;
-        }
-
         public String getIdstr() {
             return idstr;
         }
 
         public void setIdstr(String idstr) {
             this.idstr = idstr;
+        }
+
+        public String getMid() {
+            return mid;
+        }
+
+        public void setMid(String mid) {
+            this.mid = mid;
         }
 
         public boolean isCan_edit() {
@@ -727,6 +688,30 @@ public class User extends DataSupport implements Serializable{
             this.in_reply_to_screen_name = in_reply_to_screen_name;
         }
 
+        public String getThumbnail_pic() {
+            return thumbnail_pic;
+        }
+
+        public void setThumbnail_pic(String thumbnail_pic) {
+            this.thumbnail_pic = thumbnail_pic;
+        }
+
+        public String getBmiddle_pic() {
+            return bmiddle_pic;
+        }
+
+        public void setBmiddle_pic(String bmiddle_pic) {
+            this.bmiddle_pic = bmiddle_pic;
+        }
+
+        public String getOriginal_pic() {
+            return original_pic;
+        }
+
+        public void setOriginal_pic(String original_pic) {
+            this.original_pic = original_pic;
+        }
+
         public Object getGeo() {
             return geo;
         }
@@ -807,11 +792,11 @@ public class User extends DataSupport implements Serializable{
             this.visible = visible;
         }
 
-        public int getBiz_feature() {
+        public long getBiz_feature() {
             return biz_feature;
         }
 
-        public void setBiz_feature(int biz_feature) {
+        public void setBiz_feature(long biz_feature) {
             this.biz_feature = biz_feature;
         }
 
@@ -879,12 +864,20 @@ public class User extends DataSupport implements Serializable{
             this.comment_manage_info = comment_manage_info;
         }
 
-        public List<?> getPic_urls() {
+        public List<PicUrlsBean> getPic_urls() {
             return pic_urls;
         }
 
-        public void setPic_urls(List<?> pic_urls) {
+        public void setPic_urls(List<PicUrlsBean> pic_urls) {
             this.pic_urls = pic_urls;
+        }
+
+        public List<AnnotationsBean> getAnnotations() {
+            return annotations;
+        }
+
+        public void setAnnotations(List<AnnotationsBean> annotations) {
+            this.annotations = annotations;
         }
 
         public List<?> getDarwin_tags() {
@@ -912,10 +905,6 @@ public class User extends DataSupport implements Serializable{
         }
 
         public static class VisibleBean {
-            /**
-             * type : 0
-             * list_id : 0
-             */
 
             private int type;
             private int list_id;
@@ -938,10 +927,6 @@ public class User extends DataSupport implements Serializable{
         }
 
         public static class CommentManageInfoBean {
-            /**
-             * comment_permission_type : -1
-             * approval_comment_type : 0
-             */
 
             private int comment_permission_type;
             private int approval_comment_type;
@@ -960,6 +945,32 @@ public class User extends DataSupport implements Serializable{
 
             public void setApproval_comment_type(int approval_comment_type) {
                 this.approval_comment_type = approval_comment_type;
+            }
+        }
+
+        public static class PicUrlsBean {
+
+            private String thumbnail_pic;
+
+            public String getThumbnail_pic() {
+                return thumbnail_pic;
+            }
+
+            public void setThumbnail_pic(String thumbnail_pic) {
+                this.thumbnail_pic = thumbnail_pic;
+            }
+        }
+
+        public static class AnnotationsBean {
+
+            private boolean mapi_request;
+
+            public boolean isMapi_request() {
+                return mapi_request;
+            }
+
+            public void setMapi_request(boolean mapi_request) {
+                this.mapi_request = mapi_request;
             }
         }
     }

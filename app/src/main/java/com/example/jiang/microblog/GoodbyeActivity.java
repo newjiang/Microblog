@@ -44,7 +44,7 @@ public class GoodbyeActivity extends AppCompatActivity {
                    startActivity(new Intent(GoodbyeActivity.this, LoginActivity.class));
                 }
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override

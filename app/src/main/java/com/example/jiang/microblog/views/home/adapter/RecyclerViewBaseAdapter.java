@@ -15,9 +15,9 @@ import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.IntentKey;
 import com.example.jiang.microblog.base.TimeFormat;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.views.profile.ProfileActivity;
 import com.example.jiang.microblog.views.activity.ShowPictureActivity;
 import com.example.jiang.microblog.views.comment.CommentActivity;
+import com.example.jiang.microblog.views.profile.ProfileActivity;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -65,7 +65,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        //在这里设置数据
+        //TODO 在这里设置数据
         ((InnerHolder) holder).setData(mData.get(position), position);
     }
 
@@ -84,7 +84,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        //设置一个监听,其实,就是要设置一个接口,一个回调的接口
+        //TODO 设置一个监听,其实,就是要设置一个接口,一个回调的接口
         this.mOnItemClickListener = listener;
     }
 
@@ -103,63 +103,63 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
-        //用户头像
+        //TODO 用户头像
         CircleImageView userProfile;
-        //用户名字
+        //TODO 用户名字
         TextView username;
-        //删除
+        //TODO 删除
         TextView delete;
-        //微博文字内容
+        //TODO 微博文字内容
         TextView content;
-        //微博配图
+        //TODO 微博配图
         NineGridImageView picture;
-        //发布时间
+        //TODO 发布时间
         TextView time;
-        //来源
+        //TODO 来源
         TextView from;
-        //点赞数
+        //TODO 点赞数
         TextView like;
-        //转发数
+        //TODO 转发数
         TextView redirect;
-        //评论数
+        //TODO 评论数
         TextView comment;
-        //点赞图标
+        //TODO 点赞图标
         ImageView likeImage;
-        //转发图标
+        //TODO 转发图标
         ImageView redirectImage;
-        //评论图标
+        //TODO 评论图标
         ImageView commentImage;
 
-        //位置
+        //TODO 位置
         private int mPosition;
 
         public InnerHolder(View itemView) {
             super(itemView);
-            //用户头像
+            //TODO 用户头像
             userProfile = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
-            //用户名字
+            //TODO 用户名字
             username = (TextView) itemView.findViewById(microblog_user_name);
-            //删除
+            //TODO 删除
             delete = (TextView) itemView.findViewById(R.id.microblog_content_delete);
-            //微博文字内容
+            //TODO 微博文字内容
             content = (TextView) itemView.findViewById(R.id.microblog_content);
-            //微博配图
+            //TODO 微博配图
             picture = (NineGridImageView) itemView.findViewById(R.id.microblog_picture);
-            //发布时间
+            //TODO 发布时间
             time = (TextView) itemView.findViewById(R.id.microblog_time);
-            //来源
+            //TODO 来源
             from = (TextView) itemView.findViewById(R.id.microblog_from);
-            //点赞数
+            //TODO 点赞数
             like = (TextView) itemView.findViewById(R.id.attitudes_count);
-            //转发数
+            //TODO 转发数
             redirect = (TextView) itemView.findViewById(R.id.reposts_count);
-            //评论数
+            //TODO 评论数
             comment = (TextView) itemView.findViewById(R.id.comments_count);
-            //点赞图标
+            //TODO 点赞图标
             likeImage = (ImageView) itemView.findViewById(R.id.attitudes_count_iv);
-            //转发图标
+            //TODO 转发图标
             redirectImage = (ImageView) itemView.findViewById(R.id.reposts_count_iv);
-            //评论图标
+            //TODO 评论图标
             commentImage = (ImageView) itemView.findViewById(R.id.comments_count_iv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -180,33 +180,33 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         public void setData(final Microblog.StatusesBean bean, int position) {
 
             this.mPosition = position;
-            //开始设置数据
-            //用户头像
+            //TODO 开始设置数据
+            //TODO 用户头像
             Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
-            //用户名字
+            //TODO 用户名字
             username.setText(bean.getUser().getName());
-            //微博文字内容
+            //TODO 微博文字内容
             content.setText(bean.getText());
-            //是否删除
+            //TODO 是否删除
             delete.setText("");
-            //微博内容
+            //TODO 微博内容
             content.setText(bean.getText());
-            //发布时间
-            time.setText(getTimeFormat(bean.getCreated_at())); //holder.time.setText(bean.getCreated_at())
-            //来源
-            from.setText(getFormFormat(bean.getSource())); //holder.from.setText(bean.getSource());
-            //点赞数
+            //TODO 发布时间
+            time.setText(getTimeFormat(bean.getCreated_at())); //TODO holder.time.setText(bean.getCreated_at())
+            //TODO 来源
+            from.setText(getFormFormat(bean.getSource())); //TODO holder.from.setText(bean.getSource());
+            //TODO 点赞数
             like.setText(String.valueOf(bean.getAttitudes_count()));
-            //转发数
+            //TODO 转发数
             redirect.setText(String.valueOf(bean.getReposts_count()));
-            //评论数
+            //TODO 评论数
             comment.setText(String.valueOf(bean.getComments_count()));
-            //微博配图
+            //TODO 微博配图
             picture.setAdapter(new RecyclerViewBaseAdapter.NineImageAdapter());
-            //微博配图数据源
+            //TODO 微博配图数据源
             picture.setImagesData(mData.get(position).getPic_urls());
 
-            //设置进入微博详情点击事件,根据微博内容
+            //TODO 设置进入微博详情点击事件,根据微博内容
             setItemOnClickListener(username, bean);
             setItemOnClickListener(content, bean);
             setItemOnClickListener(time, bean);
@@ -214,12 +214,12 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             setItemOnClickListener(comment, bean);
             setItemOnClickListener(commentImage, bean);
 
-            //设置头像点击事件,根据用户id
+            //TODO 设置头像点击事件,根据用户id
             setProfileOnClickListener(userProfile, bean.getUser().getId());
         }
 
         /**
-         * 设置控件的点击事件
+         * 设置控件的点击事件(进入微博详情，包括评论)
          * @param view
          * @param statuses
          */
@@ -228,7 +228,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, CommentActivity.class);
-                    //通过json传递过去
+                    //TODO 通过json传递过去
                     intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
                     context.startActivity(intent);
                 }
@@ -273,10 +273,10 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-            //返回真正时间 如2018-1-1 01：01：01
+            //TODO 返回真正时间 如2018-1-1 01：01：01
             return format.format(d);
         } else {
-            //返回xx秒前，xx分钟前，xx小时前，昨天
+            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
             return f;
         }
     }
@@ -287,8 +287,11 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     public class NineImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.PicUrlsBeanX> {
         @Override
         protected void onDisplayImage(Context context, ImageView imageView, Microblog.StatusesBean.PicUrlsBeanX picUrlsBeanX) {
-            Glide.with(context).load(picUrlsBeanX.getThumbnail_pic()).into(imageView);
+            //FIXME 主页显示thumbnail级别的图改为bmiddle级别
+            String bmiddle_pic = picUrlsBeanX.getThumbnail_pic().replaceAll("thumbnail", "bmiddle");
+            Glide.with(context).load(bmiddle_pic).into(imageView);
         }
+
 
         @Override
         protected boolean onItemImageLongClick(Context context, ImageView imageView, int index, List<Microblog.StatusesBean.PicUrlsBeanX> list) {
@@ -307,4 +310,5 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             context.startActivity(intent);
         }
     }
+
 }

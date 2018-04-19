@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.Constants;
+import com.example.jiang.microblog.views.main.MainActivity;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -58,9 +59,9 @@ public class LoginActivity extends BaseActivity {
 
                     if (mAccessToken.isSessionValid()) {
 
-                        // 保存 Token 到 SharedPreferences
+                        //TODO  保存 Token 到 SharedPreferences
                         AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
-                        //启动主页面
+                        //TODO 启动主页面
                         startMainActivity();
 
                         Toast.makeText(LoginActivity.this,

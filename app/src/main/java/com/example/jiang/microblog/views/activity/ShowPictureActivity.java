@@ -22,17 +22,17 @@ import java.util.ArrayList;
 public class ShowPictureActivity extends BaseActivity {
 
     private ViewPager viewPager;
-    //显示的图片源
+    //TODO 显示的图片源
     private ImageView[] imageViews;
-    //图片源的集合
+    //TODO 图片源的集合
     private ArrayList<String> picList;
-    //是否第一次打开
+    //TODO 是否第一次打开
     private boolean isFirst = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isFirst = true;
-        //背景设置为黑色
+        //TODO 背景设置为黑色
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |

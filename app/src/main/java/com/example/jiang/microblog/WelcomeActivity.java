@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.views.activity.LoginActivity;
-import com.example.jiang.microblog.views.activity.MainActivity;
+import com.example.jiang.microblog.views.main.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 
 import org.litepal.tablemanager.Connector;
