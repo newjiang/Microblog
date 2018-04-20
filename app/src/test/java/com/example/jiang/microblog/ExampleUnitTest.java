@@ -1,15 +1,12 @@
 package com.example.jiang.microblog;
 
+import com.example.jiang.microblog.json.Up;
 import com.example.jiang.microblog.utils.TimeFormat;
-import com.example.jiang.microblog.bean.Comment;
-import com.example.jiang.microblog.json.CommentJson;
-import com.google.gson.Gson;
 
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,19 +35,14 @@ public class ExampleUnitTest {
 
     @Test
     public void jsonTest() {
-        Gson gson = new Gson();
-        Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
-        List<Comment.CommentsBean> comments = comment.getComments();
-        for (Comment.CommentsBean b : comments) {
-            System.out.println(b.toString());
-        }
+        System.out.println(Up.JSON);
     }
-    @Test
-    public void stringTest(String str){
-        int start = str.indexOf('@');
-        int end = str.indexOf(':');
-        String key = str.substring(start, end);
-        System.out.println(key);
-    }
+//    @Test
+//    public void stringTest(String str){
+//        int start = str.indexOf('@');
+//        int end = str.indexOf(':');
+//        String key = str.substring(start, end);
+//        System.out.println(key);
+//    }
 
 }

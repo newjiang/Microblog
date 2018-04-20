@@ -70,8 +70,8 @@ public class HomeFragment extends BaseFragment {
 
                 //添加数据
                 Microblog.StatusesBean microblog
-                        = new Gson().fromJson(Down.JSON, Microblog.StatusesBean.class);
-                microblog.setText("下下下下下下下下下下 NO." + down);
+                        = new Gson().fromJson(Up.JSON, Microblog.StatusesBean.class);
+                microblog.setText("下拉下拉下拉下拉下拉 NO." + down);
                 //TODO 添加的条数
                 down++;
                 microblogList.add(0, microblog);
@@ -83,7 +83,7 @@ public class HomeFragment extends BaseFragment {
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                     }
-                }, 2000);
+                }, 1000);
             }
         });
     }
@@ -126,8 +126,8 @@ public class HomeFragment extends BaseFragment {
                         public void run() {
 
                             Microblog.StatusesBean microblog
-                                    = new Gson().fromJson(Up.JSON, Microblog.StatusesBean.class);
-                            microblog.setText("上上上上上上上上上上 NO." + up);
+                                    = new Gson().fromJson(Down.JSON, Microblog.StatusesBean.class);
+                            microblog.setText("上拉上拉上拉上拉上拉 NO." + up);
                             //TODO 添加的条数
                             up++;
                             microblogList.add(microblog);
@@ -152,7 +152,7 @@ public class HomeFragment extends BaseFragment {
 //                                loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
 //                            }
                         }
-                    }, 3000);
+                    }, 1000);
                 }
             });
         }
