@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
-import com.example.jiang.microblog.base.IntentKey;
-import com.example.jiang.microblog.base.TimeFormat;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.views.activity.ShowPictureActivity;
 import com.example.jiang.microblog.views.comment.CommentActivity;
@@ -270,7 +270,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
             //TODO 返回真正时间 如2018-1-1 01：01：01

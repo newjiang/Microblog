@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.jiang.microblog.utils.ActivityController;
+
 /**
  * Created by jiang on 2018/4/14.
  */

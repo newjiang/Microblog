@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
-import com.example.jiang.microblog.base.IntentKey;
-import com.example.jiang.microblog.base.TimeFormat;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.CommentJson;
@@ -43,6 +43,8 @@ import static com.example.jiang.microblog.R.id.microblog_user_name;
 
 public class CommentActivity extends AppCompatActivity implements
         MicroblogContract.View, View.OnClickListener, DialogFragmentDataCallback {
+
+
     //TODO 用户头像
     private CircleImageView userProfile;
     //TODO 用户名字
@@ -132,41 +134,41 @@ public class CommentActivity extends AppCompatActivity implements
         commentRecyclerview.setLayoutManager(layoutManager);
         adapter = new CommentAdapter(CommentActivity.this, comments);
         commentRecyclerview.setAdapter(adapter);
+        commentRecyclerview.setFocusable(false);
     }
 
     private void initViews() {
         commentTextView = (TextView) findViewById(R.id.tv_comment_fake_button);
-         //TODO 用户头像
+        //TODO 用户头像
         userProfile = (CircleImageView) findViewById(R.id.microblog_user_proflie);
-         //TODO 用户名字
+        //TODO 用户名字
         username = (TextView) findViewById(microblog_user_name);
-         //TODO 删除
+        //TODO 删除
         delete = (TextView) findViewById(R.id.microblog_content_delete);
-         //TODO 微博文字内容
+        //TODO 微博文字内容
         content = (TextView) findViewById(R.id.microblog_content);
-         //TODO 微博配图
+        //TODO 微博配图
         picture = (NineGridImageView) findViewById(R.id.microblog_picture);
-         //TODO 发布时间
+        //TODO 发布时间
         time = (TextView) findViewById(R.id.microblog_time);
-         //TODO 来源
+        //TODO 来源
         from = (TextView) findViewById(R.id.microblog_from);
-         //TODO 点赞数
+        //TODO 点赞数
         like = (TextView) findViewById(R.id.attitudes_count);
-         //TODO 转发数
+        //TODO 转发数
         redirect = (TextView) findViewById(R.id.reposts_count);
-         //TODO 评论数
+        //TODO 评论数
         comment = (TextView) findViewById(R.id.comments_count);
-         //TODO 点赞图标
+        //TODO 点赞图标
         likeImage = (ImageView) findViewById(R.id.attitudes_count_iv);
-         //TODO 转发图标
+        //TODO 转发图标
         redirectImage = (ImageView) findViewById(R.id.reposts_count_iv);
-         //TODO 评论图标
+        //TODO 评论图标
         commentImage = (ImageView) findViewById(R.id.comments_count_iv);
 
         commentTextView.setOnClickListener(this);
 
         commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
-
 
 
     }
@@ -232,13 +234,13 @@ public class CommentActivity extends AppCompatActivity implements
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-             //TODO 返回真正时间 如2018-1-1 01：01：01
+            //TODO 返回真正时间 如2018-1-1 01：01：01
             return format.format(d);
         } else {
-             //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
+            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
             return f;
         }
     }

@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.base;
+package com.example.jiang.microblog.utils;
 
 import java.util.Date;
 

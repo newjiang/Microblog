@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.base;
+package com.example.jiang.microblog.utils;
 
 /**
  * Created by jiang on 2018/1/16.

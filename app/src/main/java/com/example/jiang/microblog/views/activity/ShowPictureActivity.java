@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
-import com.example.jiang.microblog.base.IntentKey;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.widget.CustomView;
 
 import java.util.ArrayList;

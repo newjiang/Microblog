@@ -23,6 +23,7 @@
                 android:id="@+id/home_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:popupTheme="@style/Theme.AppCompat.Light.Dialog"
                 android:spinnerMode="dialog"
                 android:entries="@array/title"/>
             <de.hdodenhof.circleimageview.CircleImageView

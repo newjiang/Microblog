@@ -1,6 +1,6 @@
 package com.example.jiang.microblog;
 
-import com.example.jiang.microblog.base.TimeFormat;
+import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.json.CommentJson;
 import com.google.gson.Gson;
@@ -37,16 +37,20 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testJson() {
+    public void jsonTest() {
         Gson gson = new Gson();
         Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
         List<Comment.CommentsBean> comments = comment.getComments();
         for (Comment.CommentsBean b : comments) {
             System.out.println(b.toString());
         }
-
-
     }
-
+    @Test
+    public void stringTest(String str){
+        int start = str.indexOf('@');
+        int end = str.indexOf(':');
+        String key = str.substring(start, end);
+        System.out.println(key);
+    }
 
 }

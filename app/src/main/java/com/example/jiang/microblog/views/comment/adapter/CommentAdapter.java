@@ -2,6 +2,7 @@ package com.example.jiang.microblog.views.comment.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.TimeFormat;
 import com.example.jiang.microblog.bean.Comment;
+import com.example.jiang.microblog.utils.TextUtilTools;
+import com.example.jiang.microblog.utils.TimeFormat;
 
 import org.jsoup.Jsoup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -34,7 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         //TODO 评论者头像
-        ImageView header;
+        CircleImageView header;
         //TODO 评论者
         TextView commentator;
         //TODO 评论内容
@@ -48,7 +52,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            header = (ImageView) itemView.findViewById(R.id.commentator_header);
+            header = (CircleImageView) itemView.findViewById(R.id.commentator_header);
             commentator = (TextView) itemView.findViewById(R.id.commentator);
             content = (TextView) itemView.findViewById(R.id.comment_content);
             time = (TextView) itemView.findViewById(R.id.comment_time);
@@ -66,12 +70,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
-        Comment.CommentsBean bean = comments.get(position);
+        //TODO 按照时间顺序显示，list倒序
+        Comment.CommentsBean bean = comments.get(comments.size() - position - 1);
         Glide.with(context).load(bean.getUser().getAvatar_hd()).into(holder.header);
         holder.commentator.setText(bean.getUser().getName());
-        holder.content.setText(bean.getText());
+
+        //TODO 关键字高亮
+        if (bean.getText().contains("@") && bean.getText().contains(":")) {
+            SpannableStringBuilder sb = TextUtilTools.highlight(bean.getText(), getKeyWord(bean.getText()));
+            holder.content.setText(sb);
+        } else {
+            holder.content.setText(bean.getText());
+        }
         holder.time.setText(getTimeFormat(bean.getCreated_at()));
         holder.from.setText(getFormFormat(bean.getSource()));
+    }
+
+    /**
+     * 获取关键字
+     * @param str
+     * @return
+     */
+    public String getKeyWord(String str){
+        int start = str.indexOf('@');
+        int end = str.indexOf(':');
+        String key = str.substring(start, end);
+        return key;
     }
 
     @Override

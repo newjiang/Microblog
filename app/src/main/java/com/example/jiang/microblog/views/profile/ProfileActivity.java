@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.base.IntentKey;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;

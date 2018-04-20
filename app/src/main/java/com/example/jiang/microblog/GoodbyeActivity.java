@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.jiang.microblog.base.ActivityController;
+import com.example.jiang.microblog.utils.ActivityController;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.views.activity.LoginActivity;
 

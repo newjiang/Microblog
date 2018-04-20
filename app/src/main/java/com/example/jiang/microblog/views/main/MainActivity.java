@@ -24,6 +24,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.GoodbyeActivity;
@@ -32,6 +33,7 @@ import com.example.jiang.microblog.views.compose.ComposeActivity;
 import com.example.jiang.microblog.views.discover.DiscoverFragment;
 import com.example.jiang.microblog.views.home.HomeFragment;
 import com.example.jiang.microblog.views.message.MessageFragment;
+import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 
 import java.util.ArrayList;
@@ -111,10 +113,13 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         homeAccountName = (TextView) headerView.findViewById(R.id.home_account_name);
         homeAccountIntroduction = (TextView) headerView.findViewById(R.id.home_account_introduction);
 /*－－－－－－－－－－－－－－－－－－－－－－－－*/
+
+        User user = new Gson().fromJson(UserJson.JSON, User.class);
+
         //TODO　设置用户信息
-        Glide.with(MainActivity.this).load("http://TODO　wx4.sinaimg.cn/thumbnail/94a4cd03gy1fnib1yur6xj20hs0hsjvb.jpg").into(homeAccountIcon);
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(homeAccountIcon);
         //TODO　homeAccountIcon.setImageResource(R.drawable.ic_android_black);
-        homeAccountName.setText("new新健");
+        homeAccountName.setText(user.getName());
         homeAccountIntroduction.setText("认真你就输了");
 /*－－－－－－－－－－－－－－－－－－－－－－－－*/
         //TODO　添加fragment
@@ -154,7 +159,7 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
     private void spinnerEvent() {
         String[] mItems = getResources().getStringArray(R.array.title);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_style, mItems);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dialog_style);
         //TODO　绑定 Adapter到控件
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
