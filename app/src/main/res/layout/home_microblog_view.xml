@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
    <LinearLayout
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
+       android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
        android:layout_marginBottom="10dp"
        android:orientation="horizontal">
@@ -38,9 +38,7 @@
                android:layout_height="wrap_content"
                android:layout_alignParentRight="true"
                android:text="删除"/>
-
            <!---微博底部 来源,时间-->
-
            <!--来源-->
            <TextView
                android:id="@+id/microblog_from"
@@ -80,6 +78,30 @@
                app:imgGap="4dp"
                app:showStyle="fill"
                app:singleImgSize="180dp"/>
+           <!--转发微博内容-->
+           <LinearLayout
+               android:id="@+id/retweeted_status"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:background="@drawable/retweeted_bg"
+               android:padding="5dp"
+               android:layout_below="@id/microblog_picture">
+               <TextView
+                   android:id="@+id/retweeted_content"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+               <!--转发微博的配图-->
+               <com.jaeger.ninegridimageview.NineGridImageView
+                   android:id="@+id/retweeted_picture"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="1dp"
+                   android:layout_width="match_parent"
+                   android:layout_below="@id/microblog_content"
+                   app:imgGap="3dp"
+                   app:showStyle="fill"
+                   app:singleImgSize="180dp"/>
+           </LinearLayout>
 
            <!---微博底部 点赞,评论,转发-->
            <LinearLayout
@@ -87,20 +109,7 @@
                android:layout_height="wrap_content"
                android:layout_marginTop="5dp"
                android:gravity="center"
-               android:layout_below="@id/microblog_picture">
-               <!--点赞数-->
-               <ImageView
-                   android:id="@+id/attitudes_count_iv"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="20dp"
-                   android:src="@drawable/timeline_icon_unlike"/>
-               <TextView
-                   android:id="@+id/attitudes_count"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="wrap_content"
-                   android:text="1"/>
+               android:layout_below="@id/retweeted_status">
                <!--转发数-->
                <ImageView
                    android:id="@+id/reposts_count_iv"
@@ -127,6 +136,19 @@
                    android:layout_weight="1"
                    android:layout_height="wrap_content"
                    android:text="3"/>
+               <!--点赞数-->
+               <ImageView
+                   android:id="@+id/attitudes_count_iv"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="20dp"
+                   android:src="@drawable/timeline_icon_unlike"/>
+               <TextView
+                   android:id="@+id/attitudes_count"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:text="1"/>
            </LinearLayout>
 
        </RelativeLayout>

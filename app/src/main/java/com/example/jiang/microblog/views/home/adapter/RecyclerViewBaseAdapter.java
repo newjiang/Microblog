@@ -3,29 +3,28 @@ package com.example.jiang.microblog.views.home.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
+import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
-import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.views.activity.ShowPictureActivity;
+import com.example.jiang.microblog.views.adapter.NineImageAdapter;
+import com.example.jiang.microblog.views.adapter.RetweetedImageAdapter;
 import com.example.jiang.microblog.views.comment.CommentActivity;
 import com.example.jiang.microblog.views.profile.ProfileActivity;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
-import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
 import org.jsoup.Jsoup;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,13 +39,13 @@ import static com.example.jiang.microblog.R.id.microblog_user_name;
 public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
 
-    protected final List<Microblog.StatusesBean> mData;
+    protected final List<Microblog.StatusesBean> beanList;
 
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener onItemClickListener;
 
     public RecyclerViewBaseAdapter(Context context, List<Microblog.StatusesBean> data) {
         this.context = context;
-        this.mData = data;
+        this.beanList = data;
     }
 
     @Override
@@ -66,7 +65,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //TODO 在这里设置数据
-        ((InnerHolder) holder).setData(mData.get(position), position);
+        ((InnerHolder) holder).setData(beanList.get(position), position);
     }
 
 
@@ -77,15 +76,15 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      */
     @Override
     public int getItemCount() {
-        if (mData != null) {
-            return mData.size();
+        if (beanList != null) {
+            return beanList.size();
         }
         return 0;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         //TODO 设置一个监听,其实,就是要设置一个接口,一个回调的接口
-        this.mOnItemClickListener = listener;
+        this.onItemClickListener = listener;
     }
 
 
@@ -96,8 +95,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      * 3、提供设置接口的方法(其实是外部实现)
      * 4、接口方法的调用
      */
-
-
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
@@ -130,11 +127,18 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         //TODO 评论图标
         ImageView commentImage;
 
+        //TODO 微博文字内容
+        TextView retweetedContent;
+        //TODO 微博配图
+        NineGridImageView retweetedPicture;
+        LinearLayout retweetedLinearLayout;
+
         //TODO 位置
         private int mPosition;
 
         public InnerHolder(View itemView) {
             super(itemView);
+
             //TODO 用户头像
             userProfile = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
             //TODO 用户名字
@@ -161,15 +165,21 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             redirectImage = (ImageView) itemView.findViewById(R.id.reposts_count_iv);
             //TODO 评论图标
             commentImage = (ImageView) itemView.findViewById(R.id.comments_count_iv);
+            //TODO 转发微博文字内容
+            retweetedContent = (TextView) itemView.findViewById(R.id.retweeted_content);
+            //TODO 转发微博配图
+            retweetedPicture = (NineGridImageView) itemView.findViewById(R.id.retweeted_picture);
+            retweetedLinearLayout = (LinearLayout) itemView.findViewById(R.id.retweeted_status);
 
+            //TODO 进入微博详情页面
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (v.getId()) {
-                        case microblog_user_name:
-                            Log.e("vvvvvv", "microblog_user_name");
-                            break;
-                    }
+                    Intent intent = new Intent(context, CommentActivity.class);
+                    Microblog.StatusesBean statuses = beanList.get(mPosition);
+                    //TODO 通过json传递过去
+                    intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
+                    context.startActivity(intent);
                 }
             });
         }
@@ -202,38 +212,26 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             //TODO 评论数
             comment.setText(String.valueOf(bean.getComments_count()));
             //TODO 微博配图
-            picture.setAdapter(new RecyclerViewBaseAdapter.NineImageAdapter());
+            picture.setAdapter(new NineImageAdapter());
             //TODO 微博配图数据源
-            picture.setImagesData(mData.get(position).getPic_urls());
-
-            //TODO 设置进入微博详情点击事件,根据微博内容
-            setItemOnClickListener(username, bean);
-            setItemOnClickListener(content, bean);
-            setItemOnClickListener(time, bean);
-            setItemOnClickListener(from, bean);
-            setItemOnClickListener(comment, bean);
-            setItemOnClickListener(commentImage, bean);
-
+            picture.setImagesData(beanList.get(position).getPic_urls());
+            if (bean.getRetweeted_status() != null) {
+                retweetedContent.setText(bean.getRetweeted_status().getText());
+                //TODO 转发微博的配图
+                retweetedPicture.setAdapter(new RetweetedImageAdapter());
+                //TODO 转发微博的配图数据源
+                retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
+            } else {
+                //TODO 不添加会有bug,暂时不清楚原因
+                retweetedLinearLayout.setVisibility(View.GONE);
+                retweetedContent.setText(null);
+                retweetedPicture.setAdapter(new RetweetedImageAdapter());
+                retweetedPicture.setImagesData(null);
+            }
             //TODO 设置头像点击事件,根据用户id
             setProfileOnClickListener(userProfile, bean.getUser().getId());
         }
 
-        /**
-         * 设置控件的点击事件(进入微博详情，包括评论)
-         * @param view
-         * @param statuses
-         */
-        private void setItemOnClickListener(View view, final Microblog.StatusesBean statuses) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, CommentActivity.class);
-                    //TODO 通过json传递过去
-                    intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
-                    context.startActivity(intent);
-                }
-            });
-        }
 
         /**
          * 点击头像事件
@@ -283,36 +281,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             } else {
                 return f;
             }
-        }
-    }
-
-    /**
-     * 九宫格图片适配器
-     */
-    public class NineImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.PicUrlsBeanX> {
-        @Override
-        protected void onDisplayImage(Context context, ImageView imageView, Microblog.StatusesBean.PicUrlsBeanX picUrlsBeanX) {
-            //FIXME 主页显示thumbnail级别的图改为bmiddle级别
-            String bmiddle_pic = picUrlsBeanX.getThumbnail_pic().replaceAll("thumbnail", "bmiddle");
-            Glide.with(context).load(bmiddle_pic).into(imageView);
-        }
-
-
-        @Override
-        protected boolean onItemImageLongClick(Context context, ImageView imageView, int index, List<Microblog.StatusesBean.PicUrlsBeanX> list) {
-            return super.onItemImageLongClick(context, imageView, index, list);
-        }
-
-        @Override
-        protected void onItemImageClick(Context context, ImageView imageView, int index, List<Microblog.StatusesBean.PicUrlsBeanX> list) {
-            ArrayList<String> stringList = new ArrayList<>();
-            for (Microblog.StatusesBean.PicUrlsBeanX x : list) {
-                stringList.add(x.getThumbnail_pic());
-            }
-            Intent intent = new Intent(context, ShowPictureActivity.class);
-            intent.putStringArrayListExtra(IntentKey.MICROBLOG_PICTURE, stringList);
-            intent.putExtra(IntentKey.MICROBLOG_PICTURE_NUMBER, index);
-            context.startActivity(intent);
         }
     }
 

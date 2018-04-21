@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
@@ -27,11 +28,10 @@ import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
-import com.example.jiang.microblog.GoodbyeActivity;
-import com.example.jiang.microblog.views.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.views.compose.ComposeActivity;
 import com.example.jiang.microblog.views.discover.DiscoverFragment;
 import com.example.jiang.microblog.views.home.HomeFragment;
+import com.example.jiang.microblog.views.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.views.message.MessageFragment;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -64,11 +64,11 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
     //TODO　导航界面头部
     private View headerView;
     //TODO　用户头像
-    private CircleImageView homeAccountIcon;
+    private CircleImageView header;
     //TODO　用户呢称
-    private TextView homeAccountName;
+    private TextView usernaem;
     //TODO　用户简介
-    private TextView homeAccountIntroduction;
+    private TextView introduction;
 
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
@@ -78,26 +78,32 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        initEvents();
         initTabs();
+        initData();
+        initEvents();
         presenter = new MicroblogPresenter(this);
         //TODO　请求获取用户信息
         //TODO　presenter.getProfile(token.getUid(),token.getToken());
 
     }
 
-    @Override
-    public void onSuccess(Object object) {
-        User user = (User) object;
-        Log.e("onSuccess", user.toString());
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+/*－－－ 设置头部信息－－－－－－－－－－－－－－－－－－－－－*/
+        User user = new Gson().fromJson(UserJson.JSON, User.class);
+        //TODO　设置用户信息
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　homeAccountIcon.setImageResource(R.drawable.ic_android_black);
+        usernaem.setText(user.getName());
+        introduction.setText("认真你就输了");
+/*－－－－－－－－－－－－－－－－－－－－－－－－*/
     }
 
-    @Override
-    public void onError(String result) {
-        Log.e("onError", result);
-    }
-
-
+    /**
+     * 初始化控件
+     */
     private void initViews() {
         composeMicroblog = (CircleImageView) findViewById(R.id.home_compose_microblog);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -107,21 +113,11 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         spinner = (Spinner) findViewById(R.id.home_spinner);
         toolbar = (Toolbar) findViewById(R.id.home_toolbar);
         toolbar.setTitle("");
-
         headerView =  navigationView.getHeaderView(0);
-        homeAccountIcon = (CircleImageView) headerView.findViewById(R.id.home_account_icon);
-        homeAccountName = (TextView) headerView.findViewById(R.id.home_account_name);
-        homeAccountIntroduction = (TextView) headerView.findViewById(R.id.home_account_introduction);
-/*－－－－－－－－－－－－－－－－－－－－－－－－*/
+        header = (CircleImageView) headerView.findViewById(R.id.home_account_icon);
+        usernaem = (TextView) headerView.findViewById(R.id.home_account_name);
+        introduction = (TextView) headerView.findViewById(R.id.home_account_introduction);
 
-        User user = new Gson().fromJson(UserJson.JSON, User.class);
-
-        //TODO　设置用户信息
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(homeAccountIcon);
-        //TODO　homeAccountIcon.setImageResource(R.drawable.ic_android_black);
-        homeAccountName.setText(user.getName());
-        homeAccountIntroduction.setText("认真你就输了");
-/*－－－－－－－－－－－－－－－－－－－－－－－－*/
         //TODO　添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
@@ -134,6 +130,30 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         viewPager.setOffscreenPageLimit(3);
     }
 
+    /**
+     * 初始化导航栏
+     */
+    private void initTabs() {
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setSelectedTabIndicatorHeight(0);
+        ViewCompat.setElevation(tabLayout, 10);
+        tabLayout.setupWithViewPager(viewPager);
+        for (int i = 0; i < fragmentList.size(); i++) {
+            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
+            if (itemTab != null && i == 0) {
+                itemTab.setCustomView(R.layout.tabber_home_icon);
+            } else if (itemTab != null && i == 1) {
+                itemTab.setCustomView(R.layout.tabber_message_icon);
+            } else {
+                itemTab.setCustomView(R.layout.tabber_discover_icon);
+            }
+        }
+        tabLayout.getTabAt(0).getCustomView().setSelected(true);
+    }
+
+    /**
+     * 初始化事件
+     */
     private void initEvents() {
         setSupportActionBar(toolbar);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -144,6 +164,8 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         spinnerEvent();
         //TODO　viewPager滑动监听事件
         viewPagerEvent();
+
+        //TODO　点击发布微博事件
         composeMicroblog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,11 +190,8 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
                 String[] languages = getResources().getStringArray(R.array.title);
                 Toast.makeText(MainActivity.this, languages[position], Toast.LENGTH_SHORT).show();
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -197,7 +216,6 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
                     toolbar.setTitle("热门");
                 }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -207,48 +225,42 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         int id = item.getItemId();
-        if (id == R.id.nav_all) {//TODO　全部
+
+        if (id == R.id.nav_all) {
+            //TODO　全部
             Toast.makeText(this, "全部", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {//TODO　相册
+        } else if (id == R.id.nav_gallery) {
+            //TODO　相册
             Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_favorite) {//TODO　收藏
+        } else if (id == R.id.nav_favorite) {
+            //TODO　收藏
             Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_original) {//TODO　原创
+        } else if (id == R.id.nav_original) {
+            //TODO　原创
             Toast.makeText(this, "原创", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_about) {//TODO　关于
+        } else if (id == R.id.nav_about) {
+            //TODO　关于
             Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_skin) {//TODO　皮肤
+        } else if (id == R.id.nav_skin) {
+            //TODO　皮肤
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_setting) {//TODO　设置
+        } else if (id == R.id.nav_setting) {
+            //TODO　设置
             Toast.makeText(this, "设置", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_switch_account) {//TODO　切换账号
+        } else if (id == R.id.nav_switch_account) {
+            //TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
-        }else if (id == R.id.nav_quit) {//TODO　退出
+        } else if (id == R.id.nav_quit) {
+            //TODO　退出
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void initTabs() {
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.setSelectedTabIndicatorHeight(0);
-        ViewCompat.setElevation(tabLayout, 10);
-        tabLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < fragmentList.size(); i++) {
-            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
-            if (itemTab != null && i == 0) {
-                itemTab.setCustomView(R.layout.tabber_home_icon);
-            } else if (itemTab != null && i == 1) {
-                itemTab.setCustomView(R.layout.tabber_message_icon);
-            } else {
-                itemTab.setCustomView(R.layout.tabber_discover_icon);
-            }
-        }
-        tabLayout.getTabAt(0).getCustomView().setSelected(true);
     }
 
     @Override
@@ -259,5 +271,15 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+        User user = (User) object;
+        Log.e("onSuccess", user.toString());
+    }
+    @Override
+    public void onError(String result) {
+        Log.e("onError", result);
     }
 }

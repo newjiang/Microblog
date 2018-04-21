@@ -68,7 +68,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
         if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
             //TODO 在这里设置数据
-            ((InnerHolder) holder).setData(mData.get(position), position);
+            ((InnerHolder) holder).setData(beanList.get(position), position);
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
             ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
         }
@@ -78,12 +78,10 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-
         if (position == getItemCount() - 1) {
             //TODO 最后一个则返回加载更多
             return TYPE_LOADER_MORE;
         }
-
         return TYPE_NORMAL;
     }
 

@@ -1,6 +1,5 @@
 package com.example.jiang.microblog.views.comment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -10,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +22,13 @@ import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
-import com.example.jiang.microblog.views.activity.ShowPictureActivity;
+import com.example.jiang.microblog.views.adapter.NineImageAdapter;
+import com.example.jiang.microblog.views.adapter.RetweetedImageAdapter;
 import com.example.jiang.microblog.views.comment.adapter.CommentAdapter;
 import com.example.jiang.microblog.views.comment.fragment.CommentDialogFragment;
 import com.example.jiang.microblog.views.comment.fragment.DialogFragmentDataCallback;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
-import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
 import org.jsoup.Jsoup;
 
@@ -79,6 +79,15 @@ public class CommentActivity extends AppCompatActivity implements
     private CommentAdapter adapter;
     //TODO 该微博内容
     private Microblog.StatusesBean bean;
+
+    //TODO 微博文字内容
+    TextView retweetedContent;
+    //TODO 微博配图
+    NineGridImageView retweetedPicture;
+    LinearLayout retweetedLinearLayout;
+
+
+
     //TODO 该微博评论内容
     private List<Comment.CommentsBean> comments;
     //TODO 点击评论内容的位置
@@ -96,8 +105,20 @@ public class CommentActivity extends AppCompatActivity implements
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        actionBar.setTitle(bean.getUser().getName());
         initViews();
         initDatas();
+
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
+    @Override
+    public void onError(String result) {
+
     }
 
     private void initDatas() {
@@ -126,6 +147,19 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 微博配图数据源
         picture.setImagesData(bean.getPic_urls());
 
+        if (bean.getRetweeted_status() != null) {
+            retweetedContent.setText(bean.getRetweeted_status().getText());
+            //TODO 转发微博的配图
+            retweetedPicture.setAdapter(new RetweetedImageAdapter());
+            //TODO 转发微博的配图数据源
+            retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
+        } else {
+            //TODO 不添加会有bug,暂时不清楚原因
+            retweetedLinearLayout.setVisibility(View.GONE);
+            retweetedContent.setText(null);
+            retweetedPicture.setAdapter(new RetweetedImageAdapter());
+            retweetedPicture.setImagesData(null);
+        }
         comments = new ArrayList<>();
         Gson gson = new Gson();
         final Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
@@ -136,6 +170,9 @@ public class CommentActivity extends AppCompatActivity implements
         adapter = new CommentAdapter(CommentActivity.this, comments);
         commentRecyclerview.setAdapter(adapter);
         commentRecyclerview.setFocusable(false);
+
+
+
 
         adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
             @Override
@@ -175,6 +212,12 @@ public class CommentActivity extends AppCompatActivity implements
         redirectImage = (ImageView) findViewById(R.id.reposts_count_iv);
         //TODO 评论图标
         commentImage = (ImageView) findViewById(R.id.comments_count_iv);
+
+        //TODO 转发微博文字内容
+        retweetedContent = (TextView) findViewById(R.id.retweeted_content);
+        //TODO 转发微博配图
+        retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
+        retweetedLinearLayout = (LinearLayout) findViewById(R.id.retweeted_status);
 
         commentTextView.setOnClickListener(this);
 
@@ -250,15 +293,7 @@ public class CommentActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSuccess(Object object) {
 
-    }
-
-    @Override
-    public void onError(String result) {
-
-    }
 
     /**
      * 格式转化来源信息
@@ -289,32 +324,4 @@ public class CommentActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * 九宫格图片适配器
-     */
-    public class NineImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.PicUrlsBeanX> {
-        @Override
-        protected void onDisplayImage(Context context, ImageView imageView, Microblog.StatusesBean.PicUrlsBeanX picUrlsBeanX) {
-            //FIXME 主页显示thumbnail级别的图改为bmiddle级别
-            String bmiddle_pic = picUrlsBeanX.getThumbnail_pic().replaceAll("thumbnail", "bmiddle");
-            Glide.with(context).load(bmiddle_pic).into(imageView);
-        }
-
-        @Override
-        protected boolean onItemImageLongClick(Context context, ImageView imageView, int index, List<Microblog.StatusesBean.PicUrlsBeanX> list) {
-            return super.onItemImageLongClick(context, imageView, index, list);
-        }
-
-        @Override
-        protected void onItemImageClick(Context context, ImageView imageView, int index, List<Microblog.StatusesBean.PicUrlsBeanX> list) {
-            ArrayList<String> stringList = new ArrayList<>();
-            for (Microblog.StatusesBean.PicUrlsBeanX x : list) {
-                stringList.add(x.getThumbnail_pic());
-            }
-            Intent intent = new Intent(context, ShowPictureActivity.class);
-            intent.putStringArrayListExtra(IntentKey.MICROBLOG_PICTURE, stringList);
-            intent.putExtra(IntentKey.MICROBLOG_PICTURE_NUMBER, index);
-            context.startActivity(intent);
-        }
-    }
 }
