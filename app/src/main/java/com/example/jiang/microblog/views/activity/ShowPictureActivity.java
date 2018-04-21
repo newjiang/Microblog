@@ -55,6 +55,9 @@ public class ShowPictureActivity extends BaseActivity {
         final int index = intent.getIntExtra(IntentKey.MICROBLOG_PICTURE_NUMBER, 0);
 
         imageViews = new ImageView[picList.size()];
+
+        viewPager.setCurrentItem(index);
+
         viewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -80,6 +83,9 @@ public class ShowPictureActivity extends BaseActivity {
                 container.removeView(imageViews[position]);
             }
         });
+
+        //TODO 显示当前的图片
+        viewPager.setCurrentItem(index);
     }
 
     /**

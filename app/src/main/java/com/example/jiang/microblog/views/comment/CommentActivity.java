@@ -7,21 +7,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
-import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.views.activity.ShowPictureActivity;
 import com.example.jiang.microblog.views.comment.adapter.CommentAdapter;
 import com.example.jiang.microblog.views.comment.fragment.CommentDialogFragment;
@@ -43,8 +43,6 @@ import static com.example.jiang.microblog.R.id.microblog_user_name;
 
 public class CommentActivity extends AppCompatActivity implements
         MicroblogContract.View, View.OnClickListener, DialogFragmentDataCallback {
-
-
     //TODO 用户头像
     private CircleImageView userProfile;
     //TODO 用户名字
@@ -75,13 +73,16 @@ public class CommentActivity extends AppCompatActivity implements
     private TextView commentTextView;
     //TODO 微博评论的RecyclerView
     private RecyclerView commentRecyclerview;
-
+    //TODO 评论弹出的Dialog
+    private CommentDialogFragment commentDialogFragment;
+    //TODO 评论的adapter
     private CommentAdapter adapter;
-
     //TODO 该微博内容
     private Microblog.StatusesBean bean;
     //TODO 该微博评论内容
     private List<Comment.CommentsBean> comments;
+    //TODO 点击评论内容的位置
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +128,7 @@ public class CommentActivity extends AppCompatActivity implements
 
         comments = new ArrayList<>();
         Gson gson = new Gson();
-        Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
+        final Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
         comments = comment.getComments();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -135,6 +136,15 @@ public class CommentActivity extends AppCompatActivity implements
         adapter = new CommentAdapter(CommentActivity.this, comments);
         commentRecyclerview.setAdapter(adapter);
         commentRecyclerview.setFocusable(false);
+
+        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemclick(View view, int position) {
+                currentPosition = comments.size() - position - 1;
+                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+
+            }
+        });
     }
 
     private void initViews() {
@@ -170,14 +180,14 @@ public class CommentActivity extends AppCompatActivity implements
 
         commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
 
-
+        commentDialogFragment = new CommentDialogFragment();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_comment_fake_button:
-                CommentDialogFragment commentDialogFragment = new CommentDialogFragment();
+                currentPosition = -1;
                 commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
                 break;
             default:
@@ -191,10 +201,44 @@ public class CommentActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setCommentText(String commentTextTemp) {
-        Log.e("setCommentText", commentTextTemp);
-        commentTextView.setText(commentTextTemp);
+    public void sendComment(String  comment) {
+
+        Comment.CommentsBean addComment = new Comment.CommentsBean();
+        //TODO 头像
+        addComment.setText(comment);
+        Date date = new Date();
+
+
+        //TODO 时间
+        addComment.setCreated_at(new Date().toString());
+        //TODO 来源
+
+        Comment.CommentsBean.UserBeanX userBeanX = new Comment.CommentsBean.UserBeanX();
+        //TODO 名字
+        userBeanX.setName("嗯嗯");
+        //TODO 头像
+        userBeanX.setAvatar_hd("http://ww1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg");
+        addComment.setUser(userBeanX);
+        if (currentPosition == -1) {
+            addComment.setSource("评论");
+            comments.add(addComment);
+            adapter.notifyDataSetChanged();
+            commentRecyclerview.scrollToPosition(0);
+            Toast.makeText(CommentActivity.this, comment, Toast.LENGTH_SHORT).show();
+        } else {
+            addComment.setSource("回复");
+            comments.add(addComment);
+            adapter.notifyDataSetChanged();
+            commentRecyclerview.scrollToPosition(0);
+            Comment.CommentsBean commentsBean = comments.get(currentPosition);
+            String s = commentsBean.getText() + "-->" + comment;
+            Toast.makeText(CommentActivity.this, s , Toast.LENGTH_SHORT).show();
+        }
+
+
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

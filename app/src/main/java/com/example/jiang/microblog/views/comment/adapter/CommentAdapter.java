@@ -31,9 +31,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Context context;
     private List<Comment.CommentsBean> comments;
 
+    //TODO 声明一个接口的引用
+    private OnItemClickListener onItemClickListener;
+
+    //TODO 构造函数
     public CommentAdapter(Context context, List<Comment.CommentsBean> comments) {
         this.context = context;
         this.comments = comments;
+    }
+    //设置监听器
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,6 +67,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             from = (TextView) itemView.findViewById(R.id.comment_sources);
             commentator = (TextView) itemView.findViewById(R.id.commentator);
             like = (ImageView) itemView.findViewById(R.id.comment_like);
+            content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onItemClickListener != null){
+                        onItemClickListener.OnItemclick(v, getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 
@@ -69,9 +85,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final CommentAdapter.ViewHolder holder, final int position) {
         //TODO 按照时间顺序显示，list倒序
         Comment.CommentsBean bean = comments.get(comments.size() - position - 1);
+
         Glide.with(context).load(bean.getUser().getAvatar_hd()).into(holder.header);
         holder.commentator.setText(bean.getUser().getName());
 
@@ -84,6 +101,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
         holder.time.setText(getTimeFormat(bean.getCreated_at()));
         holder.from.setText(getFormFormat(bean.getSource()));
+
+
     }
 
     /**
@@ -121,14 +140,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
+        //TODO 修改显示时间格式 如2018-01-01 00：00
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-            //TODO 返回真正时间 如2018-1-1 01：01：01
+            //TODO 返回真正时间 如2018-1-1 00：00
             return format.format(d);
         } else {
             //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
-            return f;
+            if (f.equals(TimeFormat.YESTERDAY)) {
+                return f + format.format(d);
+            } else {
+                return f;
+            }
         }
+    }
+
+    //TODO 点击事件监听器
+    public interface OnItemClickListener {
+        void OnItemclick(View view, int position);
     }
 }

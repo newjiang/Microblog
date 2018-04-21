@@ -270,14 +270,19 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
+        //TODO 修改显示时间格式 如2018-01-01 00：00
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-            //TODO 返回真正时间 如2018-1-1 01：01：01
+            //TODO 返回真正时间 如2018-1-1 00：00
             return format.format(d);
         } else {
             //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
-            return f;
+            if (f.equals(TimeFormat.YESTERDAY)) {
+                return f + format.format(d);
+            } else {
+                return f;
+            }
         }
     }
 

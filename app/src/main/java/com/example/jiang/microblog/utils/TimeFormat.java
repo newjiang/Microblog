@@ -19,6 +19,8 @@ public class TimeFormat {
     private static final String ONE_DAY_AGO = "天前";
     private static final String ONE_MONTH_AGO = "月前";
     private static final String ONE_YEAR_AGO = "年前";
+    public static final String YESTERDAY = "昨天 ";
+
     public static final String FLAG = "flag";
 
     public static String format(Date date) {
@@ -40,7 +42,7 @@ public class TimeFormat {
         }
         //昨天
         if (delta < 48L * ONE_HOUR) {
-            return "昨天";
+            return YESTERDAY;
         }
         //一天或者xx天前
         if (delta < 30L * ONE_DAY) {

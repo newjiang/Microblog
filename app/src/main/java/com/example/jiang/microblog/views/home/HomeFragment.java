@@ -118,8 +118,6 @@ public class HomeFragment extends BaseFragment {
             ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
                 @Override
                 public void onUpPullRefresh(final ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
-                    //这里面去加载更多的数据,同样,需要在子线程中完成,这里仅作演示
-
                     //更新UI
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -133,24 +131,7 @@ public class HomeFragment extends BaseFragment {
                             microblogList.add(microblog);
                             //这里要做两件事,一件是让刷新停止,另外一件则是要更新列表
                             adapter.notifyDataSetChanged();
-
                             loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_NORMAL);
-
-//                            Random random = new Random();
-//
-//                            if (random.nextInt() % 2 == 0) {
-//                                Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-//                                List<Microblog.StatusesBean> statuses = microblog.getStatuses();
-//                                for (Microblog.StatusesBean s : statuses) {
-//                                    microblogList.add(s);
-//                                }
-//                                //这里要做两件事,一件是让刷新停止,另外一件则是要更新列表
-//                                adapter.notifyDataSetChanged();
-//
-//                                loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_NORMAL);
-//                            } else {
-//                                loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
-//                            }
                         }
                     }, 1000);
                 }

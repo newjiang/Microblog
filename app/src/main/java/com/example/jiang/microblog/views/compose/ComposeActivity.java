@@ -33,9 +33,13 @@ import java.util.Map;
 
 
 public class ComposeActivity extends AppCompatActivity {
+
     private GridView gw;
+
     private List<Map<String, Object>> datas;
+
     private GridViewAddImgesAdpter gridViewAddImgesAdpter;
+
     private Dialog dialog;
     //TODO 拍照
     private final int PHOTO_REQUEST_CAREMA = 1;
@@ -248,9 +252,8 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     public void photoPath(String path) {
-        Log.e("成功之后", path);
-        Map<String,Object> map=new HashMap<>();
-        map.put("path",path);
+        Map<String, Object> map = new HashMap<>();
+        map.put("path", path);
         datas.add(map);
         gridViewAddImgesAdpter.notifyDataSetChanged();
     }

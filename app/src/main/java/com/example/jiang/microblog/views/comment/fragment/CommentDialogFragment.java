@@ -3,7 +3,6 @@ package com.example.jiang.microblog.views.comment.fragment;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -140,8 +139,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
                 Toast.makeText(getActivity(), "点击了@", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.image_comment_send:
-                Toast.makeText(getActivity(), commentEditText.getText().toString(), Toast.LENGTH_SHORT).show();
-                dataCallback.setCommentText(commentEditText.getText().toString());
+                dataCallback.sendComment(commentEditText.getText().toString());
                 commentEditText.setText("");
                 dismiss();
                 break;
@@ -150,16 +148,16 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         }
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        dataCallback.setCommentText(commentEditText.getText().toString());
-        super.onDismiss(dialog);
-    }
-
-    @Override
-    public void onCancel(DialogInterface dialog) {
-        dataCallback.setCommentText(commentEditText.getText().toString());
-        super.onCancel(dialog);
-    }
+//    @Override
+//    public void onDismiss(DialogInterface dialog) {
+//        dataCallback.sendComment(commentEditText.getText().toString());
+//        super.onDismiss(dialog);
+//    }
+//
+//    @Override
+//    public void onCancel(DialogInterface dialog) {
+//        dataCallback.sendComment(commentEditText.getText().toString());
+//        super.onCancel(dialog);
+//    }
 
 }

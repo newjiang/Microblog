@@ -29,7 +29,7 @@ public class TextUtilTools {
         Pattern p = Pattern.compile(target);
         Matcher m = p.matcher(text);
         while (m.find()) {
-            span = new ForegroundColorSpan(Color.RED);// 需要重复！
+            span = new ForegroundColorSpan(Color.BLUE);
             spannable.setSpan(span, m.start(), m.end(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

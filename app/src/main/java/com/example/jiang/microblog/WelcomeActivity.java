@@ -52,6 +52,6 @@ public class WelcomeActivity extends BaseActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 500);
+        }, 2500);
     }
 }
