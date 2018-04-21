@@ -48,7 +48,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             view = View.inflate(parent.getContext(), R.layout.home_microblog_view, null);
         } else {
             //TODO 这个是加载更多的
-            view = View.inflate(parent.getContext(), R.layout.item_list_loader_more, null);
+            view = View.inflate(parent.getContext(), R.layout.item_load_layout, null);
         }
         return view;
     }

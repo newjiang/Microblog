@@ -45,7 +45,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
 
         Dialog mDialog = new Dialog(getActivity(), R.style.BottomDialog);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setContentView(R.layout.dialog_fragment_comment_layout);
+        mDialog.setContentView(R.layout.dialog_comment_layout);
         mDialog.setCanceledOnTouchOutside(true);
 
         Window window = mDialog.getWindow();

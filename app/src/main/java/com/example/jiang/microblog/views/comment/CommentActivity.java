@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,9 +83,6 @@ public class CommentActivity extends AppCompatActivity implements
     TextView retweetedContent;
     //TODO 微博配图
     NineGridImageView retweetedPicture;
-    LinearLayout retweetedLinearLayout;
-
-
 
     //TODO 该微博评论内容
     private List<Comment.CommentsBean> comments;
@@ -155,7 +151,6 @@ public class CommentActivity extends AppCompatActivity implements
             retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
         } else {
             //TODO 不添加会有bug,暂时不清楚原因
-            retweetedLinearLayout.setVisibility(View.GONE);
             retweetedContent.setText(null);
             retweetedPicture.setAdapter(new RetweetedImageAdapter());
             retweetedPicture.setImagesData(null);
@@ -217,7 +212,6 @@ public class CommentActivity extends AppCompatActivity implements
         retweetedContent = (TextView) findViewById(R.id.retweeted_content);
         //TODO 转发微博配图
         retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
-        retweetedLinearLayout = (LinearLayout) findViewById(R.id.retweeted_status);
 
         commentTextView.setOnClickListener(this);
 

@@ -4,13 +4,9 @@
     android:id="@+id/microblog_view"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="10dp"
-       android:layout_marginBottom="10dp"
-       android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
        <!--头像-->
        <de.hdodenhof.circleimageview.CircleImageView
            android:id="@+id/microblog_user_proflie"
@@ -58,9 +54,7 @@
                android:layout_marginLeft="10dp"
                android:textSize="12sp"
                android:layout_below="@id/microblog_user_name"
-               android:layout_toRightOf="@id/microblog_from"
-               android:text="yyy分钟之前"/>
-
+               android:layout_toRightOf="@id/microblog_from"/>
            <!--微博文字内容-->
            <TextView
                android:id="@+id/microblog_content"
@@ -79,36 +73,34 @@
                app:showStyle="fill"
                app:singleImgSize="180dp"/>
            <!--转发微博内容-->
-           <LinearLayout
-               android:id="@+id/retweeted_status"
+           <TextView
+               android:id="@+id/retweeted_content"
+               android:layout_below="@id/microblog_picture"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="vertical"
-               android:background="@drawable/retweeted_bg"
-               android:layout_below="@id/microblog_picture">
-               <TextView
-                   android:id="@+id/retweeted_content"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content" />
-               <!--转发微博的配图-->
-               <com.jaeger.ninegridimageview.NineGridImageView
-                   android:id="@+id/retweeted_picture"
-                   android:layout_height="wrap_content"
-                   android:layout_margin="1dp"
-                   android:layout_width="match_parent"
-                   android:layout_below="@id/microblog_content"
-                   app:imgGap="3dp"
-                   app:showStyle="fill"
-                   app:singleImgSize="180dp"/>
-           </LinearLayout>
-
+               android:paddingLeft="5dp"
+               android:paddingRight="5dp"
+               android:background="@drawable/shape_retweeted_text_bg"/>
+           <!--转发微博的配图-->
+           <com.jaeger.ninegridimageview.NineGridImageView
+               android:id="@+id/retweeted_picture"
+               android:layout_below="@id/retweeted_content"
+               android:layout_height="wrap_content"
+               android:layout_width="match_parent"
+               android:background="@drawable/shape_retweeted_picture_bg"
+               android:paddingBottom="5dp"
+               android:paddingLeft="5dp"
+               android:paddingRight="5dp"
+               app:imgGap="3dp"
+               app:showStyle="fill"
+               app:singleImgSize="180dp"/>
            <!---微博底部 点赞,评论,转发-->
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_marginTop="5dp"
                android:gravity="center"
-               android:layout_below="@id/retweeted_status">
+               android:layout_below="@id/retweeted_picture">
                <!--转发数-->
                <ImageView
                    android:id="@+id/reposts_count_iv"
@@ -150,5 +142,4 @@
                    android:text="1"/>
            </LinearLayout>
        </RelativeLayout>
-   </LinearLayout>
 </LinearLayout>

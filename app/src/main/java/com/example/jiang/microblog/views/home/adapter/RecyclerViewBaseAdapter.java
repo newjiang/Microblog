@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,8 +28,6 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.example.jiang.microblog.R.id.microblog_user_name;
 
 /**
  * Created by jiang on 2018/4/14.
@@ -132,18 +128,16 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         TextView retweetedContent;
         //TODO 微博配图
         NineGridImageView retweetedPicture;
-        LinearLayout retweetedLinearLayout;
 
         //TODO 位置
         private int mPosition;
 
         public InnerHolder(View itemView) {
             super(itemView);
-
             //TODO 用户头像
             header = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
             //TODO 用户名字
-            username = (TextView) itemView.findViewById(microblog_user_name);
+            username = (TextView) itemView.findViewById(R.id.microblog_user_name);
             //TODO 删除
             delete = (TextView) itemView.findViewById(R.id.microblog_content_delete);
             //TODO 微博文字内容
@@ -170,7 +164,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             retweetedContent = (TextView) itemView.findViewById(R.id.retweeted_content);
             //TODO 转发微博配图
             retweetedPicture = (NineGridImageView) itemView.findViewById(R.id.retweeted_picture);
-            retweetedLinearLayout = (LinearLayout) itemView.findViewById(R.id.retweeted_status);
 
             //TODO 进入微博详情页面
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -230,24 +223,14 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 //TODO 转发微博的配图
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
-                int height = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-                retweetedLinearLayout.setPadding(5, 5, 5, 5);
                 retweetedPicture.setMinimumHeight(retweetedPicture.getHeight());
-                ViewTreeObserver observer = retweetedContent.getViewTreeObserver();
-                observer.addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
-                    @Override
-                    public void onDraw() {
-                        int measuredHeight = retweetedPicture.getMeasuredHeight();
-                        retweetedContent.setHeight(measuredHeight);
-                    }
-                });
+                retweetedContent.setVisibility(View.VISIBLE);
             } else {
                 retweetedContent.setText(null);
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(null);
-                retweetedLinearLayout.setPadding(0, 0, 0, 0);
+                retweetedContent.setVisibility(View.GONE);
                 retweetedPicture.setMinimumHeight(0);
-                retweetedContent.setHeight(0);
             }
         }
 
@@ -268,7 +251,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             });
         }
     }
-
     /**
      * 格式转化来源信息
      *
@@ -278,7 +260,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     private String getFormFormat(String source) {
         return Jsoup.parse(source).text();
     }
-
     /**
      * 获取真正的时间并转化格式
      *
