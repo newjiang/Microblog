@@ -28,7 +28,6 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         this.context = context;
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -39,7 +38,6 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             return new LoaderMoreHolder(view);
         }
     }
-
 
     @Override
     protected View getSubView(ViewGroup parent, int viewType) {
@@ -52,8 +50,6 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             //TODO 这个是加载更多的
             view = View.inflate(parent.getContext(), R.layout.item_list_loader_more, null);
         }
-
-
         return view;
     }
 
@@ -72,8 +68,6 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
             ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
         }
-
-
     }
 
     @Override

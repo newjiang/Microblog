@@ -85,7 +85,6 @@
                android:layout_height="wrap_content"
                android:orientation="vertical"
                android:background="@drawable/retweeted_bg"
-               android:padding="5dp"
                android:layout_below="@id/microblog_picture">
                <TextView
                    android:id="@+id/retweeted_content"
@@ -150,7 +149,6 @@
                    android:layout_height="wrap_content"
                    android:text="1"/>
            </LinearLayout>
-
        </RelativeLayout>
    </LinearLayout>
 </LinearLayout>

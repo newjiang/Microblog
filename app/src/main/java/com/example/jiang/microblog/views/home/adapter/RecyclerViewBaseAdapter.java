@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -101,7 +102,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
 
     public class InnerHolder extends RecyclerView.ViewHolder {
         //TODO 用户头像
-        CircleImageView userProfile;
+        CircleImageView header;
         //TODO 用户名字
         TextView username;
         //TODO 删除
@@ -140,7 +141,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             super(itemView);
 
             //TODO 用户头像
-            userProfile = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
+            header = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
             //TODO 用户名字
             username = (TextView) itemView.findViewById(microblog_user_name);
             //TODO 删除
@@ -188,11 +189,9 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
          * 这个方法用于设置数据
          */
         public void setData(final Microblog.StatusesBean bean, int position) {
-
             this.mPosition = position;
-            //TODO 开始设置数据
             //TODO 用户头像
-            Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
+            Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
             //TODO 用户名字
             username.setText(bean.getUser().getName());
             //TODO 微博文字内容
@@ -215,21 +214,41 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             picture.setAdapter(new NineImageAdapter());
             //TODO 微博配图数据源
             picture.setImagesData(beanList.get(position).getPic_urls());
+            setRetweetedData(bean);
+            //TODO 设置头像点击事件,根据用户id
+            setProfileOnClickListener(header, bean.getUser().getId());
+        }
+
+        /**
+         * 设置转发的内容
+         * @param bean
+         */
+        private void setRetweetedData(Microblog.StatusesBean bean) {
             if (bean.getRetweeted_status() != null) {
+                //TODO 转发微博的内容
                 retweetedContent.setText(bean.getRetweeted_status().getText());
                 //TODO 转发微博的配图
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
-                //TODO 转发微博的配图数据源
                 retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
+                int height = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                retweetedLinearLayout.setPadding(5, 5, 5, 5);
+                retweetedPicture.setMinimumHeight(retweetedPicture.getHeight());
+                ViewTreeObserver observer = retweetedContent.getViewTreeObserver();
+                observer.addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
+                    @Override
+                    public void onDraw() {
+                        int measuredHeight = retweetedPicture.getMeasuredHeight();
+                        retweetedContent.setHeight(measuredHeight);
+                    }
+                });
             } else {
-                //TODO 不添加会有bug,暂时不清楚原因
-                retweetedLinearLayout.setVisibility(View.GONE);
                 retweetedContent.setText(null);
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(null);
+                retweetedLinearLayout.setPadding(0, 0, 0, 0);
+                retweetedPicture.setMinimumHeight(0);
+                retweetedContent.setHeight(0);
             }
-            //TODO 设置头像点击事件,根据用户id
-            setProfileOnClickListener(userProfile, bean.getUser().getId());
         }
 
 
