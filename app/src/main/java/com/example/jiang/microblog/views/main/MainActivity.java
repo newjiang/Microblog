@@ -22,18 +22,18 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
-import com.example.jiang.microblog.json.UserJson;
-import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
-import com.example.jiang.microblog.views.compose.ComposeActivity;
+import com.example.jiang.microblog.mvp.contract.UserContract;
+import com.example.jiang.microblog.mvp.presenter.UserPresenter;
+import com.example.jiang.microblog.notification.NotificationActivity;
 import com.example.jiang.microblog.views.discover.DiscoverFragment;
 import com.example.jiang.microblog.views.home.HomeFragment;
 import com.example.jiang.microblog.views.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.views.message.MessageFragment;
-import com.google.gson.Gson;
+import com.example.jiang.microblog.views.share.ShareActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 
 import java.util.ArrayList;
@@ -41,9 +41,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseActivity implements MicroblogContract.View, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements UserContract.View, NavigationView.OnNavigationItemSelectedListener {
 
-    private MicroblogContract.Presenter presenter;
+    private UserContract.Presenter presenter;
 
     //TODO　发布微博按钮
     private CircleImageView composeMicroblog;
@@ -67,38 +67,29 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
     private CircleImageView header;
     //TODO　用户呢称
     private TextView usernaem;
-    //TODO　用户简介
-    private TextView introduction;
+    //TODO　用户描述
+    private TextView description;
 
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
-
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
         initTabs();
-        initData();
         initEvents();
-        presenter = new MicroblogPresenter(this);
-        //TODO　请求获取用户信息
-        //TODO　presenter.getProfile(token.getUid(),token.getToken());
 
-    }
+        //TODO 请求获取用户信息
+        presenter = new UserPresenter(this);
 
-    /**
-     * 初始化数据
-     */
-    private void initData() {
-/*－－－ 设置头部信息－－－－－－－－－－－－－－－－－－－－－*/
-        User user = new Gson().fromJson(UserJson.JSON, User.class);
-        //TODO　设置用户信息
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　homeAccountIcon.setImageResource(R.drawable.ic_android_black);
-        usernaem.setText(user.getName());
-        introduction.setText("认真你就输了");
-/*－－－－－－－－－－－－－－－－－－－－－－－－*/
+        if (user == null) {
+            Toast.makeText(this, "空空空空空空空空空", Toast.LENGTH_SHORT).show();
+            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
+        } else {
+            Toast.makeText(this, "yyyyyyyyyyyyyyyyy", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -116,7 +107,7 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         headerView =  navigationView.getHeaderView(0);
         header = (CircleImageView) headerView.findViewById(R.id.home_account_icon);
         usernaem = (TextView) headerView.findViewById(R.id.home_account_name);
-        introduction = (TextView) headerView.findViewById(R.id.home_account_introduction);
+        description = (TextView) headerView.findViewById(R.id.home_account_introduction);
 
         //TODO　添加fragment
         fragmentList = new ArrayList<>();
@@ -169,7 +160,7 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
         composeMicroblog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
+                Intent intent = new Intent(MainActivity.this, ShareActivity.class);
                 startActivity(intent);
             }
         });
@@ -248,7 +239,8 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_setting) {
             //TODO　设置
-            Toast.makeText(this, "设置", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "虽然是设置，现在用于测试通知", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         } else if (id == R.id.nav_switch_account) {
             //TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
@@ -275,11 +267,17 @@ public class MainActivity extends BaseActivity implements MicroblogContract.View
 
     @Override
     public void onSuccess(Object object) {
-        User user = (User) object;
-        Log.e("onSuccess", user.toString());
+        user = (User) object;
+        //TODO　设置用户头像
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　设置用户昵称
+        usernaem.setText(user.getName());
+        //TODO　设置用户描述
+        description.setText(user.getDescription());
     }
     @Override
     public void onError(String result) {
-        Log.e("onError", result);
+        Log.e("MainActivity-onError", result);
+        Toast.makeText(MainActivity.this, "错误" + result, Toast.LENGTH_SHORT).show();
     }
 }

@@ -2,6 +2,9 @@ package com.example.jiang.microblog.net;
 
 import android.content.Context;
 
+import com.example.jiang.microblog.net.service.CommentService;
+import com.example.jiang.microblog.net.service.MicroblogService;
+import com.example.jiang.microblog.net.service.UserService;
 import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
@@ -47,8 +50,16 @@ public class RetrofitHelper {
                 .build();
     }
 
-    public MicroblogService getServer() {
+    public MicroblogService getMicroblogServer() {
         return mRetrofit.create(MicroblogService.class);
+    }
+
+    public UserService getUserServer() {
+        return mRetrofit.create(UserService.class);
+    }
+
+    public CommentService getCommentService() {
+        return mRetrofit.create(CommentService.class);
     }
 }
 

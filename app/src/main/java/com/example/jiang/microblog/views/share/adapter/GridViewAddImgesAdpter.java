@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.compose;
+package com.example.jiang.microblog.views.share.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -34,6 +34,18 @@ public class GridViewAddImgesAdpter extends BaseAdapter {
         this.datas = datas;
         this.context = context;
         inflater = LayoutInflater.from(context);
+    }
+
+    public class ViewHolder {
+        public final ImageView ivimage;
+        public final Button btdel;
+        public final View root;
+
+        public ViewHolder(View root) {
+            ivimage = (ImageView) root.findViewById(R.id.iv_image);
+            btdel = (Button) root.findViewById(R.id.bt_del);
+            this.root = root;
+        }
     }
 
     /**
@@ -82,12 +94,10 @@ public class GridViewAddImgesAdpter extends BaseAdapter {
     public void notifyDataSetChanged(List<Map<String, Object>> datas) {
         this.datas = datas;
         this.notifyDataSetChanged();
-
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
 
         ViewHolder viewHolder = null;
         if (convertView == null) {
@@ -123,20 +133,7 @@ public class GridViewAddImgesAdpter extends BaseAdapter {
             viewHolder.ivimage.setScaleType(ImageView.ScaleType.FIT_XY);
             viewHolder.btdel.setVisibility(View.GONE);
         }
-
         return convertView;
-
     }
 
-    public class ViewHolder {
-        public final ImageView ivimage;
-        public final Button btdel;
-        public final View root;
-
-        public ViewHolder(View root) {
-            ivimage = (ImageView) root.findViewById(R.id.iv_image);
-            btdel = (Button) root.findViewById(R.id.bt_del);
-            this.root = root;
-        }
-    }
 }

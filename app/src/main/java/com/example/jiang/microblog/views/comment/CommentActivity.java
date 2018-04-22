@@ -19,6 +19,7 @@ import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.views.adapter.NineImageAdapter;
@@ -42,6 +43,9 @@ import static com.example.jiang.microblog.R.id.microblog_user_name;
 
 public class CommentActivity extends AppCompatActivity implements
         MicroblogContract.View, View.OnClickListener, DialogFragmentDataCallback {
+
+    private MicroblogContract.Presenter presenter;
+
     //TODO 用户头像
     private CircleImageView userProfile;
     //TODO 用户名字
@@ -78,12 +82,10 @@ public class CommentActivity extends AppCompatActivity implements
     private CommentAdapter adapter;
     //TODO 该微博内容
     private Microblog.StatusesBean bean;
-
-    //TODO 微博文字内容
-    TextView retweetedContent;
-    //TODO 微博配图
-    NineGridImageView retweetedPicture;
-
+    //TODO 转发微博文字内容
+    private TextView retweetedContent;
+    //TODO 转发微博配图
+    private NineGridImageView retweetedPicture;
     //TODO 该微博评论内容
     private List<Comment.CommentsBean> comments;
     //TODO 点击评论内容的位置
@@ -94,6 +96,7 @@ public class CommentActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         Intent intent = getIntent();
+        //TODO 获取传递过来的数据，减少请求次数
         String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
         Gson gson = new Gson();
         bean = gson.fromJson(json, Microblog.StatusesBean.class);
@@ -104,79 +107,6 @@ public class CommentActivity extends AppCompatActivity implements
         actionBar.setTitle(bean.getUser().getName());
         initViews();
         initDatas();
-
-    }
-
-    @Override
-    public void onSuccess(Object object) {
-
-    }
-
-    @Override
-    public void onError(String result) {
-
-    }
-
-    private void initDatas() {
-        //TODO 用户头像
-        Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
-        //TODO 用户名字
-        username.setText(bean.getUser().getName());
-        //TODO 微博文字内容
-        content.setText(bean.getText());
-        //TODO 是否删除
-        delete.setText("");
-        //TODO 微博内容
-        content.setText(bean.getText());
-        //TODO 发布时间
-        time.setText(getTimeFormat(bean.getCreated_at()));
-        //TODO 来源
-        from.setText(getFormFormat(bean.getSource()));
-        //TODO 点赞数
-        like.setText(String.valueOf(bean.getAttitudes_count()));
-        //TODO 转发数
-        redirect.setText(String.valueOf(bean.getReposts_count()));
-        //TODO 评论数
-        comment.setText(String.valueOf(bean.getComments_count()));
-        //TODO 微博配图
-        picture.setAdapter(new NineImageAdapter());
-        //TODO 微博配图数据源
-        picture.setImagesData(bean.getPic_urls());
-
-        if (bean.getRetweeted_status() != null) {
-            retweetedContent.setText(bean.getRetweeted_status().getText());
-            //TODO 转发微博的配图
-            retweetedPicture.setAdapter(new RetweetedImageAdapter());
-            //TODO 转发微博的配图数据源
-            retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
-        } else {
-            //TODO 不添加会有bug,暂时不清楚原因
-            retweetedContent.setText(null);
-            retweetedPicture.setAdapter(new RetweetedImageAdapter());
-            retweetedPicture.setImagesData(null);
-        }
-        comments = new ArrayList<>();
-        Gson gson = new Gson();
-        final Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
-        comments = comment.getComments();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        commentRecyclerview.setLayoutManager(layoutManager);
-        adapter = new CommentAdapter(CommentActivity.this, comments);
-        commentRecyclerview.setAdapter(adapter);
-        commentRecyclerview.setFocusable(false);
-
-
-
-
-        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
-            @Override
-            public void OnItemclick(View view, int position) {
-                currentPosition = comments.size() - position - 1;
-                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
-
-            }
-        });
     }
 
     private void initViews() {
@@ -207,17 +137,64 @@ public class CommentActivity extends AppCompatActivity implements
         redirectImage = (ImageView) findViewById(R.id.reposts_count_iv);
         //TODO 评论图标
         commentImage = (ImageView) findViewById(R.id.comments_count_iv);
-
         //TODO 转发微博文字内容
         retweetedContent = (TextView) findViewById(R.id.retweeted_content);
         //TODO 转发微博配图
         retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
-
         commentTextView.setOnClickListener(this);
-
         commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
-
         commentDialogFragment = new CommentDialogFragment();
+
+        comments = new ArrayList<>();
+        presenter = new MicroblogPresenter(this);
+    }
+
+    private void initDatas() {
+        //TODO 用户头像
+        Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
+        //TODO 用户名字
+        username.setText(bean.getUser().getName());
+        //TODO 微博文字内容
+        content.setText(bean.getText());
+        //TODO 是否删除
+        delete.setText("");
+        //TODO 微博内容
+        content.setText(bean.getText());
+        //TODO 发布时间
+        time.setText(getTimeFormat(bean.getCreated_at()));
+        //TODO 来源
+        from.setText(getFormFormat(bean.getSource()));
+        //TODO 点赞数
+        like.setText(String.valueOf(bean.getAttitudes_count()));
+        //TODO 转发数
+        redirect.setText(String.valueOf(bean.getReposts_count()));
+        //TODO 评论数
+        comment.setText(String.valueOf(bean.getComments_count()));
+        //TODO 微博配图
+        picture.setAdapter(new NineImageAdapter());
+        //TODO 微博配图数据源
+        picture.setImagesData(bean.getPic_urls());
+        //TODO 设置转发微博配图
+        setRetweetedData(bean);
+
+
+//TODO 评论数据源++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Gson gson = new Gson();
+        final Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
+        comments = comment.getComments();
+//TODO 评论数据源++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        commentRecyclerview.setLayoutManager(layoutManager);
+        adapter = new CommentAdapter(CommentActivity.this, comments);
+        commentRecyclerview.setAdapter(adapter);
+        commentRecyclerview.setFocusable(false);
+        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemclick(View view, int position) {
+                currentPosition = comments.size() - position - 1;
+                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+            }
+        });
     }
 
     @Override
@@ -237,14 +214,13 @@ public class CommentActivity extends AppCompatActivity implements
         return commentTextView.getText().toString();
     }
 
-    @Override
-    public void sendComment(String  comment) {
-
+    @Override //TODO 模拟评论
+    public void sendComment(String comment) {
+//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         Comment.CommentsBean addComment = new Comment.CommentsBean();
         //TODO 头像
         addComment.setText(comment);
         Date date = new Date();
-
 
         //TODO 时间
         addComment.setCreated_at(new Date().toString());
@@ -256,6 +232,7 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 头像
         userBeanX.setAvatar_hd("http://ww1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg");
         addComment.setUser(userBeanX);
+
         if (currentPosition == -1) {
             addComment.setSource("评论");
             comments.add(addComment);
@@ -269,13 +246,10 @@ public class CommentActivity extends AppCompatActivity implements
             commentRecyclerview.scrollToPosition(0);
             Comment.CommentsBean commentsBean = comments.get(currentPosition);
             String s = commentsBean.getText() + "-->" + comment;
-            Toast.makeText(CommentActivity.this, s , Toast.LENGTH_SHORT).show();
+            Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
         }
-
-
+//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -286,8 +260,6 @@ public class CommentActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     /**
      * 格式转化来源信息
@@ -318,4 +290,37 @@ public class CommentActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * 设置转发的内容
+     *
+     * @param bean
+     */
+    private void setRetweetedData(Microblog.StatusesBean bean) {
+        if (bean.getRetweeted_status() != null) {
+            //TODO 转发微博的内容
+            retweetedContent.setText(bean.getRetweeted_status().getText());
+            //TODO 转发微博的配图
+            retweetedPicture.setAdapter(new RetweetedImageAdapter());
+            retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
+            retweetedPicture.setMinimumHeight(retweetedPicture.getHeight());
+            retweetedContent.setVisibility(View.VISIBLE);
+        } else {
+            retweetedContent.setText(null);
+            retweetedPicture.setAdapter(new RetweetedImageAdapter());
+            retweetedPicture.setImagesData(null);
+            retweetedContent.setVisibility(View.GONE);
+            retweetedPicture.setMinimumHeight(0);
+        }
+    }
+
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
+    @Override
+    public void onError(String result) {
+
+    }
 }

@@ -57,8 +57,6 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
     @Override
     public void initData() {
         presenter = new MicroblogPresenter(context);
-//        presenter.getMicroblogById()
-
     }
 
     /**

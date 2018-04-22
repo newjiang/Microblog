@@ -17,10 +17,10 @@ import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.bean.User;
-import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.views.profile.adapter.InfoViewPagerAdapter;
 import com.example.jiang.microblog.views.profile.fragment.AlbumFragment;
 import com.example.jiang.microblog.views.profile.fragment.MicroblogFragment;
@@ -50,21 +50,29 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     //TODO PagerAdapter
     private InfoViewPagerAdapter viewPagerAdapter;
 
+    private Microblog.StatusesBean.UserBean userBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        getUserInfo();
         initViews();
         initEvents();
         initTab();
-        getRequestInfomation();
+    }
+
+    private void getUserInfo() {
+        Intent intent = getIntent();
+        String json = intent.getStringExtra(IntentKey.USER_INFORMATION);
+        userBean = new Gson().fromJson(json, Microblog.StatusesBean.UserBean.class);
     }
 
 
     private void initTab() {
         navList = new ArrayList<>();
         navList.add("关于");
-        navList.add("微博(123)");
+        navList.add("微博(" + userBean.getStatuses_count() + ")");
         navList.add("相册");
         //TODO 添加fragment
         fragmentList = new ArrayList<>();
@@ -80,32 +88,20 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    /**
-     * 请求得到用户信息
-     */
-    private void getRequestInfomation() {
-        Intent intent = getIntent();
-        long id = intent.getLongExtra(IntentKey.ACCOUNT_ID, 0);
-        //TODO presenter = new MicroblogPresenter(this);
-        //TODO presenter.getProfile(String.valueOf(id), App.getToken().getToken());
-        User user = new Gson().fromJson(UserJson.JSON, User.class);
-        coll.setTitle(user.getName());
-        Glide.with(this).load(user.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
-        Glide.with(this).load(user.getCover_image_phone()
-        ).into(background);
-    }
-    /**
+     /**
      * 初始化控件
      */
     private void initViews() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         coll = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        coll.setTitle(" ");
         background = (ImageView) findViewById(R.id.background);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(3);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        coll.setTitle(userBean.getName());
+        Glide.with(this).load(userBean.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
+        Glide.with(this).load(userBean.getCover_image_phone()).into(background);
     }
 
     /**
@@ -141,7 +137,7 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
 
 
         Glide.with(this).load(R.mipmap.ic_launcher).transform(new GlideRoundTransform(this, 50)).into(fab);
-        Glide.with(this).load(R.drawable.icon_compose).into(background);
+        Glide.with(this).load(R.drawable.icon_share).into(background);
     }
 
     @Override

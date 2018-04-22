@@ -28,6 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by jiang on 2018/4/19.
  */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
+
     private Context context;
     private List<Comment.CommentsBean> comments;
 
@@ -39,6 +40,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         this.context = context;
         this.comments = comments;
     }
+
     //设置监听器
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -70,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(onItemClickListener != null){
+                    if (onItemClickListener != null) {
                         onItemClickListener.OnItemclick(v, getLayoutPosition());
                     }
                 }
@@ -107,10 +109,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     /**
      * 获取关键字
+     *
      * @param str
      * @return
      */
-    public String getKeyWord(String str){
+    public String getKeyWord(String str) {
         int start = str.indexOf('@');
         int end = str.indexOf(':');
         String key = str.substring(start, end);

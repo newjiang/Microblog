@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-import com.example.jiang.microblog.mvp.model.MicroblogModel;
+import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.mvp.contract.UserContract;
+import com.example.jiang.microblog.mvp.model.UserModel;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -14,24 +14,24 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by jiang on 2018/1/8.
+ * Created by jiang on 2018/4/22.
  */
-public class MicroblogPresenter implements MicroblogContract.Presenter {
+public class UserPresenter implements UserContract.Presenter {
 
     private CompositeSubscription compositeSubscription;
-    private MicroblogContract.View view;
-    private MicroblogContract.Model model;
+    private UserContract.View view;
+    private UserContract.Model model;
 
-    private Microblog microblog;
+    private User user;
 
     /**
      * 初始化Activity
      *
      * @param context
      */
-    public MicroblogPresenter(Context context) {
-        this.view = (MicroblogContract.View) context;
-        this.model = new MicroblogModel(context);
+    public UserPresenter(Context context) {
+        this.view = (UserContract.View) context;
+        this.model = new UserModel(context);
         compositeSubscription = new CompositeSubscription();
     }
 
@@ -41,36 +41,36 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
      * @param frag
      * @param context
      */
-    public MicroblogPresenter(BaseFragment frag, Context context) {
-        this.view = (MicroblogContract.View) frag;
-        this.model = new MicroblogModel(context);
+    public UserPresenter(BaseFragment frag, Context context) {
+        this.view = (UserContract.View) frag;
+        this.model = new UserModel(context);
         compositeSubscription = new CompositeSubscription();
     }
 
-
-
     @Override
-    public void getHomeMicroblog(String access_token) {
+    public void getProfile(String uid, String access_token) {
         compositeSubscription.add(
-                model.getHomeMicroblog(access_token)
+                model.getProfile(uid, access_token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Microblog>() {
+                        .subscribe(new Observer<User>() {
                             @Override
                             public void onCompleted() {
-                                if (microblog != null) {
-                                    view.onSuccess(microblog);
+                                if (user != null) {
+                                    view.onSuccess(user);
                                 }
                             }
+
                             @Override
                             public void onError(Throwable e) {
-                                Log.e("onError,getMessage", e.getMessage());
+                                Log.e("onError", e.getMessage());
                                 view.onError(e.getMessage());
                             }
+
                             @Override
-                            public void onNext(Microblog m) {
-                                microblog = m;
-                                view.onSuccess(microblog);
+                            public void onNext(User u) {
+                                user = u;
+                                view.onSuccess(user);
                             }
                         })
         );

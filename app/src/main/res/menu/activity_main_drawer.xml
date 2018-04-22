@@ -28,7 +28,7 @@
                 android:title="关于" />
             <item
                 android:id="@+id/nav_skin"
-                android:icon="@drawable/ic_widgets_black"
+                android:icon="@drawable/ic_skin_black"
                 android:title="皮肤" />
             <item
                 android:id="@+id/nav_setting"

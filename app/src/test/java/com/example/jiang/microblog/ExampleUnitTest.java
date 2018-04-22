@@ -1,8 +1,10 @@
 package com.example.jiang.microblog;
 
-import org.junit.Test;
+import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.json.MicroblogJson;
+import com.google.gson.Gson;
 
-import java.util.Date;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,8 +20,14 @@ public class ExampleUnitTest {
     }
     @Test
     public void test(){
-        Date date = new Date();
-        String s = date.toString();
-        System.out.println(s);
+        Gson gson = new Gson();
+        Microblog microblog = gson.fromJson(MicroblogJson.JSON, Microblog.class);
+        Microblog.StatusesBean bean = microblog.getStatuses().get(0);
+        Microblog.StatusesBean.UserBean user = bean.getUser();
+
+        String toJson = gson.toJson(user);
+
+        System.out.println(toJson);
+
     }
 }

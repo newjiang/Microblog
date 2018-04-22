@@ -5,8 +5,8 @@ package com.example.jiang.microblog.utils;
  */
 
 public class IntentKey {
-    //TODO 微博账号的id
-    public static final String ACCOUNT_ID = "account_id";
+    //TODO 微博中用户的信息
+    public static final String USER_INFORMATION = "user_information";
     //TODO 一条微博json
     public static final String MICROBLOG_JSON = "microblog_json";
     //TODO 一条微博的图片

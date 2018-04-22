@@ -21,6 +21,7 @@ import java.util.List;
  * 转发微博九宫格图片适配器
  */
 public class RetweetedImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.RetweetedStatusBean.PicUrlsBean> {
+
     @Override
     protected void onDisplayImage(Context context, ImageView imageView,
                                   Microblog.StatusesBean.RetweetedStatusBean.PicUrlsBean picUrlsBean) {

@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.views.compose;
+package com.example.jiang.microblog.views.share;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.views.share.adapter.GridViewAddImgesAdpter;
 
 import net.bither.util.NativeUtil;
 
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ComposeActivity extends AppCompatActivity {
+public class ShareActivity extends AppCompatActivity {
 
     private GridView gw;
 
@@ -53,7 +54,7 @@ public class ComposeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
+        setContentView(R.layout.activity_share);
         gw = (GridView) findViewById(R.id.gw);
         datas = new ArrayList<>();
         gridViewAddImgesAdpter = new GridViewAddImgesAdpter(datas, this);
@@ -121,7 +122,6 @@ public class ComposeActivity extends AppCompatActivity {
     public void camera() {
         //TODO  判断存储卡是否可以用，可用进行存储
         if (hasSdcard()) {
-
             File dir = new File(IMAGE_DIR);
             if (!dir.exists()) {
                 dir.mkdir();
@@ -192,7 +192,6 @@ public class ComposeActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(this, "相机异常请稍后再试！", Toast.LENGTH_SHORT).show();
                         }
-
                         Log.e("images", "拿到照片path=" + tempFile.getPath());
                     } else {
                         Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();

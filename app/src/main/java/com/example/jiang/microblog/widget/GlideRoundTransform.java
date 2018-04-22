@@ -12,9 +12,10 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 /**
+ * Glide加载图片的样式
+ *
  * Created by jiang on 2018/4/16.
  */
-
 public class GlideRoundTransform extends BitmapTransformation {
 
     private static float radius = 0f;

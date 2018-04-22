@@ -194,9 +194,9 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             //TODO 微博内容
             content.setText(bean.getText());
             //TODO 发布时间
-            time.setText(getTimeFormat(bean.getCreated_at())); //TODO holder.time.setText(bean.getCreated_at())
+            time.setText(getTimeFormat(bean.getCreated_at()));
             //TODO 来源
-            from.setText(getFormFormat(bean.getSource())); //TODO holder.from.setText(bean.getSource());
+            from.setText(getFormFormat(bean.getSource()));
             //TODO 点赞数
             like.setText(String.valueOf(bean.getAttitudes_count()));
             //TODO 转发数
@@ -208,8 +208,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             //TODO 微博配图数据源
             picture.setImagesData(beanList.get(position).getPic_urls());
             setRetweetedData(bean);
-            //TODO 设置头像点击事件,根据用户id
-            setProfileOnClickListener(header, bean.getUser().getId());
+            //TODO 设置头像点击事件,根据传递用户的信息
+            setHeaderOnClickListener(header, new Gson().toJson(bean.getUser()));
         }
 
         /**
@@ -234,18 +234,17 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             }
         }
 
-
         /**
          * 点击头像事件
          * @param view
-         * @param id
+         * @param userJson
          */
-        private void setProfileOnClickListener(View view, final long id) {
+        private void setHeaderOnClickListener(View view, final String userJson) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ProfileActivity.class);
-                    intent.putExtra(IntentKey.ACCOUNT_ID, id);
+                    intent.putExtra(IntentKey.USER_INFORMATION, userJson);
                     context.startActivity(intent);
                 }
             });

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.widget.CustomView;
+import com.example.jiang.microblog.widget.PictureView;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public class ShowPictureActivity extends BaseActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(option);
             getWindow().setNavigationBarColor(Color.BLACK);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.BLACK);
         }
         ActionBar ber = getSupportActionBar();
         if (ber != null) {
@@ -71,11 +71,11 @@ public class ShowPictureActivity extends BaseActivity {
 
             @Override
             public Object instantiateItem(ViewGroup containr, int position) {
-                CustomView zoomImage = new CustomView(getApplicationContext());
-                Glide.with(ShowPictureActivity.this).load(getLargeImage(position, index)).into(zoomImage);
-                containr.addView(zoomImage);
-                imageViews[position] = zoomImage;
-                return zoomImage;
+                PictureView picture = new PictureView(getApplicationContext());
+                Glide.with(ShowPictureActivity.this).load(getLargeImage(position, index)).into(picture);
+                containr.addView(picture);
+                imageViews[position] = picture;
+                return picture;
             }
 
             @Override

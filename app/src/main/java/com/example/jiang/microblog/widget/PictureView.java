@@ -20,7 +20,7 @@ import android.widget.ImageView;
  * Created by jiang on 2018/4/15.
  */
 
-public class CustomView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener, ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+public class PictureView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener, ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
     /**
      * 初始化时缩放的值
      */
@@ -59,15 +59,15 @@ public class CustomView extends ImageView implements ViewTreeObserver.OnGlobalLa
     private boolean isCheckLeftAndRight;
     private boolean isCheckTopAndBottom;
 
-    public CustomView(Context context) {
+    public PictureView(Context context) {
         this(context, null);
     }
 
-    public CustomView(Context context, AttributeSet attrs) {
+    public PictureView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PictureView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         mScaleMatrix = new Matrix();
@@ -83,10 +83,10 @@ public class CustomView extends ImageView implements ViewTreeObserver.OnGlobalLa
                 float y = e.getY();
                 float scale = getScale();
                 if (scale < mMidScale) {
-                    postDelayed(new AutoScaleRunnable(mMidScale,x,y),16);
+                    postDelayed(new AutoScaleRunnable(mMidScale, x, y), 16);
                     isAutoScale = true;
                 } else {
-                    postDelayed(new AutoScaleRunnable(mInitScale,x,y),16);
+                    postDelayed(new AutoScaleRunnable(mInitScale, x, y), 16);
                     isAutoScale = true;
 
                 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jiang.microblog">
-
     <!-- 用于联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 用于获取连接WiFi状态 -->
@@ -12,12 +11,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 用于调用 JNI -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <!--震动-->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:name=".base.App"
         android:allowBackup="true"
-        android:icon="@mipmap/logo"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -32,10 +31,7 @@
             android:name=".views.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.activity.LoginActivity" />
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -43,11 +39,12 @@
         <activity android:name=".views.activity.ShowPictureActivity" />
         <activity
             android:name=".views.profile.ProfileActivity"
-            android:label="@string/title_activity_infomation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.comment.CommentActivity" />
         <activity android:name=".GoodbyeActivity" />
-        <activity android:name=".views.compose.ComposeActivity"></activity>
+        <activity android:name=".views.share.ShareActivity" />
+        <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".notification.NotificationContentActivity"></activity>
     </application>
 
 </manifest>

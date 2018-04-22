@@ -147,17 +147,4 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
                 break;
         }
     }
-
-//    @Override
-//    public void onDismiss(DialogInterface dialog) {
-//        dataCallback.sendComment(commentEditText.getText().toString());
-//        super.onDismiss(dialog);
-//    }
-//
-//    @Override
-//    public void onCancel(DialogInterface dialog) {
-//        dataCallback.sendComment(commentEditText.getText().toString());
-//        super.onCancel(dialog);
-//    }
-
 }
