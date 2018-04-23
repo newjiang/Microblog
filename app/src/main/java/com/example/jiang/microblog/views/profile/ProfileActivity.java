@@ -10,15 +10,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.views.profile.adapter.InfoViewPagerAdapter;
@@ -39,6 +40,10 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     private FloatingActionButton fab;
     private CollapsingToolbarLayout coll;
     private ImageView background;
+    private TextView friends_count;
+    private TextView followers_count;
+    private TextView favourites_count;
+    private TextView description;
     //TODO 导航栏标题
     private List<String> navList;
     //TODO 底部导航栏
@@ -96,12 +101,22 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         fab = (FloatingActionButton) findViewById(R.id.fab);
         coll = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         background = (ImageView) findViewById(R.id.background);
+        friends_count = (TextView) findViewById(R.id.friends_count);
+        followers_count = (TextView) findViewById(R.id.followers_count);
+        favourites_count = (TextView) findViewById(R.id.favourites_count);
+        description = (TextView) findViewById(R.id.description);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(3);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         coll.setTitle(userBean.getName());
+        coll.setExpandedTitleGravity(Gravity.CENTER_VERTICAL);
         Glide.with(this).load(userBean.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
         Glide.with(this).load(userBean.getCover_image_phone()).into(background);
+        friends_count.setText("关注(" + userBean.getFriends_count() + ")");
+        followers_count.setText("粉丝(" + userBean.getFollowers_count() + ")");
+        favourites_count.setText("收藏(" + userBean.getFavourites_count() + ")");
+        description.setText(userBean.getDescription());
+
     }
 
     /**
@@ -127,17 +142,7 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
 
     @Override
     public void onSuccess(Object object) {
-        User user = (User) object;
-        String s = new Gson().toJson(user);
-        Log.e("onSuccess", s);
-        coll.setTitle(user.getName());
-        //TODO Glide.with(this).load(user.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
-        //TODO Glide.with(this).load(user.getCover_image_phone()).into(background);
-        coll.setTitle(user.getName());
-
-
-        Glide.with(this).load(R.mipmap.ic_launcher).transform(new GlideRoundTransform(this, 50)).into(fab);
-        Glide.with(this).load(R.drawable.icon_share).into(background);
+        Log.e("onSuccess", object.toString());
     }
 
     @Override
