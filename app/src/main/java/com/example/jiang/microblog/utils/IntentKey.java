@@ -13,4 +13,7 @@ public class IntentKey {
     public static final String MICROBLOG_PICTURE = "microblog_picture";
     //TODO 一条微博配图数量
     public static final String MICROBLOG_PICTURE_NUMBER = "microblog_picture_number";
+
+    public static final String PROFILE_FRAGMENT = "profile_fragment";
+
 }

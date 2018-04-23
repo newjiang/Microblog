@@ -4,36 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#efefef">
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:textSize="14sp"
-        android:text="签名"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="认真你就输了"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:textSize="14sp"
-        android:text="签名"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="认真你就输了"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/relationship"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/textblack"
+            android:textSize="16sp"
+            android:text="互相关注"/>
+        <TextView
+            android:id="@+id/online_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/textblack"
+            android:textSize="16sp"
+            android:text="在线"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -41,28 +34,63 @@
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:textSize="14sp"
-        android:text="签名"/>
+        android:text="备注"/>
     <TextView
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
-        android:textColor="@color/black"
+        android:textColor="@color/textblack"
         android:textSize="16sp"
-        android:text="认真你就输了"/>
+        android:text="儿子"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:textSize="14sp"
-        android:text="签名"/>
+        android:text="所在地"/>
     <TextView
+        android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
-        android:textColor="@color/black"
+        android:textColor="@color/textblack"
         android:textSize="16sp"
-        android:text="认真你就输了"/>
+        android:text="广东韶关"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="14sp"
+        android:text="微博注册时间"/>
+    <TextView
+        android:id="@+id/created_at"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/textblack"
+        android:textSize="16sp"
+        android:text="2018-1-1 00：00"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="14sp"
+        android:text="博客"/>
+    <TextView
+        android:id="@+id/blog_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/textblack"
+        android:textSize="16sp"
+        android:text="https://github.com/newjiang"/>
 </LinearLayout>

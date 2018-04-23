@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--震动-->
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".base.App"
         android:allowBackup="true"
@@ -28,21 +29,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.main.MainActivity"
+            android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.activity.LoginActivity" />
+        <activity android:name=".view.activity.LoginActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".views.activity.ShowPictureActivity" />
+        <activity android:name=".view.activity.ShowPictureActivity" />
         <activity
-            android:name=".views.profile.ProfileActivity"
+            android:name=".view.profile.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.comment.CommentActivity" />
+        <activity android:name=".view.comment.CommentActivity" />
         <activity android:name=".GoodbyeActivity" />
-        <activity android:name=".views.share.ShareActivity" />
+        <activity android:name=".view.share.ShareActivity" />
         <activity android:name=".notification.NotificationActivity" />
         <activity android:name=".notification.NotificationContentActivity"></activity>
     </application>

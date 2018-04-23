@@ -22,12 +22,18 @@
            <!--用户信息-->
            <!--命名-->
            <TextView
-               android:id="@+id/microblog_user_name"
+               android:id="@+id/microblog_remark"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textColor="#000000"
-               android:layout_alignParentLeft="true"
-               android:text="jiang"/>
+               android:text="新健"/>
+           <TextView
+               android:id="@+id/microblog_username"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:textColor="#000000"
+               android:layout_toRightOf="@id/microblog_remark" />
            <TextView
                android:id="@+id/microblog_content_delete"
                android:layout_width="wrap_content"
@@ -42,9 +48,8 @@
                android:layout_height="wrap_content"
                android:layout_marginBottom="3dp"
                android:textSize="12sp"
-               android:layout_below="@id/microblog_user_name"
+               android:layout_below="@id/microblog_remark"
                android:text="来自XXX"/>
-
            <!--时间-->
            <TextView
                android:id="@+id/microblog_time"
@@ -53,7 +58,7 @@
                android:layout_marginBottom="3dp"
                android:layout_marginLeft="10dp"
                android:textSize="12sp"
-               android:layout_below="@id/microblog_user_name"
+               android:layout_below="@id/microblog_remark"
                android:layout_toRightOf="@id/microblog_from"/>
            <!--微博文字内容-->
            <TextView

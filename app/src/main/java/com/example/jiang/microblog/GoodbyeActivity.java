@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.example.jiang.microblog.utils.ActivityController;
 import com.example.jiang.microblog.base.App;
-import com.example.jiang.microblog.views.activity.LoginActivity;
+import com.example.jiang.microblog.view.activity.LoginActivity;
 
 public class GoodbyeActivity extends AppCompatActivity {
 

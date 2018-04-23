@@ -24,10 +24,9 @@ public class ExampleUnitTest {
         Microblog microblog = gson.fromJson(MicroblogJson.JSON, Microblog.class);
         Microblog.StatusesBean bean = microblog.getStatuses().get(0);
         Microblog.StatusesBean.UserBean user = bean.getUser();
+        String remark = user.getRemark();
 
-        String toJson = gson.toJson(user);
-
-        System.out.println(toJson);
+        System.out.println(remark.equals(""));
 
     }
 }
