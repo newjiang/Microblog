@@ -14,6 +14,7 @@ import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.Down;
+import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.json.Up;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
@@ -41,10 +42,10 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public View initView() {
+        presenter = new MicroblogPresenter(this,context);
         View view = View.inflate(context, R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
-        presenter = new MicroblogPresenter(this,context);
         //TODO 下拉加载更多
         handlerDownPullUpdate();
         return view;
@@ -56,15 +57,22 @@ public class HomeFragment extends BaseFragment {
         if (microblogList.isEmpty()) {
             presenter.getHomeMicroblog(App.getToken().getToken());
         } else {
+
         }
+        Gson gson = new Gson();
+        Microblog microblog = gson.fromJson(MicroblogJson.JSON, Microblog.class);
+        microblogList = microblog.getStatuses();
+        setListView();
+
+
     }
     @Override
     public void onSuccess(Object object) {
         Log.e("onSuccess", object.toString());
-        Microblog microblog = (Microblog) object;
-        //TODO 初始化数据
-        microblogList = microblog.getStatuses();
-        setListView();
+//        Microblog microblog = (Microblog) object;
+//        //TODO 初始化数据
+//        microblogList = microblog.getStatuses();
+//        setListView();
     }
     @Override
     public void onError(String result) {

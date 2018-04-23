@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jiang.microblog">
+
     <!-- 用于联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 用于获取连接WiFi状态 -->
@@ -11,7 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 用于调用 JNI -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--震动-->
+    <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -44,8 +45,9 @@
         <activity android:name=".view.comment.CommentActivity" />
         <activity android:name=".GoodbyeActivity" />
         <activity android:name=".view.share.ShareActivity" />
-        <activity android:name=".notification.NotificationActivity" />
-        <activity android:name=".notification.NotificationContentActivity"></activity>
+        <activity android:name=".test.NotificationActivity" />
+        <activity android:name=".test.NotificationContentActivity" />
+        <activity android:name=".test.TestShareActivity"></activity>
     </application>
 
 </manifest>

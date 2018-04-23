@@ -26,14 +26,16 @@ import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
-import com.example.jiang.microblog.notification.NotificationActivity;
+import com.example.jiang.microblog.test.NotificationActivity;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.share.ShareActivity;
+import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 
 import java.util.ArrayList;
@@ -85,11 +87,16 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         presenter = new UserPresenter(this);
 
         if (user == null) {
-            Toast.makeText(this, "空空空空空空空空空", Toast.LENGTH_SHORT).show();
             presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
-        } else {
-            Toast.makeText(this, "yyyyyyyyyyyyyyyyy", Toast.LENGTH_SHORT).show();
         }
+        Gson gson = new Gson();
+        user = gson.fromJson(UserJson.JSON, User.class);
+        //TODO　设置用户头像
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　设置用户昵称
+        usernaem.setText(user.getName());
+        //TODO　设置用户描述
+        description.setText(user.getDescription());
     }
 
     /**
@@ -179,7 +186,8 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String[] languages = getResources().getStringArray(R.array.title);
-                Toast.makeText(MainActivity.this, languages[position], Toast.LENGTH_SHORT).show();
+                //TODO 下拉框
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -267,17 +275,16 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
 
     @Override
     public void onSuccess(Object object) {
-        user = (User) object;
-        //TODO　设置用户头像
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　设置用户昵称
-        usernaem.setText(user.getName());
-        //TODO　设置用户描述
-        description.setText(user.getDescription());
+//        user = (User) object;
+//        //TODO　设置用户头像
+//        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+//        //TODO　设置用户昵称
+//        usernaem.setText(user.getName());
+//        //TODO　设置用户描述
+//        description.setText(user.getDescription());
     }
     @Override
     public void onError(String result) {
         Log.e("MainActivity-onError", result);
-        Toast.makeText(MainActivity.this, "错误" + result, Toast.LENGTH_SHORT).show();
     }
 }
