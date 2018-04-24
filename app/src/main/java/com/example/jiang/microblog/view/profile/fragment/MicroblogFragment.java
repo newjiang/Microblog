@@ -30,8 +30,6 @@ import java.util.Random;
 
 public class MicroblogFragment extends BaseFragment implements MicroblogContract.View {
 
-    private Oauth2AccessToken token;
-
     private MicroblogContract.Presenter presenter;
 
     private RecyclerView recyclerView;

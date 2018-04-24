@@ -42,6 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentActivity extends AppCompatActivity implements
         CommentContract.View, View.OnClickListener, DialogFragmentDataCallback {
 
+    private static final String FRAGMENT = "CommentDialogFragment";
+
     private CommentContract.Presenter presenter;
 
     //TODO 用户头像
@@ -134,7 +136,7 @@ public class CommentActivity extends AppCompatActivity implements
             @Override
             public void OnItemclick(View view, int position) {
                 currentPosition = commentsBeen.size() - position - 1;
-                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+                commentDialogFragment.show(getFragmentManager(), FRAGMENT);
             }
         });
     }
@@ -145,7 +147,7 @@ public class CommentActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.tv_comment_fake_button:
                 currentPosition = -1;
-                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+                commentDialogFragment.show(getFragmentManager(), FRAGMENT);
                 break;
             default:
                 break;
@@ -251,6 +253,7 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 转发微博配图
         retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
     }
+
     //TODO 初始化微博视图数据
     private void initMicroblogData() {
         //TODO 用户头像
@@ -289,6 +292,7 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 设置转发微博配图
         setRetweetedData(bean);
     }
+
     //TODO 设置转发的内容
     private void setRetweetedData(Microblog.StatusesBean bean) {
         if (bean.getRetweeted_status() != null) {
@@ -307,10 +311,12 @@ public class CommentActivity extends AppCompatActivity implements
             retweetedPicture.setMinimumHeight(0);
         }
     }
+
     //TODO 格式转化来源信息
     private String getFormFormat(String source) {
         return Jsoup.parse(source).text();
     }
+
     //TODO 获取真正的时间并转化格式
     private String getTimeFormat(String time) {
         Date d = new Date(time);

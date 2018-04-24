@@ -1,10 +1,9 @@
 package com.example.jiang.microblog;
 
-import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.json.MicroblogJson;
-import com.google.gson.Gson;
-
 import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,13 +19,10 @@ public class ExampleUnitTest {
     }
     @Test
     public void test(){
-        Gson gson = new Gson();
-        Microblog microblog = gson.fromJson(MicroblogJson.JSON, Microblog.class);
-        Microblog.StatusesBean bean = microblog.getStatuses().get(0);
-        Microblog.StatusesBean.UserBean user = bean.getUser();
-        String remark = user.getRemark();
-
-        System.out.println(remark.equals(""));
-
+        String time = "Tue Aug 30 20:08:33 +0800 2011";
+        Date d = new Date(time);
+        //TODO 修改显示时间格式 如2018-01-01 00：00
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        System.out.println(format.format(d));
     }
 }

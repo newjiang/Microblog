@@ -22,10 +22,15 @@ import java.util.List;
  */
 public class NineImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.PicUrlsBeanX> {
 
+    //TODO 小图
+    private static final String THUMBNAIL = "thumbnail";
+    //TODO 中图
+    private static final String BMIDDLE = "bmiddle";
+
     @Override
     protected void onDisplayImage(Context context, ImageView imageView, Microblog.StatusesBean.PicUrlsBeanX picUrlsBeanX) {
         //FIXME 主页显示thumbnail级别的图改为bmiddle级别
-        String bmiddle_pic = picUrlsBeanX.getThumbnail_pic().replaceAll("thumbnail", "bmiddle");
+        String bmiddle_pic = picUrlsBeanX.getThumbnail_pic().replaceAll(THUMBNAIL, BMIDDLE);
         Glide.with(context).load(bmiddle_pic).into(imageView);
     }
 

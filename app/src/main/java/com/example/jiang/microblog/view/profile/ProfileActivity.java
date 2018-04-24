@@ -34,6 +34,9 @@ import java.util.List;
 
 public class ProfileActivity extends BaseActivity implements MicroblogContract.View {
 
+    private static final String MALE = "m";
+    private static final String FEMALE = "f";
+
     private MicroblogContract.Presenter presenter;
 
     private Toolbar toolbar;
@@ -44,6 +47,7 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     private TextView followers_count;
     private TextView favourites_count;
     private TextView description;
+    private ImageView gender;
     //TODO 导航栏标题
     private List<String> navList;
     //TODO 底部导航栏
@@ -94,15 +98,15 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         profileFragment.setArguments(bundle);
 
         //TODO 初始化viewpager适配器
-        viewPagerAdapter = new InfoViewPagerAdapter(getSupportFragmentManager(), fragmentList,navList);
+        viewPagerAdapter = new InfoViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE );
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setSelectedTabIndicatorHeight(2);
         ViewCompat.setElevation(tabLayout, 10);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-     /**
+    /**
      * 初始化控件
      */
     private void initViews() {
@@ -114,6 +118,7 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         followers_count = (TextView) findViewById(R.id.followers_count);
         favourites_count = (TextView) findViewById(R.id.favourites_count);
         description = (TextView) findViewById(R.id.description);
+        gender = (ImageView) findViewById(R.id.gender);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(3);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -125,7 +130,13 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         followers_count.setText("粉丝(" + userBean.getFollowers_count() + ")");
         favourites_count.setText("收藏(" + userBean.getFavourites_count() + ")");
         description.setText(userBean.getDescription());
-
+        if (userBean.getGender().equals(MALE)) {
+            Glide.with(ProfileActivity.this).load(R.drawable.icon_male).into(gender);
+        } else if (userBean.getGender().equals(FEMALE)) {
+            Glide.with(ProfileActivity.this).load(R.drawable.icon_female).into(gender);
+        } else {
+            Glide.with(ProfileActivity.this).load(R.drawable.icon_gender).into(gender);
+        }
     }
 
     /**

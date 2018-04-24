@@ -22,11 +22,16 @@ import java.util.List;
  */
 public class RetweetedImageAdapter extends NineGridImageViewAdapter<Microblog.StatusesBean.RetweetedStatusBean.PicUrlsBean> {
 
+    //TODO 小图
+    private static final String THUMBNAIL = "thumbnail";
+    //TODO 中图
+    private static final String BMIDDLE = "bmiddle";
+
     @Override
     protected void onDisplayImage(Context context, ImageView imageView,
                                   Microblog.StatusesBean.RetweetedStatusBean.PicUrlsBean picUrlsBean) {
         //FIXME 主页显示thumbnail级别的图改为bmiddle级别
-        String bmiddle_pic = picUrlsBean.getThumbnail_pic().replaceAll("thumbnail", "bmiddle");
+        String bmiddle_pic = picUrlsBean.getThumbnail_pic().replaceAll(THUMBNAIL, BMIDDLE);
         Glide.with(context).load(bmiddle_pic).into(imageView);
     }
 

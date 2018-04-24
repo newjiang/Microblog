@@ -34,8 +34,16 @@
                 android:layout_height="120dp"
                 android:padding="10dp"
                 android:layout_gravity="bottom">
+                <ImageView
+                    android:id="@+id/gender"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/icon_male"/>
                 <TextView
                     android:id="@+id/friends_count"
+                    android:layout_toRightOf="@id/gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -66,12 +74,13 @@
                 <TextView
                     android:id="@+id/description"
                     android:layout_above="@id/friends_count"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:text="认真你就输了"/>
+
 
             </RelativeLayout>
 

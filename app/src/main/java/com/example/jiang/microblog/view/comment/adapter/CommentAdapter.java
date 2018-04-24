@@ -29,7 +29,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
+    //TODO at字符
+    private static final char AT = '@';
+    //TODO at字符串
+    private static final String AT_STRING = "@";
+    //TODO 冒号字符
+    private static final String COLON_STIRNG= ":";
+    //TODO 冒号字符串
+    private static final char COLON = ':';
+
     private Context context;
+
     private List<Comment.CommentsBean> comments;
 
     //TODO 声明一个接口的引用
@@ -95,7 +105,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.commentator.setText(bean.getUser().getName());
 
         //TODO 关键字高亮
-        if (bean.getText().contains("@") && bean.getText().contains(":")) {
+        if (bean.getText().contains(AT_STRING) && bean.getText().contains(COLON_STIRNG)) {
             SpannableStringBuilder sb = TextUtilTools.highlight(bean.getText(), getKeyWord(bean.getText()));
             holder.content.setText(sb);
         } else {
@@ -103,7 +113,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
         holder.time.setText(getTimeFormat(bean.getCreated_at()));
         holder.from.setText(getFormFormat(bean.getSource()));
-
 
     }
 
@@ -114,8 +123,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
      * @return
      */
     public String getKeyWord(String str) {
-        int start = str.indexOf('@');
-        int end = str.indexOf(':');
+        int start = str.indexOf(AT);
+        int end = str.indexOf(COLON);
         String key = str.substring(start, end);
         return key;
     }
