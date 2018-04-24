@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +18,8 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.json.CommentJson;
-import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
+import com.example.jiang.microblog.mvp.contract.CommentContract;
+import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
@@ -40,9 +40,9 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentActivity extends AppCompatActivity implements
-        MicroblogContract.View, View.OnClickListener, DialogFragmentDataCallback {
+        CommentContract.View, View.OnClickListener, DialogFragmentDataCallback {
 
-    private MicroblogContract.Presenter presenter;
+    private CommentContract.Presenter presenter;
 
     //TODO 用户头像
     private CircleImageView userProfile;
@@ -87,7 +87,7 @@ public class CommentActivity extends AppCompatActivity implements
     //TODO 转发微博配图
     private NineGridImageView retweetedPicture;
     //TODO 该微博评论内容
-    private List<Comment.CommentsBean> comments;
+    private List<Comment.CommentsBean> commentsBeen;
     //TODO 点击评论内容的位置
     private int currentPosition;
 
@@ -105,12 +105,119 @@ public class CommentActivity extends AppCompatActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         actionBar.setTitle(bean.getUser().getName());
+
+        commentsBeen = new ArrayList<>();
+        presenter = new CommentPresenter(this);
+        if (commentsBeen.isEmpty()) {
+            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
+        }
         initViews();
-        initDatas();
     }
 
     private void initViews() {
+        initMicroblogView();
         commentTextView = (TextView) findViewById(R.id.tv_comment_fake_button);
+        commentTextView.setOnClickListener(this);
+        commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
+        commentDialogFragment = new CommentDialogFragment();
+    }
+
+
+    private void initDatas() {
+        initMicroblogData();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        commentRecyclerview.setLayoutManager(layoutManager);
+        adapter = new CommentAdapter(CommentActivity.this, commentsBeen);
+        commentRecyclerview.setAdapter(adapter);
+        commentRecyclerview.setFocusable(false);
+        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemclick(View view, int position) {
+                currentPosition = commentsBeen.size() - position - 1;
+                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+            }
+        });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_comment_fake_button:
+                currentPosition = -1;
+                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public String getCommentText() {
+        return commentTextView.getText().toString();
+    }
+
+    @Override //TODO 模拟评论
+    public void sendComment(String comment) {
+        Comment.CommentsBean addComment = new Comment.CommentsBean();
+        //TODO 头像
+        addComment.setText(comment);
+        Date date = new Date();
+        //TODO 时间
+        addComment.setCreated_at(new Date().toString());
+        //TODO 来源
+        Comment.CommentsBean.UserBeanX userBeanX = new Comment.CommentsBean.UserBeanX();
+        //TODO 名字
+        userBeanX.setName("嗯嗯");
+        //TODO 头像
+        userBeanX.setAvatar_hd("http://ww1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg");
+        addComment.setUser(userBeanX);
+
+        if (currentPosition == -1) {
+            addComment.setSource("评论");
+            commentsBeen.add(addComment);
+            adapter.notifyDataSetChanged();
+            commentRecyclerview.scrollToPosition(0);
+            Toast.makeText(CommentActivity.this, comment, Toast.LENGTH_SHORT).show();
+        } else {
+            addComment.setSource("回复");
+            commentsBeen.add(addComment);
+            adapter.notifyDataSetChanged();
+            commentRecyclerview.scrollToPosition(0);
+            Comment.CommentsBean commentsBean = commentsBeen.get(currentPosition);
+            String s = commentsBean.getText() + "-->" + comment;
+            Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
+//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+        Comment comment = (Comment) object;
+        commentsBeen = comment.getComments();
+        initDatas();
+        Gson gson = new Gson();
+        String toJson = gson.toJson(comment);
+        Log.e("onSuccess", toJson);
+    }
+
+    @Override
+    public void onError(String result) {
+        Log.e("onError", result);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //TODO 初始化微博视图
+    private void initMicroblogView() {
         //TODO 用户头像
         userProfile = (CircleImageView) findViewById(R.id.microblog_user_proflie);
         //TODO 用户名字
@@ -143,15 +250,9 @@ public class CommentActivity extends AppCompatActivity implements
         retweetedContent = (TextView) findViewById(R.id.retweeted_content);
         //TODO 转发微博配图
         retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
-        commentTextView.setOnClickListener(this);
-        commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
-        commentDialogFragment = new CommentDialogFragment();
-
-        comments = new ArrayList<>();
-        presenter = new MicroblogPresenter(this);
     }
-
-    private void initDatas() {
+    //TODO 初始化微博视图数据
+    private void initMicroblogData() {
         //TODO 用户头像
         Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
         if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
@@ -187,125 +288,8 @@ public class CommentActivity extends AppCompatActivity implements
         picture.setImagesData(bean.getPic_urls());
         //TODO 设置转发微博配图
         setRetweetedData(bean);
-
-
-//TODO 评论数据源++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        Gson gson = new Gson();
-        final Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
-        comments = comment.getComments();
-//TODO 评论数据源++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        commentRecyclerview.setLayoutManager(layoutManager);
-        adapter = new CommentAdapter(CommentActivity.this, comments);
-        commentRecyclerview.setAdapter(adapter);
-        commentRecyclerview.setFocusable(false);
-        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
-            @Override
-            public void OnItemclick(View view, int position) {
-                currentPosition = comments.size() - position - 1;
-                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
-            }
-        });
     }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_comment_fake_button:
-                currentPosition = -1;
-                commentDialogFragment.show(getFragmentManager(), "CommentDialogFragment");
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public String getCommentText() {
-        return commentTextView.getText().toString();
-    }
-
-    @Override //TODO 模拟评论
-    public void sendComment(String comment) {
-//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        Comment.CommentsBean addComment = new Comment.CommentsBean();
-        //TODO 头像
-        addComment.setText(comment);
-        Date date = new Date();
-
-        //TODO 时间
-        addComment.setCreated_at(new Date().toString());
-        //TODO 来源
-
-        Comment.CommentsBean.UserBeanX userBeanX = new Comment.CommentsBean.UserBeanX();
-        //TODO 名字
-        userBeanX.setName("嗯嗯");
-        //TODO 头像
-        userBeanX.setAvatar_hd("http://ww1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg");
-        addComment.setUser(userBeanX);
-
-        if (currentPosition == -1) {
-            addComment.setSource("评论");
-            comments.add(addComment);
-            adapter.notifyDataSetChanged();
-            commentRecyclerview.scrollToPosition(0);
-            Toast.makeText(CommentActivity.this, comment, Toast.LENGTH_SHORT).show();
-        } else {
-            addComment.setSource("回复");
-            comments.add(addComment);
-            adapter.notifyDataSetChanged();
-            commentRecyclerview.scrollToPosition(0);
-            Comment.CommentsBean commentsBean = comments.get(currentPosition);
-            String s = commentsBean.getText() + "-->" + comment;
-            Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
-        }
-//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * 格式转化来源信息
-     *
-     * @param source
-     * @return
-     */
-    private String getFormFormat(String source) {
-        return Jsoup.parse(source).text();
-    }
-
-    /**
-     * 获取真正的时间并转化格式
-     *
-     * @param time 创建时间
-     * @return
-     */
-    private String getTimeFormat(String time) {
-        Date d = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String f = TimeFormat.format(d);
-        if (f.equals(TimeFormat.FLAG)) {
-            //TODO 返回真正时间 如2018-1-1 01：01：01
-            return format.format(d);
-        } else {
-            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
-            return f;
-        }
-    }
-
-    /**
-     * 设置转发的内容
-     *
-     * @param bean
-     */
+    //TODO 设置转发的内容
     private void setRetweetedData(Microblog.StatusesBean bean) {
         if (bean.getRetweeted_status() != null) {
             //TODO 转发微博的内容
@@ -323,15 +307,21 @@ public class CommentActivity extends AppCompatActivity implements
             retweetedPicture.setMinimumHeight(0);
         }
     }
-
-
-    @Override
-    public void onSuccess(Object object) {
-
+    //TODO 格式转化来源信息
+    private String getFormFormat(String source) {
+        return Jsoup.parse(source).text();
     }
-
-    @Override
-    public void onError(String result) {
-
+    //TODO 获取真正的时间并转化格式
+    private String getTimeFormat(String time) {
+        Date d = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String f = TimeFormat.format(d);
+        if (f.equals(TimeFormat.FLAG)) {
+            //TODO 返回真正时间 如2018-1-1 01：01：01
+            return format.format(d);
+        } else {
+            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
+            return f;
+        }
     }
 }

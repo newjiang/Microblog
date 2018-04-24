@@ -20,10 +20,19 @@ public class RetrofitHelper {
 
     private Context mCntext;
 
-    OkHttpClient client = new OkHttpClient();
-    GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
-    private static RetrofitHelper instance = null;
     private Retrofit mRetrofit = null;
+
+    OkHttpClient client = new OkHttpClient();
+
+    GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
+
+    private static RetrofitHelper instance = null;
+
+    private RetrofitHelper(Context mContext) {
+        mCntext = mContext;
+        init();
+    }
+
 
     public static RetrofitHelper getInstance(Context context) {
         if (instance == null) {
@@ -32,10 +41,7 @@ public class RetrofitHelper {
         return instance;
     }
 
-    private RetrofitHelper(Context mContext) {
-        mCntext = mContext;
-        init();
-    }
+
 
     private void init() {
         resetApp();

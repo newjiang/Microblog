@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
@@ -86,9 +85,9 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
 
-        if (user == null) {
-            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
-        }
+//        if (user == null) {
+//            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
+//        }
         Gson gson = new Gson();
         user = gson.fromJson(UserJson.JSON, User.class);
         //TODO　设置用户头像

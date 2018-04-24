@@ -63,14 +63,12 @@ public class UserPresenter implements UserContract.Presenter {
 
                             @Override
                             public void onError(Throwable e) {
-                                Log.e("onError", e.getMessage());
                                 view.onError(e.getMessage());
                             }
 
                             @Override
                             public void onNext(User u) {
                                 user = u;
-                                view.onSuccess(user);
                             }
                         })
         );

@@ -25,7 +25,6 @@
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,10 +32,6 @@
             android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.LoginActivity" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <activity android:name=".view.activity.ShowPictureActivity" />
         <activity

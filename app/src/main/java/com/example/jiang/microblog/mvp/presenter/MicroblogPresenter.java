@@ -18,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class MicroblogPresenter implements MicroblogContract.Presenter {
 
-    private CompositeSubscription compositeSubscription;
+    private CompositeSubscription subscription;
     private MicroblogContract.View view;
     private MicroblogContract.Model model;
 
@@ -32,26 +32,26 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
     public MicroblogPresenter(Context context) {
         this.view = (MicroblogContract.View) context;
         this.model = new MicroblogModel(context);
-        compositeSubscription = new CompositeSubscription();
+        subscription = new CompositeSubscription();
     }
 
     /**
      * 初始化Fragment
      *
-     * @param frag
+     * @param fragment
      * @param context
      */
-    public MicroblogPresenter(BaseFragment frag, Context context) {
-        this.view = (MicroblogContract.View) frag;
+    public MicroblogPresenter(BaseFragment fragment, Context context) {
+        this.view = (MicroblogContract.View) fragment;
         this.model = new MicroblogModel(context);
-        compositeSubscription = new CompositeSubscription();
+        subscription = new CompositeSubscription();
     }
 
 
 
     @Override
     public void getHomeMicroblog(String access_token) {
-        compositeSubscription.add(
+        subscription.add(
                 model.getHomeMicroblog(access_token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -64,13 +64,11 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
                             }
                             @Override
                             public void onError(Throwable e) {
-                                Log.e("onError,getMessage", e.getMessage());
                                 view.onError(e.getMessage());
                             }
                             @Override
                             public void onNext(Microblog m) {
                                 microblog = m;
-                                view.onSuccess(microblog);
                             }
                         })
         );

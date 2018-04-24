@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.notification;
+package com.example.jiang.microblog.test;
 
 import android.app.Notification;
 import android.app.NotificationManager;
