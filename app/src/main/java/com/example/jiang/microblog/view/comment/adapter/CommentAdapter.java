@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Comment;
-import com.example.jiang.microblog.utils.TextUtilTools;
+import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 
 import org.jsoup.Jsoup;
@@ -106,7 +106,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
         //TODO 关键字高亮
         if (bean.getText().contains(AT_STRING) && bean.getText().contains(COLON_STIRNG)) {
-            SpannableStringBuilder sb = TextUtilTools.highlight(bean.getText(), getKeyWord(bean.getText()));
+            SpannableStringBuilder sb = TextColorTools.highlight(bean.getText(), getKeyWord(bean.getText()));
             holder.content.setText(sb);
         } else {
             holder.content.setText(bean.getText());

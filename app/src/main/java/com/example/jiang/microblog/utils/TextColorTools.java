@@ -1,6 +1,5 @@
 package com.example.jiang.microblog.utils;
 
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.CharacterStyle;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
  * Created by jiang on 2018/4/20.
  */
 
-public class TextUtilTools {
+public class TextColorTools {
     /**
      * 关键字高亮显示
      *
@@ -29,7 +28,7 @@ public class TextUtilTools {
         Pattern p = Pattern.compile(target);
         Matcher m = p.matcher(text);
         while (m.find()) {
-            span = new ForegroundColorSpan(Color.BLUE);
+            span = new ForegroundColorSpan(0xffff8c00);
             spannable.setSpan(span, m.start(), m.end(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
