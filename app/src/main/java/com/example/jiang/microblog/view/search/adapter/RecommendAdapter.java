@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 
@@ -44,10 +45,16 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         return new ViewHolder(view);
     }
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.recommmendText.setText(recommends.get(position));
         Random random = new Random();
         holder.recommmendText.setTextColor(colors[random.nextInt(10)]);
+        holder.recommmendText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, recommends.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public int getItemCount() {

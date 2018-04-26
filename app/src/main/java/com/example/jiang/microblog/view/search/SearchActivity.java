@@ -26,11 +26,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     //TODO 微博热搜榜  http://s.weibo.com/top/summary?cate=realtimehot
 
-    private EditText searchContent;
-    private ImageView searchIcon;
+    private EditText searchContent;  //TODO 搜索框内容
+    private ImageView searchIcon;//TODO 去搜索图标
 
-    private TextView clearText;
-    private TextView allHistory;
+    private TextView clearText;//TODO 清除搜索的历史记录
+    private TextView allHistory;//TODO 全部
+
+    private TextView moreRecommend;//TODO 更多
 
     private RecyclerView historyRecyclerView;
     private RecyclerView recommendRecyclerView;
@@ -38,8 +40,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private HistoryAdapter historyAdapter;
     private RecommendAdapter recommendAdapter;
 
-    private List<History> historys;
-    private List<String> recommends;
+    private List<History> historys;   //TODO 历史记录
+    private List<String> recommends; //TODO 热门搜索
 
     public TextView getClearText() {
         return clearText;
@@ -71,17 +73,17 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         } else {
             historys = historyList;
         }
-        recommends.add("世界知识产权日");
+        recommends.add("东风26型导弹列装火箭军");
+        recommends.add("杨幂 刘海");
+        recommends.add("张杰 她就是小孩");
+        recommends.add("尤物唤新季");
+        recommends.add("奶茶肚");
+        recommends.add("整容院员工去整鼻");
+        recommends.add("画出爸妈离婚全过程");
+        recommends.add("金莎朗掉入下水道骨折");
         recommends.add("嗯哼吐槽霍思燕方形脸");
-        recommends.add("饺子化妆");
-        recommends.add("乐华七子");
+        recommends.add("李敖私生女回应");
         recommends.add("谢娜为杨迪庆生");
-        recommends.add("当了39次伴娘仍单身");
-        recommends.add("科三没过 我感觉委屈");
-        recommends.add("世界知识产权日");
-        recommends.add("嗯哼吐槽霍思燕方形脸");
-        recommends.add("饺子化妆");
-        recommends.add("乐华七子");
     }
 
     private void initView() {
@@ -89,11 +91,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         searchIcon = (ImageView) findViewById(R.id.search_icon);
         clearText = (TextView) findViewById(R.id.clear_history);
         allHistory = (TextView) findViewById(R.id.all_history);
+        moreRecommend = (TextView) findViewById(R.id.more_recommend);
         historyRecyclerView = (RecyclerView) findViewById(R.id.search_history);
         recommendRecyclerView = (RecyclerView) findViewById(R.id.search_recommend);
         searchIcon.setOnClickListener(this);
         clearText.setOnClickListener(this);
         allHistory.setOnClickListener(this);
+        moreRecommend.setOnClickListener(this);
 
         historyAdapter = new HistoryAdapter(SearchActivity.this, historys);
         historyRecyclerView.setAdapter(historyAdapter);
@@ -125,8 +129,12 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             case R.id.all_history:
                 startActivity(new Intent(SearchActivity.this, AllHistoryActivity.class));
                 break;
+            case R.id.more_recommend:
+                startActivity(new Intent(SearchActivity.this, MoreActivity.class));
+                break;
         }
     }
+
     @Override
     public void onBackPressed() {
         finish();
