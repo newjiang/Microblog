@@ -16,4 +16,8 @@ public class IntentKey {
 
     public static final String PROFILE_FRAGMENT = "profile_fragment";
 
+    //TODO 切换账号
+    public static String SWITCH_ACCOUNT = "switch_account";
+    //TODO 退出
+    public static String QUIT = "quit";
 }

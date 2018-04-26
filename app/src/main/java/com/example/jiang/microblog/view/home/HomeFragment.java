@@ -25,10 +25,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jiang on 2018/4/14.
- */
-
 public class HomeFragment extends BaseFragment {
 
     private MicroblogContract.Presenter presenter;
@@ -106,6 +102,7 @@ public class HomeFragment extends BaseFragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
         refreshLayout.setEnabled(true);
+        refreshLayout.setProgressViewOffset(true, 0, 200);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

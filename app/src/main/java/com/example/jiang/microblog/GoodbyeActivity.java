@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
-import com.example.jiang.microblog.utils.ActivityController;
 import com.example.jiang.microblog.base.App;
+import com.example.jiang.microblog.utils.ActivityController;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.activity.LoginActivity;
 
 public class GoodbyeActivity extends AppCompatActivity {
@@ -18,7 +20,7 @@ public class GoodbyeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //沉浸式启动欢迎界面
+        //沉浸式启动界面
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -33,23 +35,19 @@ public class GoodbyeActivity extends AppCompatActivity {
             actionBar.hide();
         }
         setContentView(R.layout.activity_goodbye);
+        Intent intent = getIntent();
+        final boolean isSwitch = intent.getBooleanExtra(IntentKey.SWITCH_ACCOUNT, false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ActivityController.finishAll();
-                //退出
-                if (App.getToken().isSessionValid()) {
+                //切换账号
+                if (isSwitch == true) {
+                    startActivity(new Intent(GoodbyeActivity.this, LoginActivity.class));
+                } else {//退出
+                    ActivityController.finishAll();
                     finish();
-                } else {//切换账号
-                   startActivity(new Intent(GoodbyeActivity.this, LoginActivity.class));
                 }
             }
         }, 1000);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
     }
 }

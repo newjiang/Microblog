@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,8 @@ import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.test.NotificationActivity;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.activity.SearchActivity;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
@@ -45,32 +49,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends BaseActivity implements UserContract.View, NavigationView.OnNavigationItemSelectedListener {
 
     private UserContract.Presenter presenter;
-
-    //TODO　发布微博按钮
-    private CircleImageView composeMicroblog;
-    //TODO　信息导航栏
-    private NavigationView navigationView;
-    //TODO　旋转效果
-    private ActionBarDrawerToggle toggle;
-    //TODO　底部导航栏
-    private TabLayout tabLayout;
-    //TODO　页面切换viewPager控件
-    private ViewPager viewPager;
-    //TODO　抽屉侧滑栏
-    private DrawerLayout drawer;
-    //TODO　Toolbar
-    private Toolbar toolbar;
-    //TODO　下拉框
-    private Spinner spinner;
-    //TODO　导航界面头部
-    private View headerView;
-    //TODO　用户头像
-    private CircleImageView header;
-    //TODO　用户呢称
-    private TextView usernaem;
-    //TODO　用户描述
-    private TextView description;
-
+    private LinearLayout mainLayout;
+    private CircleImageView composeMicroblog; //TODO　发布微博按钮
+    private ImageView homeSearch;              //TODO 搜索按钮
+    private NavigationView navigationView;    //TODO　信息导航栏
+    private ActionBarDrawerToggle toggle;      //TODO　旋转效果
+    private TabLayout tabLayout;               //TODO　底部导航栏
+    private ViewPager viewPager;               //TODO　页面切换viewPager控件
+    private DrawerLayout drawer;               //TODO　抽屉侧滑栏
+    private Toolbar toolbar;                   //TODO　Toolbar
+    private Spinner spinner;                   //TODO　下拉框
+    private View headerLayout;                //TODO　导航界面头部
+    private CircleImageView header;            //TODO　用户头像
+    private TextView usernaem;                 //TODO　用户呢称
+    private TextView description;              //TODO　用户描述
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
     private User user;
@@ -81,10 +73,8 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         initViews();
         initTabs();
         initEvents();
-
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
-
 //        if (user == null) {
 //            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
 //        }
@@ -102,7 +92,9 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
      * 初始化控件
      */
     private void initViews() {
-        composeMicroblog = (CircleImageView) findViewById(R.id.home_compose_microblog);
+        mainLayout = (LinearLayout) findViewById(R.id.content_main);
+        composeMicroblog = (CircleImageView) findViewById(R.id.home_share_microblog);
+        homeSearch = (ImageView) findViewById(R.id.home_search);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         viewPager = (ViewPager) findViewById(R.id.home_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
@@ -110,10 +102,10 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         spinner = (Spinner) findViewById(R.id.home_spinner);
         toolbar = (Toolbar) findViewById(R.id.home_toolbar);
         toolbar.setTitle("");
-        headerView =  navigationView.getHeaderView(0);
-        header = (CircleImageView) headerView.findViewById(R.id.home_account_icon);
-        usernaem = (TextView) headerView.findViewById(R.id.home_account_name);
-        description = (TextView) headerView.findViewById(R.id.home_account_introduction);
+        headerLayout =  navigationView.getHeaderView(0);
+        header = (CircleImageView) headerLayout.findViewById(R.id.home_account_icon);
+        usernaem = (TextView) headerLayout.findViewById(R.id.home_account_name);
+        description = (TextView) headerLayout.findViewById(R.id.home_account_introduction);
 
         //TODO　添加fragment
         fragmentList = new ArrayList<>();
@@ -161,13 +153,19 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         spinnerEvent();
         //TODO　viewPager滑动监听事件
         viewPagerEvent();
-
         //TODO　点击发布微博事件
         composeMicroblog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ShareActivity.class);
                 startActivity(intent);
+            }
+        });
+        homeSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                overridePendingTransition(R.anim.right_in, R.anim.reft_out);
             }
         });
     }
@@ -206,12 +204,18 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
                 if (position == 0) {
                     toolbar.setTitle("");
                     spinner.setVisibility(View.VISIBLE);
+                    homeSearch.setVisibility(View.GONE);
+                    composeMicroblog.setVisibility(View.VISIBLE);
                 } else if (position == 1) {
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
+                    homeSearch.setVisibility(View.GONE);
+                    composeMicroblog.setVisibility(View.VISIBLE);
                 } else if (position == 2){
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("热门");
+                    homeSearch.setVisibility(View.VISIBLE);
+                    composeMicroblog.setVisibility(View.GONE);
                 }
             }
             @Override
@@ -248,15 +252,12 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
             //TODO　设置
             Toast.makeText(this, "虽然是设置，现在用于测试通知", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, NotificationActivity.class));
-        } else if (id == R.id.nav_switch_account) {
-            //TODO　切换账号
+        } else if (id == R.id.nav_switch_account) {//TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
-            startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
-        } else if (id == R.id.nav_quit) {
-            //TODO　退出
-            startActivity(new Intent(MainActivity.this, GoodbyeActivity.class));
+            startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, true));
+        } else if (id == R.id.nav_quit) {//TODO　退出
+            startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, false));
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

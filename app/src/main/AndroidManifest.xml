@@ -25,6 +25,7 @@
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,7 +33,6 @@
             android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.LoginActivity" />
-
         <activity android:name=".view.activity.ShowPictureActivity" />
         <activity
             android:name=".view.profile.ProfileActivity"
@@ -42,7 +42,8 @@
         <activity android:name=".view.share.ShareActivity" />
         <activity android:name=".test.NotificationActivity" />
         <activity android:name=".test.NotificationContentActivity" />
-        <activity android:name=".test.TestShareActivity"></activity>
+        <activity android:name=".test.TestShareActivity" />
+        <activity android:name=".view.activity.SearchActivity"></activity>
     </application>
 
 </manifest>
