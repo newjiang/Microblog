@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewAddImgesAdpter;
 
 import net.bither.util.NativeUtil;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ShareActivity extends AppCompatActivity {
+public class ShareActivity extends BaseActivity {
 
     private GridView gw;
 

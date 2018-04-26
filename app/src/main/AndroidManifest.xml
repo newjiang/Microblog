@@ -43,7 +43,8 @@
         <activity android:name=".test.NotificationActivity" />
         <activity android:name=".test.NotificationContentActivity" />
         <activity android:name=".test.TestShareActivity" />
-        <activity android:name=".view.activity.SearchActivity"></activity>
+        <activity android:name=".view.search.SearchActivity" />
+        <activity android:name=".view.search.AllHistoryActivity"></activity>
     </application>
 
 </manifest>

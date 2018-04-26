@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.jiang.microblog.view.activity.SearchActivity">
-
+    tools:context="com.example.jiang.microblog.view.search.SearchActivity">
 
     <RelativeLayout
         android:id="@+id/relativelayout"
@@ -14,6 +13,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
         android:background="@drawable/search_background">
         <EditText
@@ -33,15 +33,52 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_go" />
     </RelativeLayout>
-
-
-    <LinearLayout
-        android:id="@+id/linearlayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_history"
         android:layout_width="match_parent"
-        android:layout_margin="16dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#c4b5b5">
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/clear_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="清除所有的历史记录"/>
+        <TextView
+            android:id="@+id/all_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/royalblue"
+            android:text="全部>>"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="热门搜索"/>
+        <TextView
+            android:id="@+id/more_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/royalblue"
+            android:text="更多>>"/>
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_recommend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
 

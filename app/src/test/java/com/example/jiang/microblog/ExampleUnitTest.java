@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,4 +26,12 @@ public class ExampleUnitTest {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         System.out.println(format.format(d));
     }
+    @Test
+    public void test1(){
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            System.out.println(random.nextInt(10));
+        }
+    }
+
 }

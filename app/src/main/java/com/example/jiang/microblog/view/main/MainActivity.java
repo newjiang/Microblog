@@ -32,7 +32,7 @@ import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.test.NotificationActivity;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.activity.SearchActivity;
+import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
