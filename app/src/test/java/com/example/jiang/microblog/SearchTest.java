@@ -186,17 +186,7 @@ public class SearchTest {
         }
 //TODO 描述
         String description = element.getElementsByClass("person_card").html();
-//TODO 粉丝、关注、微博
-        String friendsCount = element.getElementsByClass("person_num")
-                .select("a").get(0).getElementsByClass("W_linkb").html();
-
-        String followersCount = element.getElementsByClass("person_num")
-                .select("a").get(1).getElementsByClass("W_linkb").html();
-
-        String statusesCount = element.getElementsByClass("person_num")
-                .select("a").get(2).getElementsByClass("W_linkb").html();
-
-        Account account = new Account(name, gender, imageUrl, description, friendsCount, followersCount, statusesCount);
+        Account account = new Account(name, gender, imageUrl, description);
         System.out.println(account.toString());
     }
 

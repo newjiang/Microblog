@@ -46,11 +46,12 @@
         <activity android:name=".view.search.SearchActivity" />
         <activity android:name=".view.search.activity.AllHistoryActivity" />
         <activity android:name=".view.search.activity.MoreActivity" />
-        <activity android:name=".view.search.activity.ResultActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <activity android:name=".view.result.ResultActivity" />
+
+        <service
+            android:name=".service.PollingService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

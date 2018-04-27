@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.adapter.RecommendAdapter;
+import com.example.jiang.microblog.view.search.adapter.HotAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class MoreActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RecommendAdapter adapter;
+    private HotAdapter adapter;
     private List<Hot> hots; //TODO 热门搜索
 
     @Override
@@ -29,7 +29,7 @@ public class MoreActivity extends AppCompatActivity {
         hots = new ArrayList<>();
         initData();
         recyclerView = (RecyclerView) findViewById(R.id.more_recyclerview);
-        adapter = new RecommendAdapter(MoreActivity.this, hots);
+        adapter = new HotAdapter(MoreActivity.this, hots);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MoreActivity.this, LinearLayoutManager.VERTICAL, false));
     }

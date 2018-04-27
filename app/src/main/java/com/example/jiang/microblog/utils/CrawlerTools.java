@@ -192,19 +192,8 @@ public class CrawlerTools {
         } else {
             gender = male;
         }
-
         String description = e.getElementsByClass("person_card").html();
-
-        String friendsCount = e.getElementsByClass("person_num")
-                .select("a").get(0).getElementsByClass("W_linkb").html();
-
-        String followersCount = e.getElementsByClass("person_num")
-                .select("a").get(1).getElementsByClass("W_linkb").html();
-
-        String statusesCount = e.getElementsByClass("person_num")
-                .select("a").get(2).getElementsByClass("W_linkb").html();
-
-        return new Account(name, gender, imageUrl, description, friendsCount, followersCount, statusesCount);
+        return new Account(name, gender, imageUrl, description);
     }
 
 

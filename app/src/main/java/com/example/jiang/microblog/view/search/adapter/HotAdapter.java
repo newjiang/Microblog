@@ -14,7 +14,7 @@ import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.search.activity.MoreActivity;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
+import com.example.jiang.microblog.view.result.ResultActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -23,7 +23,7 @@ import java.util.Random;
  * Created by jiang on 2018/4/26.
  */
 
-public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
+public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
 
     private int[] colors = new int[]{
             Color.BLACK, Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.RED, Color.GREEN,
@@ -32,7 +32,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     private Context context;
     private List<Hot> hots;
 
-    public RecommendAdapter(Context context, List<Hot> hots) {
+    public HotAdapter(Context context, List<Hot> hots) {
         this.context = context;
         this.hots = hots;
     }
@@ -74,7 +74,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         } else if (hots.get(position).getDegree().equals("荐")) {
             holder.degree.setBackgroundColor(0xFF53B0FF);
         } else {
-            holder.degree.setBackgroundColor(0xFFFFFFFF);
+            holder.degree.setBackgroundColor(0x00000000);
         }
         if (context instanceof SearchActivity) {
             holder.count.setVisibility(View.GONE);

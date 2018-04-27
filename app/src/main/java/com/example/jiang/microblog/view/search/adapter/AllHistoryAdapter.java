@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
+import com.example.jiang.microblog.view.result.ResultActivity;
 
 import org.litepal.crud.DataSupport;
 

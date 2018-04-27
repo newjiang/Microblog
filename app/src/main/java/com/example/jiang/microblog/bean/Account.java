@@ -16,24 +16,15 @@ public class Account implements Serializable {
     private String imageUrl;
     //用户的个人描述
     private String description;
-    //关注数
-    private String friendsCount;
-    //粉丝数
-    private String followersCount;
-    //微博数
-    private String statusesCount;
 
     public Account() {
     }
 
-    public Account(String name, String gender, String imageUrl, String description, String friendsCount, String followersCount, String statusesCount) {
+    public Account(String name, String gender, String imageUrl, String description) {
         this.name = name;
         this.gender = gender;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.friendsCount = friendsCount;
-        this.followersCount = followersCount;
-        this.statusesCount = statusesCount;
     }
 
     public String getName() {
@@ -68,30 +59,6 @@ public class Account implements Serializable {
         this.description = description;
     }
 
-    public String getFriendsCount() {
-        return friendsCount;
-    }
-
-    public void setFriendsCount(String friendsCount) {
-        this.friendsCount = friendsCount;
-    }
-
-    public String getFollowersCount() {
-        return followersCount;
-    }
-
-    public void setFollowersCount(String followersCount) {
-        this.followersCount = followersCount;
-    }
-
-    public String getStatusesCount() {
-        return statusesCount;
-    }
-
-    public void setStatusesCount(String statusesCount) {
-        this.statusesCount = statusesCount;
-    }
-
     @Override
     public String toString() {
         return "Account{" +
@@ -99,9 +66,6 @@ public class Account implements Serializable {
                 ", gender='" + gender + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", description='" + description + '\'' +
-                ", friendsCount='" + friendsCount + '\'' +
-                ", followersCount='" + followersCount + '\'' +
-                ", statusesCount='" + statusesCount + '\'' +
                 '}';
     }
 }

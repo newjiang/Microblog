@@ -32,11 +32,11 @@ import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.test.NotificationActivity;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.message.MessageFragment;
+import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        startService(new Intent(MainActivity.this, PollingService.class));
         initViews();
         initTabs();
         initEvents();
