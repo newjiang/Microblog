@@ -199,4 +199,26 @@ public class SearchTest {
         System.out.println(account.toString());
     }
 
+
+    @Test
+    public void findTopSearch(){
+        String html = "";
+        try {
+            Document doc = Jsoup.connect("http://s.weibo.com/top/summary?cate=realtimehot").get();
+            Elements scripts = doc.select("script");
+            for (Element script : scripts) {
+                if (script.html().contains("STK && STK.pageletM && STK.pageletM.view")) {
+                    String s = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
+                    String sub = s.substring(1, s.length() - 1);
+                    if (sub.length() > html.length()) {
+                        html = sub;
+                    }
+                }
+            }
+            System.out.println(html);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
