@@ -9,15 +9,15 @@ import java.io.Serializable;
 public class Hot implements Serializable {
 
     private String title;
-    private String hot;
+    private String degree;
     private String count;
 
     public Hot() {
     }
 
-    public Hot(String title, String hot, String count) {
+    public Hot(String title, String degree, String count) {
         this.title = title;
-        this.hot = hot;
+        this.degree = degree;
         this.count = count;
     }
 
@@ -29,12 +29,12 @@ public class Hot implements Serializable {
         this.title = title;
     }
 
-    public String getHot() {
-        return hot;
+    public String getDegree() {
+        return degree;
     }
 
-    public void setHot(String hot) {
-        this.hot = hot;
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 
     public String getCount() {
@@ -49,7 +49,7 @@ public class Hot implements Serializable {
     public String toString() {
         return "Hot{" +
                 "title='" + title + '\'' +
-                ", hot='" + hot + '\'' +
+                ", degree='" + degree + '\'' +
                 ", count='" + count + '\'' +
                 '}';
     }

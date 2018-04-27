@@ -12,6 +12,7 @@ import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Weibo;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class ResultActivity extends AppCompatActivity {
                     for (Hot h : hots) {
                         Log.e("热门搜索", h.toString());
                     }
+                    System.out.println();
+                    Log.e("", new Gson().toJson(hots));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

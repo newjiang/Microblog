@@ -20,7 +20,10 @@ public class IntentKey {
     public static String SWITCH_ACCOUNT = "switch_account";
     //TODO 退出
     public static String QUIT = "quit";
-
+    //TODO 退出
     public static String SEARCH_CONTENT = "search_content";
+    //更多的热搜
+    public static String MORE_TOP = "MORE_TOP";
+
 
 }

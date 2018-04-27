@@ -208,6 +208,11 @@ public class CrawlerTools {
     }
 
 
+    /**
+     * 搜索热搜
+     *
+     * @return
+     */
     public static List<Hot> findTopSearch(){
         List<Hot> hots = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();

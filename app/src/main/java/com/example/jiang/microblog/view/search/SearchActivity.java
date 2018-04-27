@@ -14,12 +14,15 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.History;
+import com.example.jiang.microblog.bean.Hot;
+import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
 import com.example.jiang.microblog.view.search.activity.MoreActivity;
 import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.RecommendAdapter;
+import com.google.gson.Gson;
 
 import org.litepal.crud.DataSupport;
 
@@ -45,7 +48,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private RecommendAdapter recommendAdapter;
 
     private List<History> historys;   //TODO 历史记录
-    private List<String> recommends; //TODO 热门搜索
+    private List<Hot> hots; //TODO 热门搜索
 
     public TextView getClearText() {
         return clearText;
@@ -63,7 +66,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             actionBar.hide();
         }
         historys = new ArrayList<>();
-        recommends = new ArrayList<>();
+        hots = new ArrayList<>();
         initData();
         initView();
     }
@@ -77,17 +80,17 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         } else {
             historys = historyList;
         }
-        recommends.add("东风26型导弹列装火箭军");
-        recommends.add("杨幂 刘海");
-        recommends.add("张杰 她就是小孩");
-        recommends.add("尤物唤新季");
-        recommends.add("奶茶肚");
-        recommends.add("整容院员工去整鼻");
-        recommends.add("画出爸妈离婚全过程");
-        recommends.add("金莎朗掉入下水道骨折");
-        recommends.add("嗯哼吐槽霍思燕方形脸");
-        recommends.add("李敖私生女回应");
-        recommends.add("谢娜为杨迪庆生");
+        Gson gson = new Gson();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Hot> hotList = CrawlerTools.findTopSearch();
+                for (int i = 0; i < 10; i++) {
+                    hots.add(hotList.get(i));
+                }
+            }
+        }).start();
+
     }
 
     private void initView() {
@@ -119,7 +122,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initRecommend() {
-        recommendAdapter = new RecommendAdapter(SearchActivity.this, recommends);
+        recommendAdapter = new RecommendAdapter(SearchActivity.this, hots);
         recommendRecyclerView.setAdapter(recommendAdapter);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recommendRecyclerView.setLayoutManager(staggeredGridLayoutManager);
@@ -147,7 +150,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 startActivity(new Intent(SearchActivity.this, AllHistoryActivity.class));
                 break;
             case R.id.more_recommend:
-                startActivity(new Intent(SearchActivity.this, MoreActivity.class));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent more = new Intent(SearchActivity.this, MoreActivity.class);
+                        List<Hot> topSearch = CrawlerTools.findTopSearch();
+                        more.putExtra(IntentKey.MORE_TOP, new Gson().toJson(topSearch));
+                        startActivity(more);
+                    }
+                }).start();
                 break;
         }
     }

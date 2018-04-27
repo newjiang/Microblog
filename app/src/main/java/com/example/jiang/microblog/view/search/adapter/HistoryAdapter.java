@@ -57,7 +57,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, historys.get(position).getHistory(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, ResultActivity.class);
                 intent.putExtra(IntentKey.SEARCH_CONTENT, historys.get(position).getHistory());
                 context.startActivity(intent);

@@ -1,10 +1,15 @@
 package com.example.jiang.microblog;
 
+import com.example.jiang.microblog.bean.Hot;
+import com.example.jiang.microblog.json.HosJson;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,9 +33,8 @@ public class ExampleUnitTest {
     }
     @Test
     public void test1(){
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            System.out.println(random.nextInt(10));
-        }
+        Gson gson = new Gson();
+        List<Hot> hots = gson.fromJson(HosJson.JSON, new TypeToken<List<Hot>>(){}.getType());
+        System.out.println(hots);
     }
 }
