@@ -1,15 +1,19 @@
 package com.example.jiang.microblog.view.search.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.History;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
 
 import org.litepal.crud.DataSupport;
@@ -49,6 +53,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, final int position) {
         holder.content.setText(historys.get(position).getHistory());
+
+        holder.content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, historys.get(position).getHistory(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ResultActivity.class);
+                intent.putExtra(IntentKey.SEARCH_CONTENT, historys.get(position).getHistory());
+                context.startActivity(intent);
+            }
+        });
         holder.clearIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

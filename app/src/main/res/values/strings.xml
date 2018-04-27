@@ -193,5 +193,6 @@
     <string name="at_me_message_text">我的微博和评论</string>
     <string name="receive_comment_text">收到的评论</string>
     <string name="receive_like_text">收到的赞</string>
+    <string name="search_hint">搜索Ta,搜索微博</string>
 
 </resources>

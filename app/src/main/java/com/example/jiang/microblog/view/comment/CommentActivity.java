@@ -18,6 +18,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
@@ -101,7 +102,9 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 获取传递过来的数据，减少请求次数
         String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
         Gson gson = new Gson();
+        Log.e("gson", json);
         bean = gson.fromJson(json, Microblog.StatusesBean.class);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -109,10 +112,14 @@ public class CommentActivity extends AppCompatActivity implements
         actionBar.setTitle(bean.getUser().getName());
 
         commentsBeen = new ArrayList<>();
+
+        Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
+        commentsBeen = comment.getComments();
+
         presenter = new CommentPresenter(this);
-        if (commentsBeen.isEmpty()) {
-            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
-        }
+//        if (commentsBeen.isEmpty()) {
+//            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
+//        }
         initViews();
     }
 
@@ -195,12 +202,12 @@ public class CommentActivity extends AppCompatActivity implements
 
     @Override
     public void onSuccess(Object object) {
-        Comment comment = (Comment) object;
-        commentsBeen = comment.getComments();
-        initDatas();
-        Gson gson = new Gson();
-        String toJson = gson.toJson(comment);
-        Log.e("onSuccess", toJson);
+//        Comment comment = (Comment) object;
+//        commentsBeen = comment.getComments();
+//        initDatas();
+//        Gson gson = new Gson();
+//        String toJson = gson.toJson(comment);
+//        Log.e("onSuccess", toJson);
     }
 
     @Override
@@ -220,6 +227,7 @@ public class CommentActivity extends AppCompatActivity implements
 
     //TODO 初始化微博视图
     private void initMicroblogView() {
+        Log.e("bean", bean.toString());
         //TODO 用户头像
         userProfile = (CircleImageView) findViewById(R.id.microblog_user_proflie);
         //TODO 用户名字
@@ -252,6 +260,7 @@ public class CommentActivity extends AppCompatActivity implements
         retweetedContent = (TextView) findViewById(R.id.retweeted_content);
         //TODO 转发微博配图
         retweetedPicture = (NineGridImageView) findViewById(R.id.retweeted_picture);
+        initMicroblogData();
     }
 
     //TODO 初始化微博视图数据
@@ -291,6 +300,8 @@ public class CommentActivity extends AppCompatActivity implements
         picture.setImagesData(bean.getPic_urls());
         //TODO 设置转发微博配图
         setRetweetedData(bean);
+
+        Log.e("from", getFormFormat(bean.getSource()));
     }
 
     //TODO 设置转发的内容

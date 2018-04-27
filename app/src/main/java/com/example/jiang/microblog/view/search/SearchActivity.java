@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.History;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
+import com.example.jiang.microblog.view.search.activity.MoreActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.RecommendAdapter;
 
@@ -99,15 +103,12 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         allHistory.setOnClickListener(this);
         moreRecommend.setOnClickListener(this);
 
-        historyAdapter = new HistoryAdapter(SearchActivity.this, historys);
-        historyRecyclerView.setAdapter(historyAdapter);
-        historyRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
+        initHistory();
+        initRecommend();
+        showTips();
+    }
 
-        recommendAdapter = new RecommendAdapter(SearchActivity.this, recommends);
-        recommendRecyclerView.setAdapter(recommendAdapter);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recommendRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-
+    private void showTips() {
         if (historys.isEmpty()) {
             clearText.setVisibility(View.GONE);
             allHistory.setVisibility(View.GONE);
@@ -117,11 +118,27 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private void initRecommend() {
+        recommendAdapter = new RecommendAdapter(SearchActivity.this, recommends);
+        recommendRecyclerView.setAdapter(recommendAdapter);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recommendRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+    }
+
+    private void initHistory() {
+        historyAdapter = new HistoryAdapter(SearchActivity.this, historys);
+        historyRecyclerView.setAdapter(historyAdapter);
+        historyRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_icon:
                 historyAdapter.addHistory(new History(searchContent.getText().toString()));
+                Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
+                intent.putExtra(IntentKey.SEARCH_CONTENT, searchContent.getText().toString());
+                startActivity(intent);
                 break;
             case R.id.clear_history:
                 historyAdapter.clearHistory();
@@ -139,5 +156,21 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.search_reft_in, R.anim.search_right_out);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        historys.clear();
+        List<History> historyList = DataSupport.findAll(History.class);
+        if (historyList.size() > 5) {
+            for (int i = 0; i < 5; i++) {
+                historys.add(historyList.get(i));
+            }
+        } else {
+            historys = historyList;
+        }
+        initHistory();
+        showTips();
     }
 }

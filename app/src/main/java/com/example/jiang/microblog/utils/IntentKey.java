@@ -20,4 +20,7 @@ public class IntentKey {
     public static String SWITCH_ACCOUNT = "switch_account";
     //TODO 退出
     public static String QUIT = "quit";
+
+    public static String SEARCH_CONTENT = "search_content";
+
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.jiang.microblog.view.search.AllHistoryActivity">
+    tools:context="com.example.jiang.microblog.view.search.activity.AllHistoryActivity">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/all_history_recyclerview"
         android:layout_width="match_parent"

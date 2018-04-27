@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search;
+package com.example.jiang.microblog.view.search.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

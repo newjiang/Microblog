@@ -1,6 +1,5 @@
-package com.example.jiang.microblog.view.search;
+package com.example.jiang.microblog.view.search.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,11 +43,6 @@ public class AllHistoryActivity extends BaseActivity {
                 adapter.clearHistory();
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(AllHistoryActivity.this, SearchActivity.class));
     }
 
 }

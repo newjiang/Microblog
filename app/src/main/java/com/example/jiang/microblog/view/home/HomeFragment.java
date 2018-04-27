@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.Down;
@@ -50,11 +49,11 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void initData() {
         //TODO TODO 获取用户及用户关注好友的微博
-        if (microblogList.isEmpty()) {
-            presenter.getHomeMicroblog(App.getToken().getToken());
-        } else {
-
-        }
+//        if (microblogList.isEmpty()) {
+//            presenter.getHomeMicroblog(App.getToken().getToken());
+//        } else {
+//
+//        }
         Gson gson = new Gson();
         Microblog microblog = gson.fromJson(MicroblogJson.JSON, Microblog.class);
         microblogList = microblog.getStatuses();
