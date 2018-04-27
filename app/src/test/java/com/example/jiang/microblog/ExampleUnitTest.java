@@ -1,14 +1,9 @@
 package com.example.jiang.microblog;
 
-import com.example.jiang.microblog.bean.Account;
-import com.example.jiang.microblog.bean.Weibo;
-import com.example.jiang.microblog.utils.CrawlerTools;
-
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -37,12 +32,5 @@ public class ExampleUnitTest {
         for (int i = 0; i < 10; i++) {
             System.out.println(random.nextInt(10));
         }
-    }
-    @Test
-    public void test2(){
-        List<Weibo> hhh = CrawlerTools.findWeibo("hhh");
-        System.out.println(hhh.toString());
-        List<Account> accounts = CrawlerTools.findAccount("hhh");
-        System.out.println(accounts.toString());
     }
 }

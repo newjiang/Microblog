@@ -3,8 +3,8 @@ package com.example.jiang.microblog.utils;
 import android.util.Log;
 
 import com.example.jiang.microblog.bean.Account;
+import com.example.jiang.microblog.bean.Html;
 import com.example.jiang.microblog.bean.Weibo;
-import com.example.jiang.microblog.test.Demo;
 import com.google.gson.Gson;
 
 import org.jsoup.Jsoup;
@@ -16,11 +16,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
- * Created by jiang on 2018/4/26.
+ * Created by jiang on 2018//26.
  */
 
-public class  CrawlerTools {
+public class CrawlerTools {
+
+    private static final String WEIBO_URL = "http://s.weibo.com/weibo/";
+    private static final String USER_URL = "http://s.weibo.com/user/";
+    private static final String HOT_URL = "http://s.weibo.com/top/summary?cate=realtimehot";
+
     /**
      * 根据关键词查找微博
      *
@@ -29,40 +38,42 @@ public class  CrawlerTools {
      */
     public static List<Weibo> findWeibo(String key) {
         List<Weibo> weibos = new ArrayList<>();
-        String html = "";
+        OkHttpClient client = new OkHttpClient();
+        String weibo = "";//TODO 微博集合的html
+        Response response;
+        Request request = new Request.Builder().url(WEIBO_URL + key).build();
         try {
-            Document doc = Jsoup.connect("http://s.weibo.com/weibo/" + key).get();
-            Log.e("doc", doc.toString());
+            response = client.newCall(request).execute();
+            Document doc = Jsoup.parse(response.body().string());
             Elements scripts = doc.select("script");
             for (Element script : scripts) {
                 if (script.html().contains("STK && STK.pageletM && STK.pageletM.view")) {
                     String str = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
                     String substring = str.substring(1, str.length() - 1);
-                    if (substring.length() > html.length()) {
-                        html = substring;
+                    if (substring.length() > weibo.length()) {
+                        weibo = substring;
                     }
+                }
+            }
+            if (weibo == null || weibo.equals("")) {
+                Log.e("html", "空");
+            } else {
+                Gson gson = new Gson();
+                Html demo = gson.fromJson(weibo, Html.class);
+                Elements es = Jsoup.parse(demo.getHtml()).select("div.feed_lists").select("div.WB_cardwrap");
+                for (Element e : es) {
+                    weibos.add(getWeibo(e));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (html == null || html.equals("")) {
-            Log.e("html", "空");
-        } else {
-            Gson gson = new Gson();
-            Demo demo = gson.fromJson(html, Demo.class);
-            Document doc = Jsoup.parse(demo.getHtml());
-            Elements select = doc.select("div.feed_lists");
-            Elements elements = select.select("div.WB_cardwrap");
-            for (Element e : elements) {
-                weibos.add(getWeibo(e));
-            }
         }
         return weibos;
     }
 
     /**
      * 查找微博元素的数据
+     *
      * @param e
      * @return Weibo
      */
@@ -118,68 +129,79 @@ public class  CrawlerTools {
         return new Weibo(mid, header, name, content, pictureList, time, from, like, redirect, comment, retweetedUser, retweetedContent, retweetedPicture);
     }
 
-    public static List<Account> findAccount(String key) {
+
+    /**
+     * 根据关键字查询用户
+     *
+     * @param key
+     * @return
+     */
+    public static List<Account> findUser(String key) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(USER_URL + key).build();
         List<Account> accounts = new ArrayList<>();
-        String html = "";
+        Response response;
+        String user = "";
         try {
-            Document doc = Jsoup.connect("http://s.weibo.com/user/" + key + "&Refer=weibo_user").get();
+            response = client.newCall(request).execute();
+            Document doc = Jsoup.parse(response.body().string());
             Elements scripts = doc.select("script");
             for (Element script : scripts) {
                 if (script.html().contains("STK && STK.pageletM && STK.pageletM.view")) {
-                    String str = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
-                    String substring = str.substring(1, str.length() - 1);
-                    if (substring.length() > html.length()) {
-                        html = substring;
+                    String s = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
+                    String sub = s.substring(1, s.length() - 1);
+                    if (sub.length() > user.length()) {
+                        user = sub;
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new Gson();
-        Demo demo = gson.fromJson(html, Demo.class);
-        try {
-            Document doc = Jsoup.parse(demo.getHtml());
-            Elements elements = doc.select("div.list_person");
-            for (Element account : elements) {
-                accounts.add(getAccountInfo(account));
+            Gson gson = new Gson();
+            Html h = gson.fromJson(user, Html.class);
+            Document d = Jsoup.parse(h.getHtml());
+            Elements es = d.select("div.list_person");
+            for (Element e : es) {
+                accounts.add(getAccountInfo(e));
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return accounts;
     }
 
-    private static Account getAccountInfo(Element element) {
-//TODO 头像
-        String imageUrl = element.getElementsByClass("person_pic").select("img").attr("src");
-//TODO 名字
-        String name = element.getElementsByClass("person_name")
+    /**
+     * 查找用户元素的数据
+     *
+     * @param e
+     * @return
+     */
+    private static Account getAccountInfo(Element e) {
+        String imageUrl = e.getElementsByClass("person_pic").select("img").attr("src");
+
+        String name = e.getElementsByClass("person_name")
                 .select("a").get(0).getElementsByClass("W_texta").html();
-//TODO 性别
+
         String gender = "";
-        String female = element.getElementsByClass("person_addr")
+
+        String female = e.getElementsByClass("person_addr")
                 .select("span").get(0).getElementsByClass("female").attr("title");
-        String male = element.getElementsByClass("person_addr")
+        String male = e.getElementsByClass("person_addr")
                 .select("span").get(0).getElementsByClass("male").attr("title");
         if (male.equals("")) {
             gender = female;
         } else {
             gender = male;
         }
-//TODO 描述
-        String description = element.getElementsByClass("person_card").html();
-//TODO 粉丝、关注、微博
-        String friendsCount = element.getElementsByClass("person_num")
+
+        String description = e.getElementsByClass("person_card").html();
+
+        String friendsCount = e.getElementsByClass("person_num")
                 .select("a").get(0).getElementsByClass("W_linkb").html();
 
-        String followersCount = element.getElementsByClass("person_num")
+        String followersCount = e.getElementsByClass("person_num")
                 .select("a").get(1).getElementsByClass("W_linkb").html();
 
-        String statusesCount = element.getElementsByClass("person_num")
+        String statusesCount = e.getElementsByClass("person_num")
                 .select("a").get(2).getElementsByClass("W_linkb").html();
-
-        Account account = new Account(name, gender, imageUrl, description, friendsCount, followersCount, statusesCount);
 
         return new Account(name, gender, imageUrl, description, friendsCount, followersCount, statusesCount);
     }

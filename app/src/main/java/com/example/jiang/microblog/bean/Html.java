@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.test;
+package com.example.jiang.microblog.bean;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * Created by jiang on 2018/4/24.
  */
 
-public class Demo {
+public class Html {
 
     private String pid;
     private String html;

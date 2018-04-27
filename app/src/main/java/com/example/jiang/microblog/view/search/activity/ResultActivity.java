@@ -3,21 +3,20 @@ package com.example.jiang.microblog.view.search.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.bean.Account;
+import com.example.jiang.microblog.bean.Weibo;
+import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import java.util.List;
 
 public class ResultActivity extends AppCompatActivity {
 
     private TextView textView;
-    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +25,24 @@ public class ResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String key = intent.getStringExtra(IntentKey.SEARCH_CONTENT);
         textView = (TextView) findViewById(R.id.jjjjj);
-        button = (Button) findViewById(R.id.bbbbb);
         textView.setText(key);
-        button.setOnClickListener(new View.OnClickListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            OkHttpClient client = new OkHttpClient();
-
-                            Request request = new Request.Builder()
-                                    .url("http://s.weibo.com/weibo/hhhhhh")
-                                    .build();
-
-                            Response response = client.newCall(request).execute();
-                            String string = response.body().string();
-                            System.out.println(string);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            public void run() {
+                try {
+                    List<Weibo> weibos = CrawlerTools.findWeibo(key);
+                    for (Weibo w : weibos) {
+                        Log.e("微博微博", w.toString());
                     }
-                }).start();
-            }
 
-        });
+                    List<Account> accounts = CrawlerTools.findUser(key);
+                    for (Account a : accounts) {
+                        Log.e("用户用户", a.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

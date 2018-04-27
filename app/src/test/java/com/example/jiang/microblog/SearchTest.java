@@ -1,7 +1,7 @@
 package com.example.jiang.microblog;
 
 import com.example.jiang.microblog.bean.Account;
-import com.example.jiang.microblog.test.Demo;
+import com.example.jiang.microblog.bean.Html;
 import com.google.gson.Gson;
 
 import org.jsoup.Jsoup;
@@ -46,8 +46,8 @@ public class SearchTest {
             e.printStackTrace();
         }
         Gson gson = new Gson();
-        Demo demo = gson.fromJson(html, Demo.class);
-        Document doc = Jsoup.parse(demo.getHtml());
+        Html h = gson.fromJson(html, Html.class);
+        Document doc = Jsoup.parse(h.getHtml());
         Elements select = doc.select("div.feed_lists");
         Elements elements = select.select("div.WB_cardwrap");
         for (Element e : elements) {
@@ -154,9 +154,9 @@ public class SearchTest {
             e.printStackTrace();
         }
         Gson gson = new Gson();
-        Demo demo = gson.fromJson(html, Demo.class);
+        Html h = gson.fromJson(html, Html.class);
         try {
-            Document doc = Jsoup.parse(demo.getHtml());
+            Document doc = Jsoup.parse(h.getHtml());
             Elements elements = doc.select("div.list_person");
             for (Element account : elements) {
                 getAccountInfo(account);
