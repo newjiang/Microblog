@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Account;
+import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Weibo;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
@@ -38,6 +39,10 @@ public class ResultActivity extends AppCompatActivity {
                     List<Account> accounts = CrawlerTools.findUser(key);
                     for (Account a : accounts) {
                         Log.e("用户用户", a.toString());
+                    }
+                    List<Hot> hots = CrawlerTools.findTopSearch();
+                    for (Hot h : hots) {
+                        Log.e("热门搜索", h.toString());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

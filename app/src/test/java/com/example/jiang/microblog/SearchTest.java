@@ -1,6 +1,7 @@
 package com.example.jiang.microblog;
 
 import com.example.jiang.microblog.bean.Account;
+import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Html;
 import com.google.gson.Gson;
 
@@ -202,6 +203,7 @@ public class SearchTest {
 
     @Test
     public void findTopSearch(){
+        List<Hot> hots = new ArrayList<>();
         String html = "";
         try {
             Document doc = Jsoup.connect("http://s.weibo.com/top/summary?cate=realtimehot").get();
@@ -215,7 +217,21 @@ public class SearchTest {
                     }
                 }
             }
-            System.out.println(html);
+            Gson gson = new Gson();
+            Html h = gson.fromJson(html, Html.class);
+
+            Document d = Jsoup.parse(h.getHtml());
+            Elements tbody = d.select("tbody").select("tr");
+            for (Element e : tbody) {
+                String title = e.select("td.td_02").select("div.rank_content").select("p.star_name").select("a").html();
+                String hot = e.select("td.td_02").select("div.rank_content").select("p.star_name").select("i.icon_txt").html();
+                String count = e.select("td.td_03").select("p.star_num").select("span").html();
+                hots.add(new Hot(title, hot, count));
+            }
+
+            String toJson = new Gson().toJson(hots);
+            System.out.println(toJson);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

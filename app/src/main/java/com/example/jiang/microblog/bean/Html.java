@@ -47,7 +47,7 @@ public class Html {
 
     @Override
     public String toString() {
-        return "Demo{" +
+        return "Html{" +
                 "pid='" + pid + '\'' +
                 ", html='" + html + '\'' +
                 ", js=" + js +

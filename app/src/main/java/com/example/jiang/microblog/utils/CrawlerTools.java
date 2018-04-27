@@ -3,6 +3,7 @@ package com.example.jiang.microblog.utils;
 import android.util.Log;
 
 import com.example.jiang.microblog.bean.Account;
+import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Html;
 import com.example.jiang.microblog.bean.Weibo;
 import com.google.gson.Gson;
@@ -206,4 +207,42 @@ public class CrawlerTools {
         return new Account(name, gender, imageUrl, description, friendsCount, followersCount, statusesCount);
     }
 
+
+    public static List<Hot> findTopSearch(){
+        List<Hot> hots = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(HOT_URL).build();
+        Response response;
+        String html = "";
+        try {
+            response = client.newCall(request).execute();
+            Document doc = Jsoup.parse(response.body().string());
+            Elements scripts = doc.select("script");
+            for (Element script : scripts) {
+                if (script.html().contains("STK && STK.pageletM && STK.pageletM.view")) {
+                    String s = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
+                    String sub = s.substring(1, s.length() - 1);
+                    if (sub.length() > html.length()) {
+                        html = sub;
+                    }
+                }
+            }
+            Gson gson = new Gson();
+            Html h = gson.fromJson(html, Html.class);
+            Document d = Jsoup.parse(h.getHtml());
+            Elements tbody = d.select("tbody").select("tr");
+            for (Element e : tbody) {
+                //TODO 标题
+                String title = e.select("td.td_02").select("div.rank_content").select("p.star_name").select("a").html();
+                //TODO 热度程度
+                String hot = e.select("td.td_02").select("div.rank_content").select("p.star_name").select("i.icon_txt").html();
+                //TODO 搜索次数
+                String count = e.select("td.td_03").select("p.star_num").select("span").html();
+                hots.add(new Hot(title, hot, count));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hots;
+    }
 }
