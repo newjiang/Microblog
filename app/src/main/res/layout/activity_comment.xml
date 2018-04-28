@@ -19,7 +19,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <include layout="@layout/home_microblog_view"/>
+                    <include layout="@layout/microblog_layout"/>
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/comment_recyclerview"
                         android:layout_width="match_parent"

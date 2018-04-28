@@ -152,8 +152,8 @@
 
     <color name="textblack">#c8000000</color> <!-- 黑色 -->
 
-    <color name="background_my_material_light">@color/material_grey_50</color>
-    <color name="background_my_material_grey">#ededed</color>
+    <color name="background_light">@color/material_grey_50</color>
+    <color name="background_grey">#ededed</color>
     <color name="iconCover">#cc979797</color>
     <color name="iconCoverDark">#cc393939</color>
     <color name="iconTransparent">#00000000</color>

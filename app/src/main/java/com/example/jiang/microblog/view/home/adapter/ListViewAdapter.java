@@ -45,7 +45,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         //TODO 根据类型来创建view
         if (viewType == TYPE_NORMAL) {
             //TODO 加载微博内容
-            view = View.inflate(parent.getContext(), R.layout.home_microblog_view, null);
+            view = View.inflate(parent.getContext(), R.layout.microblog_layout, null);
         } else {
             //TODO 这个是加载更多的
             view = View.inflate(parent.getContext(), R.layout.item_load_layout, null);

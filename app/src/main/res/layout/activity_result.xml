@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.example.jiang.microblog.view.result.ResultActivity">
     <ProgressBar
-        android:id="@+id/progressbar"
+        android:id="@+id/user_bar"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_margin="10dp"
@@ -17,6 +17,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
+    <ProgressBar
+        android:id="@+id/weibo_bar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal|center_vertical"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/weibo_recyclerview"
         android:layout_width="match_parent"

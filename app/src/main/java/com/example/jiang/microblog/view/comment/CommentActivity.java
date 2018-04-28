@@ -234,8 +234,6 @@ public class CommentActivity extends AppCompatActivity implements
         username = (TextView) findViewById(R.id.microblog_remark);
         //TODO 用户备注
         remark = (TextView) findViewById(R.id.microblog_username);
-        //TODO 删除
-        delete = (TextView) findViewById(R.id.microblog_content_delete);
         //TODO 微博文字内容
         content = (TextView) findViewById(R.id.microblog_content);
         //TODO 微博配图

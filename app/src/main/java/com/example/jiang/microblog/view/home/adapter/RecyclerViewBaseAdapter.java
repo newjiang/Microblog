@@ -103,8 +103,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         TextView username;
         //TODO 用户备注信息
         TextView remark;
-        //TODO 删除
-        TextView delete;
         //TODO 微博文字内容
         TextView content;
         //TODO 微博配图
@@ -142,8 +140,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             username = (TextView) itemView.findViewById(R.id.microblog_remark);
             //TODO 用户备注
             remark = (TextView) itemView.findViewById(R.id.microblog_username);
-            //TODO 删除
-            delete = (TextView) itemView.findViewById(R.id.microblog_content_delete);
             //TODO 微博文字内容
             content = (TextView) itemView.findViewById(R.id.microblog_content);
             //TODO 微博配图
@@ -202,8 +198,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             }
             //TODO 微博文字内容
             content.setText(bean.getText());
-            //TODO 是否删除
-            delete.setText("");
             //TODO 微博内容
             content.setText(bean.getText());
             //TODO 发布时间

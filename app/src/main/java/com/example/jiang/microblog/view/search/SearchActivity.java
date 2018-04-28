@@ -19,9 +19,8 @@ import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
-import com.example.jiang.microblog.view.search.activity.MoreActivity;
 import com.example.jiang.microblog.view.result.ResultActivity;
+import com.example.jiang.microblog.view.search.activity.MoreActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.HotAdapter;
 import com.google.gson.Gson;
@@ -78,9 +77,16 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Hot> hotList = CrawlerTools.findTopSearch();
-                for (int i = 0; i < 10; i++) {
-                    hots.add(hotList.get(i));
+                List<Hot> hotList = null;
+                try {
+                    hotList = CrawlerTools.findTopSearch();
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
+                }
+                if (hotList != null) {
+                    for (int i = 0; i < 10; i++) {
+                        hots.add(hotList.get(i));
+                    }
                 }
                 runOnUiThread(new Runnable() {
                     @Override
