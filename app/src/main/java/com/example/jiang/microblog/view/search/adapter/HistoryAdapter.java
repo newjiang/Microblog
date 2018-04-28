@@ -14,6 +14,7 @@ import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.result.ResultActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
+import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -36,10 +37,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView content;
         ImageView clearIcon;
+        ImageView historyIcon;
         public ViewHolder(View itemView) {
             super(itemView);
             content = (TextView) itemView.findViewById(R.id.history_content);
             clearIcon = (ImageView) itemView.findViewById(R.id.clear_icon);
+            historyIcon = (ImageView) itemView.findViewById(R.id.history_icon);
         }
     }
 
@@ -65,6 +68,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 removeHistory(position);
+            }
+        });
+        holder.historyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, AllHistoryActivity.class));
             }
         });
     }
@@ -119,10 +128,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         SearchActivity activity = (SearchActivity) context;
         if (historys.isEmpty()) {
             activity.getClearText().setVisibility(View.GONE);
-            activity.getAllHistory().setVisibility(View.GONE);
         } else {
             activity.getClearText().setVisibility(View.VISIBLE);
-            activity.getAllHistory().setVisibility(View.VISIBLE);
         }
     }
 

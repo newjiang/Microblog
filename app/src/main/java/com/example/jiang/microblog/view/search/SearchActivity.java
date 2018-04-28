@@ -33,13 +33,10 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener{
 
-    //TODO 微博热搜榜  http://s.weibo.com/top/summary?cate=realtimehot
-
     private EditText searchContent;  //TODO 搜索框内容
     private ImageView searchIcon;//TODO 去搜索图标
 
     private TextView clearText;//TODO 清除搜索的历史记录
-    private TextView allHistory;//TODO 全部
 
     private TextView moreRecommend;//TODO 更多
 
@@ -56,9 +53,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         return clearText;
     }
 
-    public TextView getAllHistory() {
-        return allHistory;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +64,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         historys = new ArrayList<>();
         hots = new ArrayList<>();
         initData();
-        initView();
     }
 
     private void initData() {
@@ -82,7 +75,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         } else {
             historys = historyList;
         }
-        Gson gson = new Gson();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,6 +82,12 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 for (int i = 0; i < 10; i++) {
                     hots.add(hotList.get(i));
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initView();
+                    }
+                });
             }
         }).start();
 
@@ -99,13 +97,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         searchContent = (EditText) findViewById(R.id.search_edit);
         searchIcon = (ImageView) findViewById(R.id.search_icon);
         clearText = (TextView) findViewById(R.id.clear_history);
-        allHistory = (TextView) findViewById(R.id.all_history);
         moreRecommend = (TextView) findViewById(R.id.more_recommend);
         historyRecyclerView = (RecyclerView) findViewById(R.id.search_history);
         recommendRecyclerView = (RecyclerView) findViewById(R.id.search_recommend);
         searchIcon.setOnClickListener(this);
         clearText.setOnClickListener(this);
-        allHistory.setOnClickListener(this);
         moreRecommend.setOnClickListener(this);
 
         initHistory();
@@ -116,10 +112,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void showTips() {
         if (historys.isEmpty()) {
             clearText.setVisibility(View.GONE);
-            allHistory.setVisibility(View.GONE);
         } else {
             clearText.setVisibility(View.VISIBLE);
-            allHistory.setVisibility(View.VISIBLE);
         }
     }
 
@@ -151,9 +145,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.clear_history:
                 historyAdapter.clearHistory();
-                break;
-            case R.id.all_history:
-                startActivity(new Intent(SearchActivity.this, AllHistoryActivity.class));
                 break;
             case R.id.more_recommend:
                 new Thread(new Runnable() {

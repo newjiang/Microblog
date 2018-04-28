@@ -1,8 +1,10 @@
 package com.example.jiang.microblog.view.search.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +32,11 @@ public class AllHistoryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_history);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("历史记录");
+        }
         histories = DataSupport.findAll(History.class);
         recyclerView = (RecyclerView) findViewById(R.id.all_history_recyclerview);
         clearHistory = (TextView) findViewById(R.id.clear_all_history);
@@ -43,6 +50,15 @@ public class AllHistoryActivity extends BaseActivity {
                 adapter.clearHistory();
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

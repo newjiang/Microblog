@@ -50,14 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="清除所有的历史记录"/>
-        <TextView
-            android:id="@+id/all_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/royalblue"
-            android:text="全部>>"/>
     </RelativeLayout>
 
     <RelativeLayout
