@@ -190,9 +190,10 @@
     <string name="title_activity_infomation">InfomationActivity</string>
 
 
-    <string name="at_me_message_text">我的微博和评论</string>
-    <string name="receive_comment_text">收到的评论</string>
-    <string name="receive_like_text">收到的赞</string>
-    <string name="search_hint">搜索Ta,搜索微博</string>
+    <string name="at_me_weibos" translatable="false">\@我的微博</string>
+    <string name="at_me_comments" translatable="false">\@我的评论</string>
+    <string name="receive_comments">收到的评论</string>
+    <string name="send_comment">发出的评论</string>
+    <string name="search_hint">搜点什么...</string>
 
 </resources>

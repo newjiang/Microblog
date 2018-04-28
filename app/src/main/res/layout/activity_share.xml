@@ -32,7 +32,7 @@
             android:layout_height="24dp"
             android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_photo"
+            android:src="@drawable/icon_photo"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
 
@@ -43,7 +43,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/tupian"
             android:padding="2dp"
-            android:src="@drawable/ic_at"
+            android:src="@drawable/icon_at"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
 
@@ -54,7 +54,7 @@
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_send"
+            android:src="@drawable/icon_send"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
     </RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            style="@style/message_linearlayout_style">
+            <ImageView
+                style="@style/message_iv_style"
+                android:background="@drawable/message_icon_background"
+                android:src="@drawable/ic_at"/>
+            <TextView
+                style="@style/message_tv_style"
+                android:text="@string/at_me_weibos"/>
+            <TextView
+                android:id="@+id/at_me_weibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            style="@style/message_linearlayout_style">
+            <ImageView
+                style="@style/message_iv_style"
+                android:background="@drawable/message_icon_background"
+                android:src="@drawable/ic_at"/>
+            <TextView
+                style="@style/message_tv_style"
+                android:text="@string/at_me_comments"/>
+            <TextView
+                android:id="@+id/at_me_commends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            style="@style/message_linearlayout_style">
+            <ImageView
+                style="@style/message_iv_style"
+                android:background="@drawable/message_icon_background"
+                android:src="@drawable/ic_receive_comment"/>
+            <TextView
+                style="@style/message_tv_style"
+                android:text="@string/receive_comments"/>
+            <TextView
+                android:id="@+id/receive_commends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            style="@style/message_linearlayout_style">
+            <ImageView
+                style="@style/message_iv_style"
+                android:background="@drawable/message_icon_background"
+                android:src="@drawable/ic_send"/>
+            <TextView
+                style="@style/message_tv_style"
+                android:text="@string/send_comment"/>
+            <TextView
+                android:id="@+id/send_commends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

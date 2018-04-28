@@ -15,7 +15,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/img_avatar"/>
+            android:src="@drawable/icon_avatar"/>
         <ImageView
             android:id="@+id/gender"
             android:layout_width="15dp"

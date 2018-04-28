@@ -40,7 +40,7 @@
                     android:layout_height="35dp"
                     android:layout_margin="10dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/img_avatar"/>
+                    android:src="@drawable/icon_avatar"/>
 
                 <TextView
                     android:id="@+id/tv_comment_fake_button"
