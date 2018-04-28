@@ -68,7 +68,7 @@
                android:layout_margin="1dp"
                android:layout_width="match_parent"
                android:layout_below="@id/microblog_content"
-               app:imgGap="4dp"
+               app:imgGap="3dp"
                app:showStyle="fill"
                app:singleImgSize="180dp"/>
            <!--转发微博内容-->

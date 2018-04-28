@@ -3,6 +3,7 @@ package com.example.jiang.microblog.view.home.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
 import com.example.jiang.microblog.view.adapter.RetweetedImageAdapter;
@@ -34,11 +36,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private Context context;
-
     protected final List<Microblog.StatusesBean> beanList;
-
-    private OnItemClickListener onItemClickListener;
 
     public RecyclerViewBaseAdapter(Context context, List<Microblog.StatusesBean> data) {
         this.context = context;
@@ -77,23 +77,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             return beanList.size();
         }
         return 0;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        //TODO 设置一个监听,其实,就是要设置一个接口,一个回调的接口
-        this.onItemClickListener = listener;
-    }
-
-
-    /**
-     * 编写回调的步骤
-     * 1、创建这个接口
-     * 2、定义借口内部的方法
-     * 3、提供设置接口的方法(其实是外部实现)
-     * 4、接口方法的调用
-     */
-    public interface OnItemClickListener {
-        void onItemClick(int position);
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
@@ -221,12 +204,16 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
 
         /**
          * 设置转发的内容
+         *
          * @param bean
          */
         private void setRetweetedData(Microblog.StatusesBean bean) {
             if (bean.getRetweeted_status() != null) {
                 //TODO 转发微博的内容
-                retweetedContent.setText(bean.getRetweeted_status().getText());
+                String name = "@" + bean.getRetweeted_status().getUser().getName();
+                String text =  name + bean.getRetweeted_status().getText();
+                SpannableStringBuilder sb = TextColorTools.highlight(text, name);
+                retweetedContent.setText(sb);
                 //TODO 转发微博的配图
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
@@ -243,6 +230,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
 
         /**
          * 点击头像事件
+         *
          * @param view
          * @param userJson
          */
@@ -257,6 +245,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             });
         }
     }
+
     /**
      * 格式转化来源信息
      *
@@ -266,6 +255,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     private String getFormFormat(String source) {
         return Jsoup.parse(source).text();
     }
+
     /**
      * 获取真正的时间并转化格式
      *

@@ -6,16 +6,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import com.example.jiang.microblog.base.App;
+import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.utils.ActivityController;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.activity.LoginActivity;
 
-public class GoodbyeActivity extends AppCompatActivity {
+public class GoodbyeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,6 @@ public class GoodbyeActivity extends AppCompatActivity {
                     startActivity(new Intent(GoodbyeActivity.this, LoginActivity.class));
                 } else {//退出
                     ActivityController.finishAll();
-                    finish();
                 }
             }
         }, 1000);

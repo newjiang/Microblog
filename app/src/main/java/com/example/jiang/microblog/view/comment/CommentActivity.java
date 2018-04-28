@@ -53,8 +53,6 @@ public class CommentActivity extends AppCompatActivity implements
     TextView username;
     //TODO 用户备注信息
     TextView remark;
-    //TODO 删除
-    private TextView delete;
     //TODO 微博文字内容
     private TextView content;
     //TODO 微博配图
@@ -278,8 +276,6 @@ public class CommentActivity extends AppCompatActivity implements
         }
         //TODO 微博文字内容
         content.setText(bean.getText());
-        //TODO 是否删除
-        delete.setText("");
         //TODO 微博内容
         content.setText(bean.getText());
         //TODO 发布时间

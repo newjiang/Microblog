@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
@@ -87,6 +88,14 @@ public class HomeFragment extends BaseFragment {
         //TODO 下划线
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "长按", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         //TODO 上拉加载更多
         handlerUpPullUpdate();
     }

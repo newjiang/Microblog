@@ -33,20 +33,11 @@
                 android:layout_alignParentBottom="true"
                 android:background="#ffffff"
                 android:elevation="8dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/account_header"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/icon_avatar"/>
-
                 <TextView
                     android:id="@+id/tv_comment_fake_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="添加评论..."
+                    android:hint="  添加评论..."
                     android:textColorHint="#88888888"
                     android:textColor="#212121"
                     android:gravity="center_vertical"

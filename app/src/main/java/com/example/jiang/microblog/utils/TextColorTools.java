@@ -28,7 +28,7 @@ public class TextColorTools {
         Pattern p = Pattern.compile(target);
         Matcher m = p.matcher(text);
         while (m.find()) {
-            span = new ForegroundColorSpan(0xffff8c00);
+            span = new ForegroundColorSpan(0xFF007DE0);
             spannable.setSpan(span, m.start(), m.end(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
