@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
+import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
@@ -39,17 +39,22 @@ import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
 import com.google.gson.Gson;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.share.WbShareCallback;
+import com.sina.weibo.sdk.share.WbShareHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseActivity implements UserContract.View, NavigationView.OnNavigationItemSelectedListener {
-
+public class MainActivity extends BaseActivity implements UserContract.View,
+        NavigationView.OnNavigationItemSelectedListener, WbShareCallback {
     private UserContract.Presenter presenter;
-    private LinearLayout mainLayout;
     private CircleImageView composeMicroblog; //TODO　发布微博按钮
     private ImageView homeSearch;              //TODO 搜索按钮
     private NavigationView navigationView;    //TODO　信息导航栏
@@ -66,11 +71,21 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
     private User user;
+
+    private AuthInfo mAuthInfo;
+
+    private WbShareHandler shareHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startService(new Intent(MainActivity.this, PollingService.class));
+
+        mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+        WbSdk.install(this, mAuthInfo);
+        shareHandler = new WbShareHandler(this);
+        shareHandler.registerApp();
         initViews();
         initTabs();
         initEvents();
@@ -93,7 +108,6 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
      * 初始化控件
      */
     private void initViews() {
-        mainLayout = (LinearLayout) findViewById(R.id.content_main);
         composeMicroblog = (CircleImageView) findViewById(R.id.home_share_microblog);
         homeSearch = (ImageView) findViewById(R.id.home_search);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -103,7 +117,7 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         spinner = (Spinner) findViewById(R.id.home_spinner);
         toolbar = (Toolbar) findViewById(R.id.home_toolbar);
         toolbar.setTitle("");
-        headerLayout =  navigationView.getHeaderView(0);
+        headerLayout = navigationView.getHeaderView(0);
         header = (CircleImageView) headerLayout.findViewById(R.id.home_account_icon);
         usernaem = (TextView) headerLayout.findViewById(R.id.home_account_name);
         description = (TextView) headerLayout.findViewById(R.id.home_account_introduction);
@@ -158,8 +172,13 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         composeMicroblog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ShareActivity.class);
-                startActivity(intent);
+                boolean isInstall = WbSdk.isWbInstall(MainActivity.this);
+                if (isInstall) {
+                    shareByClient();
+                } else {
+                    startActivity(new Intent(MainActivity.this, ShareActivity.class));
+                }
+
             }
         });
         homeSearch.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +189,21 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
             }
         });
     }
+
+    /**
+     * 通过微博客户端分享微博
+     *
+     */
+    private void shareByClient() {
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+        TextObject textObject = new TextObject();
+        textObject.text = "";
+        textObject.title = "xxxx";
+        textObject.actionUrl = "http://www.sina.com";
+        weiboMessage.textObject = textObject;
+        shareHandler.shareMessage(weiboMessage, false);
+    }
+
 
     /**
      * 下拉框事件
@@ -187,8 +221,10 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
                 //TODO 下拉框
 
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
@@ -200,6 +236,7 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -212,13 +249,14 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
                     toolbar.setTitle("消息");
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
-                } else if (position == 2){
+                } else if (position == 2) {
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("热门");
                     homeSearch.setVisibility(View.VISIBLE);
                     composeMicroblog.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -232,25 +270,18 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
         int id = item.getItemId();
 
         if (id == R.id.nav_all) {
-            //TODO　全部
             Toast.makeText(this, "全部", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_gallery) {
-            //TODO　相册
             Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_favorite) {
-            //TODO　收藏
             Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_original) {
-            //TODO　原创
             Toast.makeText(this, "原创", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_about) {
-            //TODO　关于
             Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_skin) {
-            //TODO　皮肤
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_setting) {
-            //TODO　设置
             Toast.makeText(this, "虽然是设置，现在用于测试通知", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         } else if (id == R.id.nav_switch_account) {//TODO　切换账号
@@ -284,8 +315,24 @@ public class MainActivity extends BaseActivity implements UserContract.View, Nav
 //        //TODO　设置用户描述
 //        description.setText(user.getDescription());
     }
+
     @Override
     public void onError(String result) {
         Log.e("MainActivity-onError", result);
+    }
+
+    @Override
+    public void onWbShareSuccess() {
+
+    }
+
+    @Override
+    public void onWbShareCancel() {
+
+    }
+
+    @Override
+    public void onWbShareFail() {
+
     }
 }
