@@ -1,7 +1,9 @@
 package com.example.jiang.microblog;
 
 import com.example.jiang.microblog.bean.Hot;
+import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.HosJson;
+import com.example.jiang.microblog.json.MicroblogJson;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,4 +39,41 @@ public class ExampleUnitTest {
         List<Hot> hots = gson.fromJson(HosJson.JSON, new TypeToken<List<Hot>>(){}.getType());
         System.out.println(hots);
     }
+
+    @Test
+    public void test2() {
+        Gson gson = new Gson();
+        Microblog m1 = gson.fromJson(MicroblogJson.JSON, Microblog.class);
+        Microblog m2 = gson.fromJson(MicroblogJson.JSON, Microblog.class);
+        List<Microblog.StatusesBean> old = m1.getStatuses();
+        List<Microblog.StatusesBean> xin = m2.getStatuses();
+        xin.remove(2);
+        xin.remove(4);
+        xin.get(3).setMid("12111111111111");
+        System.out.println("添加前");
+        for (Microblog.StatusesBean m : old) {
+            System.out.print(m.getMid() + "\t");
+        }
+        for (int i = 0; i < xin.size(); i++) {
+            int k = 0;
+            int count = 0;
+            for (int j = 0; j < old.size(); j++) {
+                if (xin.get(i).getMid().equals(old.get(j).getMid())) {
+                    old.remove(j);
+                    old.add(j, xin.get(i));
+                } else {
+                    count = ++k;
+                    if (count == old.size()) {
+                        old.add(0, xin.get(i));
+                    }
+                }
+            }
+        }
+        System.out.println();
+        System.out.println("添加后");
+        for (Microblog.StatusesBean m : old) {
+            System.out.print(m.getMid() + "\t");
+        }
+    }
+
 }

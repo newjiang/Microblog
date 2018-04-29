@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        startService(new Intent(MainActivity.this, PollingService.class));
+//        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         WbSdk.install(this, mAuthInfo);
@@ -95,15 +95,10 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 //        if (user == null) {
 //            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
 //        }
-        Gson gson = new Gson();
-        user = gson.fromJson(UserJson.JSON, User.class);
-        //TODO　设置用户头像
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　设置用户昵称
-        usernaem.setText(user.getName());
-        //TODO　设置用户描述
-        description.setText(user.getDescription());
+        fromTestData();
     }
+
+
 
     /**
      * 初始化控件
@@ -347,5 +342,17 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public void onWbShareFail() {
 
+    }
+
+//TODO 测试数据
+    private void fromTestData() {
+        Gson gson = new Gson();
+        user = gson.fromJson(UserJson.JSON, User.class);
+        //TODO　设置用户头像
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　设置用户昵称
+        usernaem.setText(user.getName());
+        //TODO　设置用户描述
+        description.setText(user.getDescription());
     }
 }

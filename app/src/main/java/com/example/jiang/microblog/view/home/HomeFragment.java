@@ -104,11 +104,7 @@ public class HomeFragment extends BaseFragment {
      * 下来事件
      */
     private void handlerDownPullUpdate() {
-        refreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         refreshLayout.setEnabled(true);
         refreshLayout.setProgressViewOffset(true, 0, 200);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
