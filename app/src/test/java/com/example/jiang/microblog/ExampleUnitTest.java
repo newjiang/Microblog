@@ -49,26 +49,15 @@ public class ExampleUnitTest {
         List<Microblog.StatusesBean> xin = m2.getStatuses();
         xin.remove(2);
         xin.remove(4);
-        xin.get(3).setMid("12111111111111");
-        System.out.println("添加前");
+        xin.get(1).setMid("1111111111111111");
+        xin.get(3).setMid("3333333333333333");
+        xin.get(5).setMid("5555555555555555");
+        System.out.println("添加前" + old.size());
         for (Microblog.StatusesBean m : old) {
             System.out.print(m.getMid() + "\t");
         }
-        for (int i = 0; i < xin.size(); i++) {
-            int k = 0;
-            int count = 0;
-            for (int j = 0; j < old.size(); j++) {
-                if (xin.get(i).getMid().equals(old.get(j).getMid())) {
-                    old.remove(j);
-                    old.add(j, xin.get(i));
-                } else {
-                    count = ++k;
-                    if (count == old.size()) {
-                        old.add(0, xin.get(i));
-                    }
-                }
-            }
-        }
+        System.out.println("");
+        add(old, xin, false);
         System.out.println();
         System.out.println("添加后");
         for (Microblog.StatusesBean m : old) {
@@ -76,4 +65,25 @@ public class ExampleUnitTest {
         }
     }
 
+    private void add(List<Microblog.StatusesBean> currentList,
+                     List<Microblog.StatusesBean> newList, boolean isDown) {
+        int index = 0;
+        for (int i = 0; i < newList.size(); i++) {
+            int count = 0;
+            for (int j = 0; j < currentList.size(); j++) {
+                if (!(newList.get(i).getMid().equals(currentList.get(j).getMid()))) {
+                    count++;
+                    if (count == currentList.size()) {
+                        if (isDown) {
+                            currentList.add(index, newList.get(i));
+                            index++;
+                        } else {
+                            currentList.add(newList.get(i));
+                        }
+                        count = 0;
+                    }
+                }
+            }
+        }
+    }
 }
