@@ -9,7 +9,7 @@
         android:layout_height="20dp"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:text="热" />
+        android:layout_margin="5dp"/>
     <TextView
         android:id="@+id/hot_title"
         android:layout_toRightOf="@id/degree"

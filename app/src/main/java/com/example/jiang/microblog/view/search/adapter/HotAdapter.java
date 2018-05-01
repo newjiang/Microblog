@@ -68,11 +68,11 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
         });
         holder.degree.setText(hots.get(position).getDegree());
         if (hots.get(position).getDegree().equals("热")) {
-            holder.degree.setBackgroundColor(0xFFFF9406);
+            holder.degree.setBackgroundResource(R.drawable.degree_hot_background);
         }else if (hots.get(position).getDegree().equals("新")) {
-            holder.degree.setBackgroundColor(0xFFFF3852);
+            holder.degree.setBackgroundResource(R.drawable.degree_new_background);
         } else if (hots.get(position).getDegree().equals("荐")) {
-            holder.degree.setBackgroundColor(0xFF53B0FF);
+            holder.degree.setBackgroundResource(R.drawable.degree_recmmend_background);
         } else {
             holder.degree.setBackgroundColor(0x00000000);
         }
