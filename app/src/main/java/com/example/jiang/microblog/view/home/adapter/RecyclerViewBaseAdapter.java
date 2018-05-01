@@ -14,6 +14,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.ListUtils;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
@@ -74,7 +75,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public int getItemCount() {
         if (beanList != null) {
-            return beanList.size();
+            return beanList.size()+1;
         }
         return 0;
     }
@@ -278,6 +279,10 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 return f;
             }
         }
+    }
+    public void add(List<Microblog.StatusesBean> newList, boolean flag) {
+        ListUtils.add(beanList, newList, flag);
+        notifyDataSetChanged();
     }
 
 }

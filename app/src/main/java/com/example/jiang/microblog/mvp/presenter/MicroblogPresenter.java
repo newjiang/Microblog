@@ -1,7 +1,6 @@
 package com.example.jiang.microblog.mvp.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
@@ -48,11 +47,10 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
     }
 
 
-
     @Override
-    public void getHomeMicroblog(String access_token) {
+    public void getHomeMicroblog(String access_token, int page) {
         subscription.add(
-                model.getHomeMicroblog(access_token)
+                model.getHomeMicroblog(access_token, page)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<Microblog>() {
@@ -62,10 +60,12 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
                                     view.onSuccess(microblog);
                                 }
                             }
+
                             @Override
                             public void onError(Throwable e) {
                                 view.onError(e.getMessage());
                             }
+
                             @Override
                             public void onNext(Microblog m) {
                                 microblog = m;

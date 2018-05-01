@@ -16,7 +16,7 @@ public interface MicroblogContract {
 
     interface Model {
         //TODO 获取用户及用户关注好友的微博
-        public Observable<Microblog> getHomeMicroblog(String access_token);
+        public Observable<Microblog> getHomeMicroblog(String access_token, int page);
     }
 
     interface View {
@@ -28,6 +28,6 @@ public interface MicroblogContract {
 
     interface Presenter {
         //TODO 获取用户及用户关注好友的微博
-        void getHomeMicroblog(String access_token);
+        void getHomeMicroblog(String access_token, int page);
     }
 }

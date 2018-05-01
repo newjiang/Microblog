@@ -19,8 +19,9 @@ public class MicroblogModel implements MicroblogContract.Model {
     public MicroblogModel(Context context) {
         this.microblogService = RetrofitHelper.getInstance(context).getMicroblogServer();
     }
+
     @Override
-    public Observable<Microblog> getHomeMicroblog(String access_token) {
-        return microblogService.getHomeMicroblog(access_token);
+    public Observable<Microblog> getHomeMicroblog(String access_token, int page) {
+        return microblogService.getHomeMicroblog(access_token, page);
     }
 }

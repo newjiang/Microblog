@@ -14,18 +14,14 @@ import java.util.List;
 
 public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
-    private Context context;
-
-    //TODO 普通的条目类型
+    //普通的条目类型
     public static final int TYPE_NORMAL = 0;
-    //TODO 加载更多
+    //加载更多
     public static final int TYPE_LOADER_MORE = 1;
-
-    private OnRefreshListener refreshListener;
+    private OnRefreshListener mUpPullRefreshListener;
 
     public ListViewAdapter(Context context, List<Microblog.StatusesBean> data) {
-        super(context,data);
-        this.context = context;
+        super(context, data);
     }
 
     @Override
@@ -39,17 +35,21 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         }
     }
 
+
     @Override
     protected View getSubView(ViewGroup parent, int viewType) {
         View view;
-        //TODO 根据类型来创建view
+        //根据类型来创建view
+
         if (viewType == TYPE_NORMAL) {
-            //TODO 加载微博内容
+            //
             view = View.inflate(parent.getContext(), R.layout.microblog_layout, null);
         } else {
-            //TODO 这个是加载更多的
+            //这个是加载更多的
             view = View.inflate(parent.getContext(), R.layout.item_load_layout, null);
         }
+
+
         return view;
     }
 
@@ -63,19 +63,23 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
-            //TODO 在这里设置数据
+            //在这里设置数据
             ((InnerHolder) holder).setData(beanList.get(position), position);
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
             ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
         }
+
+
     }
 
     @Override
     public int getItemViewType(int position) {
+
         if (position == getItemCount() - 1) {
-            //TODO 最后一个则返回加载更多
+            //最后一个则返回加载更多、
             return TYPE_LOADER_MORE;
         }
+
         return TYPE_NORMAL;
     }
 
@@ -83,10 +87,10 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
      * 设置刷的监听的接口
      */
     public void setOnRefreshListener(OnRefreshListener listener) {
-        this.refreshListener = listener;
+        this.mUpPullRefreshListener = listener;
     }
 
-    //TODO 定义接口
+    //定义接口
     public interface OnRefreshListener {
         void onUpPullRefresh(LoaderMoreHolder loaderMoreHolder);
     }
@@ -97,19 +101,19 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         public static final int LOADER_STATE_RELOAD = 1;
         public static final int LOADER_STATE_NORMAL = 2;
 
-        private LinearLayout linearLayout;
+        private LinearLayout mLading;
         private TextView mReLoad;
 
         public LoaderMoreHolder(View itemView) {
             super(itemView);
 
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.loading);
+            mLading = (LinearLayout) itemView.findViewById(R.id.loading);
             mReLoad = (TextView) itemView.findViewById(R.id.reload);
 
             mReLoad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 这里面要去触发加载数据
+                    //这里面要去触发加载数据
                     update(LOADER_STATE_LOADING);
                 }
             });
@@ -118,14 +122,14 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
         public void update(int state) {
 
-            //TODO 重置控件的状态
-            linearLayout.setVisibility(View.GONE);
+            //重置控件的状态
+            mLading.setVisibility(View.GONE);
             mReLoad.setVisibility(View.GONE);
 
             switch (state) {
                 case LOADER_STATE_LOADING:
-                    linearLayout.setVisibility(View.VISIBLE);
-                    //TODO 触发加载数据
+                    mLading.setVisibility(View.VISIBLE);
+                    //触发加载数据
                     startLoaderMore();
                     break;
 
@@ -134,15 +138,15 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
                     break;
 
                 case LOADER_STATE_NORMAL:
-                    linearLayout.setVisibility(View.GONE);
+                    mLading.setVisibility(View.GONE);
                     mReLoad.setVisibility(View.GONE);
                     break;
             }
         }
 
         private void startLoaderMore() {
-            if (refreshListener != null) {
-                refreshListener.onUpPullRefresh(this);
+            if (mUpPullRefreshListener != null) {
+                mUpPullRefreshListener.onUpPullRefresh(this);
             }
         }
     }

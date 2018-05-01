@@ -4,6 +4,7 @@ import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.json.HosJson;
 import com.example.jiang.microblog.json.MicroblogJson;
+import com.example.jiang.microblog.utils.ListUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,33 +58,11 @@ public class ExampleUnitTest {
             System.out.print(m.getMid() + "\t");
         }
         System.out.println("");
-        add(old, xin, false);
+        ListUtils.add(old, xin, true);
         System.out.println();
         System.out.println("添加后");
         for (Microblog.StatusesBean m : old) {
             System.out.print(m.getMid() + "\t");
-        }
-    }
-
-    private void add(List<Microblog.StatusesBean> currentList,
-                     List<Microblog.StatusesBean> newList, boolean isDown) {
-        int index = 0;
-        for (int i = 0; i < newList.size(); i++) {
-            int count = 0;
-            for (int j = 0; j < currentList.size(); j++) {
-                if (!(newList.get(i).getMid().equals(currentList.get(j).getMid()))) {
-                    count++;
-                    if (count == currentList.size()) {
-                        if (isDown) {
-                            currentList.add(index, newList.get(i));
-                            index++;
-                        } else {
-                            currentList.add(newList.get(i));
-                        }
-                        count = 0;
-                    }
-                }
-            }
         }
     }
 }

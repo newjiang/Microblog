@@ -256,4 +256,9 @@ public class ShareActivity extends BaseActivity {
         datas.add(map);
         gridViewAddImgesAdpter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

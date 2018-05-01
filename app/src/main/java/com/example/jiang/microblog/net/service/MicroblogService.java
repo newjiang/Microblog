@@ -14,5 +14,5 @@ public interface MicroblogService {
 
     //TODO 获取用户及用户关注好友的微博
     @GET("statuses/home_timeline.json")
-    Observable<Microblog> getHomeMicroblog(@Query("access_token") String access_token);
+    Observable<Microblog> getHomeMicroblog(@Query("access_token") String access_token, @Query("page") int page);
 }

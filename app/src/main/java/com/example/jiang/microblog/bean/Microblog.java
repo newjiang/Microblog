@@ -14,7 +14,7 @@ import java.util.List;
 public class Microblog extends DataSupport implements Serializable{
 
     private boolean hasvisible;
-    private int previous_cursor;
+    private Long previous_cursor;
     private long next_cursor;
     private int total_number;
     private int interval;
@@ -34,11 +34,11 @@ public class Microblog extends DataSupport implements Serializable{
         this.hasvisible = hasvisible;
     }
 
-    public int getPrevious_cursor() {
+    public Long getPrevious_cursor() {
         return previous_cursor;
     }
 
-    public void setPrevious_cursor(int previous_cursor) {
+    public void setPrevious_cursor(Long previous_cursor) {
         this.previous_cursor = previous_cursor;
     }
 
