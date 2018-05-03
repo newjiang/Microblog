@@ -15,6 +15,8 @@ import java.util.List;
 
 public class AtActivity extends AppCompatActivity implements UserContract.View {
 
+    private UserContract.Presenter presenter;
+
     private RecyclerView friendRecyclerView;
     private RecyclerView headerRecyclerView;
 
@@ -28,9 +30,11 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at);
+//        presenter.
         initFriendList();
         initHeaders();
     }
+
     @Override
     public void onSuccess(Object object) {
 

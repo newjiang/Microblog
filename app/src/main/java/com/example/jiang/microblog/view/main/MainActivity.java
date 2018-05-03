@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         setContentView(R.layout.activity_main);
 //        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
-//        startActivity(new Intent(MainActivity.this, ShareActivity.class));
+        startActivity(new Intent(MainActivity.this, ShareActivity.class));
 
 
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);

@@ -89,6 +89,7 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
         switch (v.getId()) {
             case R.id.select_video:
                 Toast.makeText(ShareActivity.this, "video", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShareActivity.this, RecordingActivity.class));
                 break;
             case R.id.select_photo:
                 if (datas.size() > 9) {
