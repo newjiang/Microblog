@@ -16,7 +16,7 @@
         android:background="@null"/>
 
     <GridView
-        android:id="@+id/gw"
+        android:id="@+id/photo_gridview"
         android:numColumns="5"
         android:columnWidth="66dp"
         android:layout_width="match_parent"
@@ -24,37 +24,62 @@
         android:layout_weight="1"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom">
         <ImageView
-            android:id="@+id/tupian"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="10dp"
+            android:id="@+id/select_video"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/icon_photo"
+            android:src="@drawable/ic_videocam_black"
+            android:layout_centerVertical="true"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
 
         <ImageView
-            android:id="@+id/atpian"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/tupian"
+            android:id="@+id/select_photo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/select_video"
+            android:src="@drawable/ic_menu_gallery"
+            android:layout_centerVertical="true"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+        <ImageView
+            android:id="@+id/at_friend"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/select_photo"
+            android:layout_centerVertical="true"
             android:padding="2dp"
-            android:src="@drawable/icon_at"
+            android:src="@drawable/ic_at"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
 
         <ImageView
-            android:id="@+id/fasong"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginRight="10dp"
+            android:id="@+id/topic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/at_friend"
+            android:layout_centerVertical="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_topic"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+
+        <ImageView
+            android:id="@+id/share_weibo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/icon_send"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_send"
             android:tint="#cc393939"
             android:tintMode="multiply"/>
     </RelativeLayout>

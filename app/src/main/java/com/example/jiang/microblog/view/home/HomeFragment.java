@@ -2,7 +2,7 @@ package com.example.jiang.microblog.view.home;
 
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -95,7 +95,7 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ListViewAdapter(context, microblogList);
         recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         if (microblogList.isEmpty()) {
             loadingBar.setVisibility(View.VISIBLE);
         } else {

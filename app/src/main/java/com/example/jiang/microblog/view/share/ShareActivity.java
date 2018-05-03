@@ -9,19 +9,22 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.view.at.AtActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewAddImgesAdpter;
 
 import net.bither.util.NativeUtil;
@@ -33,51 +36,90 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ShareActivity extends BaseActivity {
+public class ShareActivity extends BaseActivity implements  View.OnClickListener {
 
-    private GridView gw;
+    private final int PHOTO_REQUEST_CAREMA = 1;//TODO 拍照
+    private final int PHOTO_REQUEST_GALLERY = 2;//TODO 从相册中选择"temp_photo.jpg";
+    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/gridview/";
+    private final String PHOTO_FILE_NAME = "temp_photo.jpg";
 
-    private List<Map<String, Object>> datas;
+    private ImageView selectVideo;
+    private ImageView selectPhoto;
+    private ImageView atFriends;
+    private ImageView shareWeibo;
+    private ImageView topic;
 
+    private GridView gridView;
     private GridViewAddImgesAdpter gridViewAddImgesAdpter;
 
+    private List<Map<String, Object>> datas = new ArrayList<>();;
     private Dialog dialog;
-    //TODO 拍照
-    private final int PHOTO_REQUEST_CAREMA = 1;
-    //TODO 从相册中选择private static final String PHOTO_FILE_NAME = "temp_photo.jpg";
-    private final int PHOTO_REQUEST_GALLERY = 2;
     private File tempFile;
-    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/gridview/";
-    /* 头像名称 */
-    private final String PHOTO_FILE_NAME = "temp_photo.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
-        gw = (GridView) findViewById(R.id.gw);
-        datas = new ArrayList<>();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("哈哈哈");
+        }
+        initView();
+    }
+
+    private void initView() {
+        gridView = (GridView) findViewById(R.id.photo_gridview);
+        selectPhoto = (ImageView) findViewById(R.id.select_photo);
+        selectVideo = (ImageView) findViewById(R.id.select_video);
+        atFriends = (ImageView) findViewById(R.id.at_friend);
+        shareWeibo = (ImageView) findViewById(R.id.share_weibo);
+        topic = (ImageView) findViewById(R.id.topic);
         gridViewAddImgesAdpter = new GridViewAddImgesAdpter(datas, this);
-        gw.setAdapter(gridViewAddImgesAdpter);
-        gw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                showdialog();
-            }
-        });
+        gridView.setAdapter(gridViewAddImgesAdpter);
+        selectVideo.setOnClickListener(this);
+        selectPhoto.setOnClickListener(this);
+        atFriends.setOnClickListener(this);
+        shareWeibo.setOnClickListener(this);
+        topic.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.select_video:
+                Toast.makeText(ShareActivity.this, "video", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.select_photo:
+                if (datas.size() > 9) {
+                    Toast.makeText(ShareActivity.this, "最多只能选择9张图片", Toast.LENGTH_SHORT).show();
+                } else {
+                    gallery();
+                }
+                break;
+            case R.id.at_friend:
+                Toast.makeText(ShareActivity.this, "@xxxx", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShareActivity.this,AtActivity.class));
+                break;
+            case R.id.topic:
+                Toast.makeText(ShareActivity.this, "topic", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.share_weibo:
+                Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     /**
      * 选择图片对话框
      */
-    public void showdialog() {
-        View localView = LayoutInflater.from(this).inflate(
-                R.layout.dialog_add_picture, null);
-        TextView tv_camera = (TextView) localView.findViewById(R.id.tv_camera);
-        TextView tv_gallery = (TextView) localView.findViewById(R.id.tv_gallery);
-        TextView tv_cancel = (TextView) localView.findViewById(R.id.tv_cancel);
+    public void showDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_picture, null);
+        TextView tv_camera = (TextView) view.findViewById(R.id.tv_camera);
+        TextView tv_gallery = (TextView) view.findViewById(R.id.tv_gallery);
+        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
         dialog = new Dialog(this, R.style.custom_dialog);
-        dialog.setContentView(localView);
+        dialog.setContentView(view);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         //TODO 设置全屏
         WindowManager windowManager = getWindowManager();
@@ -88,15 +130,13 @@ public class ShareActivity extends BaseActivity {
         dialog.getWindow().setAttributes(lp);
         dialog.show();
         tv_cancel.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
+                //TODO 取消
                 dialog.dismiss();
             }
         });
-
         tv_camera.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -104,9 +144,7 @@ public class ShareActivity extends BaseActivity {
                 camera();
             }
         });
-
         tv_gallery.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -126,8 +164,7 @@ public class ShareActivity extends BaseActivity {
             if (!dir.exists()) {
                 dir.mkdir();
             }
-            tempFile = new File(dir,
-                    System.currentTimeMillis() + "_" + PHOTO_FILE_NAME);
+            tempFile = new File(dir, System.currentTimeMillis() + "_" + PHOTO_FILE_NAME);
             //TODO 从文件中创建uri
             Uri uri = Uri.fromFile(tempFile);
             Intent intent = new Intent();
@@ -145,21 +182,15 @@ public class ShareActivity extends BaseActivity {
      * 判断sdcard是否被挂载
      */
     public boolean hasSdcard() {
-        return Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED);
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
-
-
     /**
-     * 从相册获取2
+     * 从相册获取
      */
     public void gallery() {
-        Intent intent = new Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -227,13 +258,11 @@ public class ShareActivity extends BaseActivity {
                 } else {
                     Log.e("images", "源文件不存在" + path);
                 }
-
                 File dir = new File(IMAGE_DIR);
                 if (!dir.exists()) {
                     dir.mkdir();
                 }
                 final File file = new File(dir + "/temp_photo" + System.currentTimeMillis() + ".jpg");
-
                 //TODO 图片压缩
                 NativeUtil.compressBitmap(path, file.getAbsolutePath(), 50);
                 if (file.exists()) {
@@ -256,9 +285,13 @@ public class ShareActivity extends BaseActivity {
         datas.add(map);
         gridViewAddImgesAdpter.notifyDataSetChanged();
     }
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

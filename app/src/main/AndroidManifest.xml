@@ -50,7 +50,9 @@
         <service
             android:name=".service.PollingService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".view.at.AtActivity"></activity>
     </application>
 
 </manifest>
