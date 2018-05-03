@@ -34,9 +34,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     //TODO at字符串
     private static final String AT_STRING = "@";
     //TODO 冒号字符
-    private static final String COLON_STIRNG= ":";
-    //TODO 冒号字符串
     private static final char COLON = ':';
+    //TODO 冒号字符串
+    private static final String COLON_STIRNG= ":";
 
     private Context context;
 
@@ -92,7 +92,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public CommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_comment, parent, false);
         return new ViewHolder(view);
     }
 
@@ -159,10 +159,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             //TODO 返回真正时间 如2018-1-1 00：00
             return format.format(d);
         } else {
-            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
+
             if (f.equals(TimeFormat.YESTERDAY)) {
+                //TODO 返回昨天 yyyy-MM-dd HH:mm
                 return f + format.format(d);
             } else {
+                //TODO 返回xx秒前，xx分钟前，xx小时前
                 return f;
             }
         }

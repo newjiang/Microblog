@@ -280,6 +280,13 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             }
         }
     }
+
+    /**
+     * 添加新的元素并刷新
+     *
+     * @param newList
+     * @param flag
+     */
     public void add(List<Microblog.StatusesBean> newList, boolean flag) {
         ListUtils.add(beanList, newList, flag);
         notifyDataSetChanged();

@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="热门搜索"/>
         <TextView
-            android:id="@+id/more_recommend"
+            android:id="@+id/more_hots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -71,7 +71,7 @@
             android:text="更多>>"/>
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_recommend"
+        android:id="@+id/search_hots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center">

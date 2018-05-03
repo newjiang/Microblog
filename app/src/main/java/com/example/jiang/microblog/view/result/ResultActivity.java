@@ -49,6 +49,7 @@ public class ResultActivity extends AppCompatActivity {
         userBar = (ProgressBar) findViewById(R.id.user_bar);
         weiboBar = (ProgressBar) findViewById(R.id.weibo_bar);
 
+        //TODO 获取关键字
         Intent intent = getIntent();
         String key = intent.getStringExtra(IntentKey.SEARCH_CONTENT);
         search(key);
@@ -78,6 +79,11 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 根据关键字搜索用户和微博
+     *
+     * @param key
+     */
     public void search(final String key) {
         //TODO 搜索用户
         new Thread(new Runnable() {
@@ -116,6 +122,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         }).start();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

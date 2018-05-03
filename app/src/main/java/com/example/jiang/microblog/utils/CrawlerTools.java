@@ -50,9 +50,9 @@ public class CrawlerTools {
             for (Element script : scripts) {
                 if (script.html().contains("STK && STK.pageletM && STK.pageletM.view")) {
                     String str = script.html().replace("STK && STK.pageletM && STK.pageletM.view", "");
-                    String substring = str.substring(1, str.length() - 1);
-                    if (substring.length() > weibo.length()) {
-                        weibo = substring;
+                    String sub = str.substring(1, str.length() - 1);
+                    if (sub.length() > weibo.length()) {
+                        weibo = sub;
                     }
                 }
             }
@@ -198,7 +198,7 @@ public class CrawlerTools {
 
 
     /**
-     * 搜索热搜
+     * 搜索热搜榜
      *
      * @return
      */

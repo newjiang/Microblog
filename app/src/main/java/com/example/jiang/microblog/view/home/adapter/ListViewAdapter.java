@@ -14,85 +14,15 @@ import java.util.List;
 
 public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
-    //普通的条目类型
+    //TODO 普通的条目类型
     public static final int TYPE_NORMAL = 0;
-    //加载更多
+    //TODO 加载更多
     public static final int TYPE_LOADER_MORE = 1;
-    private OnRefreshListener mUpPullRefreshListener;
+    
+    private OnRefreshListener onRefreshListener;
 
     public ListViewAdapter(Context context, List<Microblog.StatusesBean> data) {
         super(context, data);
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = getSubView(parent, viewType);
-        if (viewType == TYPE_NORMAL) {
-            return new InnerHolder(view);
-        } else {
-            return new LoaderMoreHolder(view);
-        }
-    }
-
-
-    @Override
-    protected View getSubView(ViewGroup parent, int viewType) {
-        View view;
-        //根据类型来创建view
-
-        if (viewType == TYPE_NORMAL) {
-            //
-            view = View.inflate(parent.getContext(), R.layout.microblog_layout, null);
-        } else {
-            //这个是加载更多的
-            view = View.inflate(parent.getContext(), R.layout.item_load_layout, null);
-        }
-
-
-        return view;
-    }
-
-    /**
-     * 这个方法是用于绑定holder的,一般用来设置数据
-     *
-     * @param holder
-     * @param position
-     */
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
-            //在这里设置数据
-            ((InnerHolder) holder).setData(beanList.get(position), position);
-        } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
-            ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
-        }
-
-
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-
-        if (position == getItemCount() - 1) {
-            //最后一个则返回加载更多、
-            return TYPE_LOADER_MORE;
-        }
-
-        return TYPE_NORMAL;
-    }
-
-    /**
-     * 设置刷的监听的接口
-     */
-    public void setOnRefreshListener(OnRefreshListener listener) {
-        this.mUpPullRefreshListener = listener;
-    }
-
-    //定义接口
-    public interface OnRefreshListener {
-        void onUpPullRefresh(LoaderMoreHolder loaderMoreHolder);
     }
 
     public class LoaderMoreHolder extends RecyclerView.ViewHolder {
@@ -113,7 +43,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             mReLoad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //这里面要去触发加载数据
+                    //TODO 这里面要去触发加载数据
                     update(LOADER_STATE_LOADING);
                 }
             });
@@ -122,14 +52,14 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
 
         public void update(int state) {
 
-            //重置控件的状态
+            //TODO 重置控件的状态
             mLading.setVisibility(View.GONE);
             mReLoad.setVisibility(View.GONE);
 
             switch (state) {
                 case LOADER_STATE_LOADING:
                     mLading.setVisibility(View.VISIBLE);
-                    //触发加载数据
+                    //TODO 触发加载数据
                     startLoaderMore();
                     break;
 
@@ -145,9 +75,75 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         }
 
         private void startLoaderMore() {
-            if (mUpPullRefreshListener != null) {
-                mUpPullRefreshListener.onUpPullRefresh(this);
+            if (onRefreshListener != null) {
+                onRefreshListener.onUpPullRefresh(this);
             }
         }
     }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = getSubView(parent, viewType);
+        if (viewType == TYPE_NORMAL) {
+            return new InnerHolder(view);
+        } else {
+            return new LoaderMoreHolder(view);
+        }
+    }
+
+    /**
+     * 这个方法是用于绑定holder的,一般用来设置数据
+     *
+     * @param holder
+     * @param position
+     */
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
+            //TODO 在这里设置数据
+            ((InnerHolder) holder).setData(beanList.get(position), position);
+        } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
+            ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
+        }
+    }
+
+
+    @Override
+    protected View getSubView(ViewGroup parent, int viewType) {
+        View view;
+        //TODO 根据类型来创建view
+
+        if (viewType == TYPE_NORMAL) {
+            //TODO 加载微博的布局
+            view = View.inflate(parent.getContext(), R.layout.layout_microblog, null);
+        } else {
+            //TODO 这个是加载更多的布局
+            view = View.inflate(parent.getContext(), R.layout.layout_item_load, null);
+        }
+        return view;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == getItemCount() - 1) {
+            //TODO 最后一个则返回加载更多、
+            return TYPE_LOADER_MORE;
+        }
+        return TYPE_NORMAL;
+    }
+
+    //TODO 定义接口
+    public interface OnRefreshListener {
+        void onUpPullRefresh(LoaderMoreHolder loaderMoreHolder);
+    }
+    /**
+     * 设置刷的监听的接口
+     */
+    public void setOnRefreshListener(OnRefreshListener listener) {
+        this.onRefreshListener = listener;
+    }
+
+
 }

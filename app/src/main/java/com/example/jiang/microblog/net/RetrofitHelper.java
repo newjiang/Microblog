@@ -33,15 +33,18 @@ public class RetrofitHelper {
         init();
     }
 
-
+    /**
+     * 获取RetrofitHelper实例
+     *
+     * @param context
+     * @return
+     */
     public static RetrofitHelper getInstance(Context context) {
         if (instance == null) {
             instance = new RetrofitHelper(context);
         }
         return instance;
     }
-
-
 
     private void init() {
         resetApp();
@@ -56,14 +59,29 @@ public class RetrofitHelper {
                 .build();
     }
 
+    /**
+     * 获取MicroblogService的实例
+     *
+     * @return
+     */
     public MicroblogService getMicroblogServer() {
         return mRetrofit.create(MicroblogService.class);
     }
 
+    /**
+     * 获取UserService的实例
+     *
+     * @return
+     */
     public UserService getUserServer() {
         return mRetrofit.create(UserService.class);
     }
 
+    /**
+     * 获取CommentService的实例
+     *
+     * @return
+     */
     public CommentService getCommentService() {
         return mRetrofit.create(CommentService.class);
     }

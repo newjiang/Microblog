@@ -7,25 +7,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <LinearLayout
+            android:id="@+id/layout_at_me_weibos"
             style="@style/message_linearlayout_style">
             <ImageView
                 style="@style/message_iv_style"
-                android:background="@drawable/message_icon_background"
+                android:background="@drawable/background_message_icon"
                 android:src="@drawable/ic_at"/>
             <TextView
                 style="@style/message_tv_style"
                 android:text="@string/at_me_weibos"/>
             <TextView
-                android:id="@+id/at_me_weibo"
+                android:id="@+id/at_me_weibos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_at_me_commends"
             style="@style/message_linearlayout_style">
             <ImageView
                 style="@style/message_iv_style"
-                android:background="@drawable/message_icon_background"
+                android:background="@drawable/background_message_icon"
                 android:src="@drawable/ic_at"/>
             <TextView
                 style="@style/message_tv_style"
@@ -37,10 +39,11 @@
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_receive_commends"
             style="@style/message_linearlayout_style">
             <ImageView
                 style="@style/message_iv_style"
-                android:background="@drawable/message_icon_background"
+                android:background="@drawable/background_message_icon"
                 android:src="@drawable/ic_receive_comment"/>
             <TextView
                 style="@style/message_tv_style"
@@ -52,10 +55,11 @@
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_send_commends"
             style="@style/message_linearlayout_style">
             <ImageView
                 style="@style/message_iv_style"
-                android:background="@drawable/message_icon_background"
+                android:background="@drawable/background_message_icon"
                 android:src="@drawable/ic_send"/>
             <TextView
                 style="@style/message_tv_style"

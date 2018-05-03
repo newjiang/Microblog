@@ -50,11 +50,12 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recommend_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_hots, parent, false);
         return new ViewHolder(view);
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+
         holder.title.setText(hots.get(position).getTitle());
         Random random = new Random();
         holder.title.setTextColor(colors[random.nextInt(10)]);
@@ -66,6 +67,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
+
         holder.degree.setText(hots.get(position).getDegree());
         if (hots.get(position).getDegree().equals("热")) {
             holder.degree.setBackgroundResource(R.drawable.degree_hot_background);
@@ -74,6 +76,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
         } else if (hots.get(position).getDegree().equals("荐")) {
             holder.degree.setBackgroundResource(R.drawable.degree_recmmend_background);
         } else {
+            //TODO 设置透明
             holder.degree.setBackgroundColor(0x00000000);
         }
         if (context instanceof SearchActivity) {

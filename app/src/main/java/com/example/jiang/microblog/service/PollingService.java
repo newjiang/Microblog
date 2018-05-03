@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.widget.Toast;
 
 public class PollingService extends Service {
+
     public PollingService() {
     }
 

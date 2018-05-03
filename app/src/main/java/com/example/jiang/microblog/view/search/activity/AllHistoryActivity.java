@@ -37,9 +37,12 @@ public class AllHistoryActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("历史记录");
         }
+        //TODO　查询搜索的历史记录
         histories = DataSupport.findAll(History.class);
+
         recyclerView = (RecyclerView) findViewById(R.id.all_history_recyclerview);
         clearHistory = (TextView) findViewById(R.id.clear_all_history);
+
         adapter = new AllHistoryAdapter(AllHistoryActivity.this, histories);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(AllHistoryActivity.this, LinearLayoutManager.VERTICAL, false));
@@ -51,6 +54,7 @@ public class AllHistoryActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

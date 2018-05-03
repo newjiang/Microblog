@@ -51,6 +51,7 @@ public class MoreActivity extends AppCompatActivity {
         hots = new Gson().fromJson(json, new TypeToken<List<Hot>>() {
         }.getType());
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

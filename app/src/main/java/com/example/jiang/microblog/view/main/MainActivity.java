@@ -24,11 +24,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.User;
-import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.test.NotificationActivity;
@@ -39,7 +39,6 @@ import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
-import com.google.gson.Gson;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -55,6 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements UserContract.View,
         NavigationView.OnNavigationItemSelectedListener, WbShareCallback {
+
     private UserContract.Presenter presenter;
     private CircleImageView composeMicroblog; //TODO　发布微博按钮
     private ImageView homeSearch;              //TODO 搜索按钮
@@ -82,7 +82,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
-
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         WbSdk.install(this, mAuthInfo);
         shareHandler = new WbShareHandler(this);
@@ -92,13 +91,26 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         initEvents();
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
-//        if (user == null) {
-//            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
-//        }
-        fromTestData();
+        if (user == null) {
+            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
+        }
     }
 
+    @Override
+    public void onSuccess(Object object) {
+        user = (User) object;
+        //TODO　设置用户头像
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　设置用户昵称
+        usernaem.setText(user.getName());
+        //TODO　设置用户描述
+        description.setText(user.getDescription());
+    }
 
+    @Override
+    public void onError(String result) {
+        Log.e("MainActivity-E", result);
+    }
 
     /**
      * 初始化控件
@@ -117,7 +129,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         header = (CircleImageView) headerLayout.findViewById(R.id.home_account_icon);
         usernaem = (TextView) headerLayout.findViewById(R.id.home_account_name);
         description = (TextView) headerLayout.findViewById(R.id.home_account_introduction);
-
         //TODO　添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
@@ -177,6 +188,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
             }
         });
+        //TODO　点击搜索框搜索事件
         homeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +200,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
     /**
      * 通过微博客户端分享微博
-     *
      */
     private void shareByClient() {
         WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
@@ -200,14 +211,13 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         shareHandler.shareMessage(weiboMessage, false);
     }
 
-
     /**
      * 下拉框事件
      */
     private void spinnerEvent() {
         String[] mItems = getResources().getStringArray(R.array.title);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_style, mItems);
-        adapter.setDropDownViewResource(R.layout.spinner_dialog_style);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner, mItems);
+        adapter.setDropDownViewResource(R.layout.style_spinner_dialog);
         //TODO　绑定 Adapter到控件
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -215,12 +225,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String[] languages = getResources().getStringArray(R.array.title);
                 //TODO 下拉框
-
+                //TODO 下拉框
+                //TODO 下拉框
+                //TODO 下拉框
+                //TODO 下拉框
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -230,22 +242,23 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private void viewPagerEvent() {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
+                    //TODO home页面
                     toolbar.setTitle("");
                     spinner.setVisibility(View.VISIBLE);
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                 } else if (position == 1) {
+                    //TODO message页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                 } else if (position == 2) {
+                    //TODO discover页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("热门");
                     homeSearch.setVisibility(View.VISIBLE);
@@ -254,17 +267,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == R.id.nav_all) {
             Toast.makeText(this, "全部", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_gallery) {
@@ -302,19 +312,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     }
 
     @Override
-    public void onSuccess(Object object) {
-//        user = (User) object;
-//        //TODO　设置用户头像
-//        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-//        //TODO　设置用户昵称
-//        usernaem.setText(user.getName());
-//        //TODO　设置用户描述
-//        description.setText(user.getDescription());
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //TODO 按下back键时，不退出，返回桌面
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             home.addCategory(Intent.CATEGORY_HOME);
@@ -322,11 +322,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onError(String result) {
-        Log.e("MainActivity-onError", result);
     }
 
     @Override
@@ -342,17 +337,5 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public void onWbShareFail() {
 
-    }
-
-//TODO 测试数据
-    private void fromTestData() {
-        Gson gson = new Gson();
-        user = gson.fromJson(UserJson.JSON, User.class);
-        //TODO　设置用户头像
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　设置用户昵称
-        usernaem.setText(user.getName());
-        //TODO　设置用户描述
-        description.setText(user.getDescription());
     }
 }

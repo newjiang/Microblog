@@ -48,7 +48,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.history_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_history, parent, false);
         return new ViewHolder(view);
     }
 
@@ -115,6 +115,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         notifyDataSetChanged();
 
     }
+
     /**
      * 清除所有的历史记录
      */
@@ -124,6 +125,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    /**
+     * 是否显示清除所有的历史记录
+     */
     public void showTips(){
         SearchActivity activity = (SearchActivity) context;
         if (historys.isEmpty()) {
@@ -132,5 +136,4 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             activity.getClearText().setVisibility(View.VISIBLE);
         }
     }
-
 }

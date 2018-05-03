@@ -26,10 +26,21 @@ public class App extends Application {
         //TODO 获取token
         token = AccessTokenKeeper.readAccessToken(context);
     }
+
+    /**
+     * 获取全局context
+     *
+     * @return
+     */
     public static Context getContext() {
         return context;
     }
 
+    /**
+     * 获取全局的token
+     *
+     * @return
+     */
     public static Oauth2AccessToken getToken() {
         return token;
     }

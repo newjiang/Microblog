@@ -39,7 +39,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_margin">5dp</item>
-        <item name="android:background">@drawable/message_icon_background</item>
+        <item name="android:background">@drawable/background_message_icon</item>
     </style>
 
     <style name="message_tv_style">

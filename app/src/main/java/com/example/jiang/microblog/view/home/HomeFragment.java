@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
@@ -25,6 +26,7 @@ public class HomeFragment extends BaseFragment {
     private MicroblogContract.Presenter presenter;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
+    private ProgressBar loadingBar;
     private RecyclerViewBaseAdapter adapter;
     private List<Microblog.StatusesBean> microblogList = new ArrayList<>();
 
@@ -39,6 +41,7 @@ public class HomeFragment extends BaseFragment {
         View view = View.inflate(context, R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
+        loadingBar = (ProgressBar) view.findViewById(R.id.loading_bar);
         //TODO 下拉刷新
         downPullUpdate();
         return view;
@@ -62,21 +65,21 @@ public class HomeFragment extends BaseFragment {
             //TODO 添加数据
             adapter.add(m, isDown);
             if (isDown) {
-                //TODO 延迟1S处理，关闭下拉操作提示
+                //TODO 延迟2S处理，关闭下拉操作提示
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         refreshLayout.setRefreshing(false);
                     }
-                }, 1000);
+                }, 2000);
             } else {
-                //TODO 延迟1S处理，关闭上拉操作提示
+                //TODO 延迟2S处理，关闭上拉操作提示
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
                     }
-                }, 1000);
+                }, 2000);
             }
         }
     }
@@ -93,6 +96,11 @@ public class HomeFragment extends BaseFragment {
         adapter = new ListViewAdapter(context, microblogList);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (microblogList.isEmpty()) {
+            loadingBar.setVisibility(View.VISIBLE);
+        } else {
+            loadingBar.setVisibility(View.GONE);
+        }
         handlerUpPullUpdate();
     }
     //TODO 下拉刷新

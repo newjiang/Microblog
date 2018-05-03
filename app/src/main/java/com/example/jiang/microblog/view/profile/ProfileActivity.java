@@ -67,8 +67,20 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         setContentView(R.layout.activity_profile);
         getUserInfo();
         initViews();
+        initData();
         initEvents();
         initTab();
+    }
+
+
+    @Override
+    public void onSuccess(Object object) {
+        Log.e("onSuccess", object.toString());
+    }
+
+    @Override
+    public void onError(String result) {
+        Log.e("onError", result);
     }
 
     private void getUserInfo() {
@@ -76,7 +88,6 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         String json = intent.getStringExtra(IntentKey.USER_INFORMATION);
         userBean = new Gson().fromJson(json, Microblog.StatusesBean.UserBean.class);
     }
-
 
     private void initTab() {
         navList = new ArrayList<>();
@@ -122,6 +133,12 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(3);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
         coll.setTitle(userBean.getName());
         coll.setExpandedTitleGravity(Gravity.CENTER_VERTICAL);
         Glide.with(this).load(userBean.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
@@ -158,15 +175,5 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSuccess(Object object) {
-        Log.e("onSuccess", object.toString());
-    }
-
-    @Override
-    public void onError(String result) {
-        Log.e("onError", result);
     }
 }

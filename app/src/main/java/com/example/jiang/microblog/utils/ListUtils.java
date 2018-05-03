@@ -9,6 +9,14 @@ import java.util.List;
  */
 
 public class ListUtils {
+
+    /**
+     * 添加新的元素进入集合
+     *
+     * @param currentList 当前集合
+     * @param newList     新元素的结合
+     * @param isDown      是否向下拉动操作
+     */
     public static void add(List<Microblog.StatusesBean> currentList,
                            List<Microblog.StatusesBean> newList, boolean isDown) {
         //TODO 下拉添加数据的位置索引

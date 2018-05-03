@@ -18,7 +18,7 @@ public class GoodbyeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //沉浸式启动界面
+        //TODO 沉浸式启动界面
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -38,10 +38,11 @@ public class GoodbyeActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //切换账号
                 if (isSwitch == true) {
+                    //TODO 切换账号
                     startActivity(new Intent(GoodbyeActivity.this, LoginActivity.class));
-                } else {//退出
+                } else {
+                    //TODO 退出
                     ActivityController.finishAll();
                 }
             }

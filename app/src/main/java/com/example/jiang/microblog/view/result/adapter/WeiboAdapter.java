@@ -86,7 +86,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
     @Override
     public WeiboAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.microblog_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_microblog, parent, false);
         return new ViewHolder(view);
     }
 
@@ -99,8 +99,6 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         //TODO 微博文字内容
         holder.content.setText(Html.fromHtml(weibos.get(position).getContent()));
 //TODO 微博配图
-
-
         //TODO 发布时间
         holder.time.setText(weibos.get(position).getTime());
         //TODO 来源
@@ -114,15 +112,12 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         //TODO 点赞图标
         //TODO 转发图标
         //TODO 评论图标
-
         if (weibos.get(position).getRetweetedContent().equals("")) {
             holder.retweetedContent.setVisibility(View.GONE);
         } else {
             //TODO 转发微博文字内容
             holder.retweetedContent.setText(Html.fromHtml(weibos.get(position).getRetweetedUser() + weibos.get(position).getRetweetedContent()));
         }
-
-
 //TODO 转发微博配图
     }
 

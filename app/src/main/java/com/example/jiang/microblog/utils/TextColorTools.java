@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
  */
 
 public class TextColorTools {
+
+    private static final int COLOR = 0xFF007DE0;
+
     /**
      * 关键字高亮显示
      *
@@ -28,7 +31,7 @@ public class TextColorTools {
         Pattern p = Pattern.compile(target);
         Matcher m = p.matcher(text);
         while (m.find()) {
-            span = new ForegroundColorSpan(0xFF007DE0);
+            span = new ForegroundColorSpan(COLOR);
             spannable.setSpan(span, m.start(), m.end(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

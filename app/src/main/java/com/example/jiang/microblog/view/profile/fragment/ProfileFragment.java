@@ -47,9 +47,11 @@ public class ProfileFragment extends BaseFragment implements MicroblogContract.V
 
     @Override
     public void initData() {
+        //TODO　获取传递过来的数据
         String json = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
         Gson gson = new Gson();
         userBean = gson.fromJson(json, Microblog.StatusesBean.UserBean.class);
+        //TODO 设置显示数据
         name.setText(userBean.getRemark());
         location.setText(userBean.getLocation());
         blogUrl.setText(userBean.getUrl());
@@ -66,6 +68,12 @@ public class ProfileFragment extends BaseFragment implements MicroblogContract.V
 
     }
 
+    /**
+     * 时间的格式转化
+     *
+     * @param time
+     * @return
+     */
     public String getTimeFormat(String time) {
         SimpleDateFormat f = new SimpleDateFormat(TIME_FORMAT);
         return f.format(new Date(time));

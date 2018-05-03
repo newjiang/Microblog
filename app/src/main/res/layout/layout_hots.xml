@@ -19,7 +19,7 @@
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:text="哈哈哈哈哈"
-        android:background="@drawable/recommend_background"/>
+        android:background="@drawable/background_recommend"/>
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"

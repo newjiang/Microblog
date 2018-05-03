@@ -41,21 +41,26 @@ public class ShowPictureActivity extends BaseActivity {
             getWindow().setNavigationBarColor(Color.BLACK);
             getWindow().setStatusBarColor(Color.BLACK);
         }
+        //TODO 隐藏actionbar
         ActionBar ber = getSupportActionBar();
         if (ber != null) {
             ber.hide();
         }
-
         setContentView(R.layout.activity_show_picture);
 
         viewPager = (ViewPager) findViewById(R.id.show_picture_view_pager);
 
         Intent intent = getIntent();
+        //TODO 获取图片url集合
         picList = intent.getStringArrayListExtra(IntentKey.MICROBLOG_PICTURE);
+
+        //TODO 获取点击的图片的索引
         final int index = intent.getIntExtra(IntentKey.MICROBLOG_PICTURE_NUMBER, 0);
 
+        //TODO　初始化
         imageViews = new ImageView[picList.size()];
 
+        //TODO 设置当前显示的图片
         viewPager.setCurrentItem(index);
 
         viewPager.setAdapter(new PagerAdapter() {

@@ -46,7 +46,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
 
     @Override
     public AccountAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.account_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_account, parent, false);
         return new ViewHolder(view);
     }
 
@@ -60,6 +60,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         }
         holder.name.setText(Html.fromHtml(accounts.get(position).getName()));
     }
+
     @Override
     public int getItemCount() {
         return accounts.size();

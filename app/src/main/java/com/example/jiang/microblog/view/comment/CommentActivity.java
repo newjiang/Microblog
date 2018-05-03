@@ -18,7 +18,6 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.json.CommentJson;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
@@ -88,7 +87,7 @@ public class CommentActivity extends AppCompatActivity implements
     //TODO 转发微博配图
     private NineGridImageView retweetedPicture;
     //TODO 该微博评论内容
-    private List<Comment.CommentsBean> commentsBeen;
+    private List<Comment.CommentsBean> commentsBeen = new ArrayList<>();
     //TODO 点击评论内容的位置
     private int currentPosition;
 
@@ -96,29 +95,38 @@ public class CommentActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        Intent intent = getIntent();
-        //TODO 获取传递过来的数据，减少请求次数
-        String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
-        Gson gson = new Gson();
-        Log.e("gson", json);
-        bean = gson.fromJson(json, Microblog.StatusesBean.class);
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        getUserInfo();
         actionBar.setTitle(bean.getUser().getName());
-
-        commentsBeen = new ArrayList<>();
-
-        Comment comment = gson.fromJson(CommentJson.JSON, Comment.class);
-        commentsBeen = comment.getComments();
-
         presenter = new CommentPresenter(this);
-//        if (commentsBeen.isEmpty()) {
-//            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
-//        }
+        if (commentsBeen.isEmpty()) {
+            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
+        }
+
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+        Comment comment = (Comment) object;
+        commentsBeen = comment.getComments();
         initViews();
+        initDatas();
+    }
+
+    @Override
+    public void onError(String result) {
+        Log.e("CommentActivity-E", result);
+    }
+
+    //TODO 获取传递过来用户数据，减少请求次数
+    private void getUserInfo() {
+        Intent intent = getIntent();
+        String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
+        Gson gson = new Gson();
+        bean = gson.fromJson(json, Microblog.StatusesBean.class);
     }
 
     private void initViews() {
@@ -128,8 +136,6 @@ public class CommentActivity extends AppCompatActivity implements
         commentRecyclerview = (RecyclerView) findViewById(R.id.comment_recyclerview);
         commentDialogFragment = new CommentDialogFragment();
     }
-
-
     private void initDatas() {
         initMicroblogData();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -146,7 +152,6 @@ public class CommentActivity extends AppCompatActivity implements
         });
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -158,7 +163,6 @@ public class CommentActivity extends AppCompatActivity implements
                 break;
         }
     }
-
     @Override
     public String getCommentText() {
         return commentTextView.getText().toString();
@@ -179,7 +183,6 @@ public class CommentActivity extends AppCompatActivity implements
         //TODO 头像
         userBeanX.setAvatar_hd("http://ww1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg");
         addComment.setUser(userBeanX);
-
         if (currentPosition == -1) {
             addComment.setSource("评论");
             commentsBeen.add(addComment);
@@ -195,23 +198,9 @@ public class CommentActivity extends AppCompatActivity implements
             String s = commentsBean.getText() + "-->" + comment;
             Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
         }
-//TODO 模拟评论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     }
 
-    @Override
-    public void onSuccess(Object object) {
-//        Comment comment = (Comment) object;
-//        commentsBeen = comment.getComments();
-//        initDatas();
-//        Gson gson = new Gson();
-//        String toJson = gson.toJson(comment);
-//        Log.e("onSuccess", toJson);
-    }
 
-    @Override
-    public void onError(String result) {
-        Log.e("onError", result);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

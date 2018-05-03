@@ -22,7 +22,7 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //沉浸式启动欢迎界面
+        //TODO 沉浸式启动欢迎界面
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -39,11 +39,13 @@ public class WelcomeActivity extends BaseActivity {
         setContentView(R.layout.activity_welcome);
         boolean isLogin = AccessTokenKeeper.readAccessToken(this).isSessionValid();
         if (isLogin) {
+            //TODO　进入主页
             intent = new Intent(WelcomeActivity.this, MainActivity.class);
         } else {
+            //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);
         }
-        //创建数据库
+        //TODO 创建数据库
         Connector.getDatabase();
         //3s秒后启动主页面
         new Handler().postDelayed(new Runnable() {

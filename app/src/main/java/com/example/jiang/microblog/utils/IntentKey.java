@@ -15,14 +15,11 @@ public class IntentKey {
     public static final String MICROBLOG_PICTURE_NUMBER = "microblog_picture_number";
 
     public static final String PROFILE_FRAGMENT = "profile_fragment";
-
     //TODO 切换账号
     public static String SWITCH_ACCOUNT = "switch_account";
-    //TODO 退出
-    public static String QUIT = "quit";
-    //TODO 退出
+    //TODO 搜索内容
     public static String SEARCH_CONTENT = "search_content";
-    //更多的热搜
+    //TODO 更多的热搜
     public static String MORE_TOP = "MORE_TOP";
 
 

@@ -32,12 +32,12 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener{
 
-    private EditText searchContent;  //TODO 搜索框内容
-    private ImageView searchIcon;//TODO 去搜索图标
+    private EditText searchContent;     //TODO 搜索框内容
+    private ImageView searchIcon;       //TODO 去搜索图标
 
-    private TextView clearText;//TODO 清除搜索的历史记录
+    private TextView clearText;         //TODO 清除搜索的历史记录
 
-    private TextView moreRecommend;//TODO 更多
+    private TextView moreRecommend;     //TODO 更多
 
     private RecyclerView historyRecyclerView;
     private RecyclerView recommendRecyclerView;
@@ -45,8 +45,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private HistoryAdapter historyAdapter;
     private HotAdapter hotAdapter;
 
-    private List<History> historys;   //TODO 历史记录
-    private List<Hot> hots; //TODO 热门搜索
+    private List<History> historys;     //TODO 历史记录
+    private List<Hot> hots;             //TODO 热门搜索
 
     public TextView getClearText() {
         return clearText;
@@ -67,6 +67,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private void initData() {
         List<History> historyList = DataSupport.findAll(History.class);
+        //TODO 只显示5条历史记录
         if (historyList.size() > 5) {
             for (int i = 0; i < 5; i++) {
                 historys.add(historyList.get(i));
@@ -74,6 +75,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         } else {
             historys = historyList;
         }
+        //TODO 搜索热搜榜
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -103,18 +105,21 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         searchContent = (EditText) findViewById(R.id.search_edit);
         searchIcon = (ImageView) findViewById(R.id.search_icon);
         clearText = (TextView) findViewById(R.id.clear_history);
-        moreRecommend = (TextView) findViewById(R.id.more_recommend);
+        moreRecommend = (TextView) findViewById(R.id.more_hots);
         historyRecyclerView = (RecyclerView) findViewById(R.id.search_history);
-        recommendRecyclerView = (RecyclerView) findViewById(R.id.search_recommend);
+        recommendRecyclerView = (RecyclerView) findViewById(R.id.search_hots);
         searchIcon.setOnClickListener(this);
         clearText.setOnClickListener(this);
         moreRecommend.setOnClickListener(this);
 
         initHistory();
-        initRecommend();
+        initHots();
         showTips();
     }
 
+    /**
+     * 是否显示清除所有的历史记录
+     */
     private void showTips() {
         if (historys.isEmpty()) {
             clearText.setVisibility(View.GONE);
@@ -123,13 +128,18 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private void initRecommend() {
+    /**
+     * 初始化热搜榜单
+     */
+    private void initHots() {
         hotAdapter = new HotAdapter(SearchActivity.this, hots);
         recommendRecyclerView.setAdapter(hotAdapter);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recommendRecyclerView.setLayoutManager(staggeredGridLayoutManager);
     }
-
+    /**
+     * 初始化搜索历史记录
+     */
     private void initHistory() {
         historyAdapter = new HistoryAdapter(SearchActivity.this, historys);
         historyRecyclerView.setAdapter(historyAdapter);
@@ -152,7 +162,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             case R.id.clear_history:
                 historyAdapter.clearHistory();
                 break;
-            case R.id.more_recommend:
+            case R.id.more_hots:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -169,6 +179,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         finish();
+        //TODO　设置退出该activit时的动画
         overridePendingTransition(R.anim.search_reft_in, R.anim.search_right_out);
     }
 

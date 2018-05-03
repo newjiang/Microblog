@@ -45,7 +45,7 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
 
     @Override
     public AllHistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.history_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_history, parent, false);
         return new ViewHolder(view);
     }
 
@@ -84,8 +84,8 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
         notifyItemRemoved(position);
         showTips();
         notifyDataSetChanged();
-
     }
+
     /**
      * 清除所有的历史记录
      */
@@ -96,6 +96,9 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
         notifyDataSetChanged();
     }
 
+    /**
+     * 是否显示清除所有的历史记录
+     */
     public void showTips(){
         AllHistoryActivity activity = (AllHistoryActivity) context;
         if (historys.isEmpty()) {

@@ -21,7 +21,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/bt_dynamic_del" />
+            android:background="@drawable/selector_dynamic_del" />
     </RelativeLayout>
 
 </RelativeLayout>
