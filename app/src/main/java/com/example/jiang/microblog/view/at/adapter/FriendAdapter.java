@@ -31,12 +31,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         CircleImageView header;
         TextView name;
         TextView description;
         CheckBox checkBox;
-
         public ViewHolder(View itemView) {
             super(itemView);
             header = (CircleImageView) itemView.findViewById(R.id.header);
@@ -46,6 +44,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
     }
 
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_friend_list, parent, false);
@@ -53,10 +53,18 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(context).load(users.get(position).getProfile_url()).into(holder.header);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        Glide.with(context).load(users.get(position).getAvatar_large()).into(holder.header);
         holder.name.setText(users.get(position).getName());
         holder.description.setText(users.get(position).getDescription());
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickListener != null) {
+                    clickListener.onItemOnClickListener(v, position, holder.checkBox.isChecked());
+                }
+            }
+        });
     }
 
     @Override
@@ -64,4 +72,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         return users.size();
     }
 
+
+    public interface OnItemOnClickListener {
+        public void onItemOnClickListener(View view, int position, boolean isCheck);
+    }
+    private  OnItemOnClickListener clickListener;
+
+    public void setClickListener(OnItemOnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 }

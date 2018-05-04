@@ -1,7 +1,10 @@
 package com.example.jiang.microblog;
 
+import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.FriendJson;
 import com.example.jiang.microblog.json.HosJson;
 import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.utils.ListUtils;
@@ -63,6 +66,15 @@ public class ExampleUnitTest {
         System.out.println("添加后");
         for (Microblog.StatusesBean m : old) {
             System.out.print(m.getMid() + "\t");
+        }
+    }
+    @Test
+    public void test4(){
+        Gson gson = new Gson();
+        Friend friend = gson.fromJson(FriendJson.JSON, Friend.class);
+        List<User> users = friend.getUsers();
+        for (User u : users) {
+            System.out.println(u.toString());
         }
     }
 }

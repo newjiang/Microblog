@@ -14,13 +14,14 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!--相机-->
+    <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
-    <!--自动对焦-->
+    <!-- 自动对焦 -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!--视频录制-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- 视频录制 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".base.App"
@@ -60,8 +61,10 @@
             android:exported="true" />
 
         <activity android:name=".view.at.AtActivity" />
-        <activity android:name=".view.share.RecordingActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+        <activity
+            android:name=".view.share.RecordingActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity android:name=".test.WebViewActivity"></activity>
     </application>
 
 </manifest>

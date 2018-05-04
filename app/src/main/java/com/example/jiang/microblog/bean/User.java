@@ -974,4 +974,65 @@ public class User extends DataSupport implements Serializable{
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", idstr='" + idstr + '\'' +
+                ", classX=" + classX +
+                ", screen_name='" + screen_name + '\'' +
+                ", name='" + name + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", location='" + location + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", profile_image_url='" + profile_image_url + '\'' +
+                ", cover_image_phone='" + cover_image_phone + '\'' +
+                ", profile_url='" + profile_url + '\'' +
+                ", domain='" + domain + '\'' +
+                ", weihao='" + weihao + '\'' +
+                ", gender='" + gender + '\'' +
+                ", followers_count=" + followers_count +
+                ", friends_count=" + friends_count +
+                ", pagefriends_count=" + pagefriends_count +
+                ", statuses_count=" + statuses_count +
+                ", favourites_count=" + favourites_count +
+                ", created_at='" + created_at + '\'' +
+                ", following=" + following +
+                ", allow_all_act_msg=" + allow_all_act_msg +
+                ", geo_enabled=" + geo_enabled +
+                ", verified=" + verified +
+                ", verified_type=" + verified_type +
+                ", remark='" + remark + '\'' +
+                ", insecurity=" + insecurity +
+                ", status=" + status +
+                ", ptype=" + ptype +
+                ", allow_all_comment=" + allow_all_comment +
+                ", avatar_large='" + avatar_large + '\'' +
+                ", avatar_hd='" + avatar_hd + '\'' +
+                ", verified_reason='" + verified_reason + '\'' +
+                ", verified_trade='" + verified_trade + '\'' +
+                ", verified_reason_url='" + verified_reason_url + '\'' +
+                ", verified_source='" + verified_source + '\'' +
+                ", verified_source_url='" + verified_source_url + '\'' +
+                ", follow_me=" + follow_me +
+                ", like=" + like +
+                ", like_me=" + like_me +
+                ", online_status=" + online_status +
+                ", bi_followers_count=" + bi_followers_count +
+                ", lang='" + lang + '\'' +
+                ", star=" + star +
+                ", mbtype=" + mbtype +
+                ", mbrank=" + mbrank +
+                ", block_word=" + block_word +
+                ", block_app=" + block_app +
+                ", credit_score=" + credit_score +
+                ", user_ability=" + user_ability +
+                ", urank=" + urank +
+                ", story_read_state=" + story_read_state +
+                ", vclub_member=" + vclub_member +
+                '}';
+    }
 }

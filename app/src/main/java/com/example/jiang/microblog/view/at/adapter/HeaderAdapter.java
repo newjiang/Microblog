@@ -44,7 +44,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(context).load(headers.get(position).getProfile_url()).into(holder.header);
+        Glide.with(context).load(headers.get(position).getAvatar_large()).into(holder.header);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderAdapter.ViewHolder
      */
     public void remove(User user) {
         for (int i = 0; i < headers.size(); i++) {
-            if (user.equals(headers.get(i))) {
+            if (headers.get(i).getId() == user.getId()) {
                 headers.remove(i);
             }
         }

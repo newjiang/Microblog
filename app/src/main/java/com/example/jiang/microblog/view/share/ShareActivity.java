@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.test.WebViewActivity;
 import com.example.jiang.microblog.view.at.AtActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewAddImgesAdpter;
 
@@ -99,7 +100,6 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
                 }
                 break;
             case R.id.at_friend:
-                Toast.makeText(ShareActivity.this, "@xxxx", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(ShareActivity.this,AtActivity.class));
                 break;
             case R.id.topic:
@@ -107,6 +107,7 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
                 break;
             case R.id.share_weibo:
                 Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShareActivity.this,WebViewActivity.class));
                 break;
         }
     }

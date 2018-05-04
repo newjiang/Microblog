@@ -13,12 +13,17 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friend_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="80dp">
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/silver">
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friend_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
-
 </LinearLayout>
