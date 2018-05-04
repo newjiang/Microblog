@@ -2,6 +2,7 @@ package com.example.jiang.microblog.mvp.model;
 
 import android.content.Context;
 
+import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.net.RetrofitHelper;
@@ -23,5 +24,15 @@ public class UserModel implements UserContract.Model {
     @Override
     public Observable<User> getProfile(String uid, String access_token) {
         return userService.getProfile(uid, access_token);
+    }
+
+    @Override
+    public Observable<Friend> getNextFriendList(String access_token, String uid, int next_cursor) {
+        return userService.getNextFriendList(access_token, uid, next_cursor);
+    }
+
+    @Override
+    public Observable<Friend> getPreFriendList(String access_token, String uid, int previous_cursor) {
+        return userService.getPreFriendList(access_token, uid, previous_cursor);
     }
 }

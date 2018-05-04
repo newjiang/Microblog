@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.User;
-import com.example.jiang.microblog.json.FriendJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
+import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.view.at.adapter.FriendAdapter;
 import com.example.jiang.microblog.view.at.adapter.HeaderAdapter;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +40,18 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
         if (actionBar != null) {
             actionBar.setTitle("选择@的好友");
         }
+        presenter = new UserPresenter(this);
         initData();
-        initFriendList();
-        initHeaders();
     }
 
     @Override
     public void onSuccess(Object object) {
-
+        Friend friend = (Friend) object;
+        if (users.isEmpty()) {
+            users = friend.getUsers();
+            initFriendList();
+            initHeaders();
+        }
     }
 
     @Override
@@ -56,9 +60,9 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
     }
 
     private void initData() {
-        Gson gson = new Gson();
-        Friend friend = gson.fromJson(FriendJson.JSON, Friend.class);
-        users = friend.getUsers();
+        if (users.isEmpty()) {
+            presenter.getNextFriendList(App.getToken().getToken(), App.getToken().getUid(), 0);
+        }
     }
 
     private void initHeaders() {

@@ -28,6 +28,15 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderAdapter.ViewHolder
         this.headers = headers;
     }
 
+    /**
+     * 获得选择@好友集合
+     *
+     * @return
+     */
+    public List<User> getHeaders() {
+        return headers;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView header;
         public ViewHolder(View itemView) {
