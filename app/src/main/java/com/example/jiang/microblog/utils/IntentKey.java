@@ -21,6 +21,7 @@ public class IntentKey {
     public static String SEARCH_CONTENT = "search_content";
     //TODO 更多的热搜
     public static String MORE_TOP = "MORE_TOP";
-
-
+    //TODO 视频的存储路径
+    public static String VIDEO_PATH = "video_path";
+    public static String AT_FRIEND = "at_friend";
 }

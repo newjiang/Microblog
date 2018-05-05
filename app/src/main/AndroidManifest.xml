@@ -61,10 +61,20 @@
             android:exported="true" />
 
         <activity android:name=".view.at.AtActivity" />
-        <activity
-            android:name=".view.share.RecordingActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity android:name=".test.WebViewActivity"></activity>
+        <activity android:name=".test.WebViewActivity" />
+        <activity android:name=".view.message.MessageActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.microblog.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".view.share.RecordActivity"></activity>
     </application>
 
 </manifest>

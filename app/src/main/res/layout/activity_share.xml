@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context="com.example.jiang.microblog.view.share.ShareActivity">
     <EditText
+        android:id="@+id/share_content"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:padding="10dp"
@@ -27,7 +28,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom">
         <ImageView
-            android:id="@+id/select_video"
+            android:id="@+id/take_video"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"
@@ -38,11 +39,22 @@
             android:tintMode="multiply"/>
 
         <ImageView
-            android:id="@+id/select_photo"
+            android:id="@+id/take_photo"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/select_video"
+            android:layout_toRightOf="@id/take_video"
+            android:src="@drawable/ic_camera_black"
+            android:layout_centerVertical="true"
+            android:tint="#cc393939"
+            android:tintMode="multiply"/>
+
+        <ImageView
+            android:id="@+id/select_gallery"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/take_photo"
             android:src="@drawable/ic_menu_gallery"
             android:layout_centerVertical="true"
             android:tint="#cc393939"
@@ -52,7 +64,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/select_photo"
+            android:layout_toRightOf="@id/select_gallery"
             android:layout_centerVertical="true"
             android:padding="2dp"
             android:src="@drawable/ic_at"

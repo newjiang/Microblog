@@ -1,61 +1,78 @@
 package com.example.jiang.microblog.view.share;
 
-import android.app.Dialog;
+import android.Manifest;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
-import com.example.jiang.microblog.test.WebViewActivity;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.at.AtActivity;
-import com.example.jiang.microblog.view.share.adapter.GridViewAddImgesAdpter;
-
-import net.bither.util.NativeUtil;
+import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
-public class ShareActivity extends BaseActivity implements  View.OnClickListener {
 
-    private final int PHOTO_REQUEST_CAREMA = 1;//TODO 拍照
-    private final int PHOTO_REQUEST_GALLERY = 2;//TODO 从相册中选择"temp_photo.jpg";
-    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/gridview/";
-    private final String PHOTO_FILE_NAME = "temp_photo.jpg";
+public class ShareActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView selectVideo;
-    private ImageView selectPhoto;
-    private ImageView atFriends;
-    private ImageView shareWeibo;
+    public static final int TAKE_RECORD = 0;
+    public static final int TAKE_CAMERA = 1;
+    public static final int OPEN_ALBUM = 2;
+    public static final int AT_FRIENDS = 3;
+
+    //TODO　压缩后图片的存储位置
+    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/microblog/img/";
+    //TODO 临时图片的文件名后缀
+    private final String PHOTO_NAME = "temp.jpg";
+
+    private EditText editText;
+
+    private ImageView takeVideo;
+    private ImageView takePhoto;
+    private ImageView takeGallery;
+    private ImageView atFrient;
     private ImageView topic;
 
     private GridView gridView;
-    private GridViewAddImgesAdpter gridViewAddImgesAdpter;
+    private GridViewImageAdapter adapter;
 
-    private List<Map<String, Object>> datas = new ArrayList<>();;
-    private Dialog dialog;
-    private File tempFile;
+    private List<Map<String, Object>> pictures = new ArrayList<>();
+
+    private File temp;
+    private Uri imageUri;
+
+    static final String[] PERMISSIONS = new String[]{
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,119 +81,111 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("哈哈哈");
+            actionBar.setTitle("分享微博");
+        }
+        boolean ispermission = (ContextCompat.checkSelfPermission(this, PERMISSIONS[0]) != 0 ||
+                ContextCompat.checkSelfPermission(this, PERMISSIONS[1]) != 0 ||
+                ContextCompat.checkSelfPermission(this, PERMISSIONS[2]) != 0 );
+
+        if(ispermission){
+            ActivityCompat.requestPermissions(this,PERMISSIONS,1);
         }
         initView();
     }
 
     private void initView() {
         gridView = (GridView) findViewById(R.id.photo_gridview);
-        selectPhoto = (ImageView) findViewById(R.id.select_photo);
-        selectVideo = (ImageView) findViewById(R.id.select_video);
-        atFriends = (ImageView) findViewById(R.id.at_friend);
-        shareWeibo = (ImageView) findViewById(R.id.share_weibo);
+        adapter = new GridViewImageAdapter(this, pictures);
+        gridView.setAdapter(adapter);
+
+        editText = (EditText) findViewById(R.id.share_content);
+
+        takeVideo = (ImageView) findViewById(R.id.take_video);
+        takePhoto = (ImageView) findViewById(R.id.take_photo);
+        takeGallery = (ImageView) findViewById(R.id.select_gallery);
+        atFrient = (ImageView) findViewById(R.id.at_friend);
         topic = (ImageView) findViewById(R.id.topic);
-        gridViewAddImgesAdpter = new GridViewAddImgesAdpter(datas, this);
-        gridView.setAdapter(gridViewAddImgesAdpter);
-        selectVideo.setOnClickListener(this);
-        selectPhoto.setOnClickListener(this);
-        atFriends.setOnClickListener(this);
-        shareWeibo.setOnClickListener(this);
+
+        takeVideo.setOnClickListener(this);
+        takePhoto.setOnClickListener(this);
+        takeGallery.setOnClickListener(this);
+        atFrient.setOnClickListener(this);
         topic.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.select_video:
-                Toast.makeText(ShareActivity.this, "video", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ShareActivity.this, RecordingActivity.class));
+            case R.id.take_video:
+                startActivityForResult(new Intent(ShareActivity.this, RecordActivity.class), TAKE_RECORD);
                 break;
-            case R.id.select_photo:
-                if (datas.size() > 9) {
-                    Toast.makeText(ShareActivity.this, "最多只能选择9张图片", Toast.LENGTH_SHORT).show();
+            case R.id.take_photo:
+                if (pictures.size() < 9) {
+                    openCamera();
                 } else {
-                    gallery();
+                    Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.select_gallery:
+                if (pictures.size() < 9) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.at_friend:
-                startActivity(new Intent(ShareActivity.this,AtActivity.class));
+                startActivityForResult(new Intent(ShareActivity.this, AtActivity.class), AT_FRIENDS);
                 break;
             case R.id.topic:
                 Toast.makeText(ShareActivity.this, "topic", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.share_weibo:
                 Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ShareActivity.this,WebViewActivity.class));
                 break;
         }
     }
 
-    /**
-     * 选择图片对话框
-     */
-    public void showDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_picture, null);
-        TextView tv_camera = (TextView) view.findViewById(R.id.tv_camera);
-        TextView tv_gallery = (TextView) view.findViewById(R.id.tv_gallery);
-        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        dialog = new Dialog(this, R.style.custom_dialog);
-        dialog.setContentView(view);
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-        //TODO 设置全屏
-        WindowManager windowManager = getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        //TODO 设置宽度
-        lp.width = display.getWidth();
-        dialog.getWindow().setAttributes(lp);
-        dialog.show();
-        tv_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                //TODO 取消
-                dialog.dismiss();
-            }
-        });
-        tv_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                //TODO  拍照
-                camera();
-            }
-        });
-        tv_gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                //TODO  从系统相册选取照片
-                gallery();
-            }
-        });
-    }
-
-    /**
-     * 拍照
-     */
-    public void camera() {
-        //TODO  判断存储卡是否可以用，可用进行存储
-        if (hasSdcard()) {
-            File dir = new File(IMAGE_DIR);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            tempFile = new File(dir, System.currentTimeMillis() + "_" + PHOTO_FILE_NAME);
-            //TODO 从文件中创建uri
-            Uri uri = Uri.fromFile(tempFile);
-            Intent intent = new Intent();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.addCategory(intent.CATEGORY_DEFAULT);
-            //TODO  开启一个带有返回值的Activity，请求码为PHOTO_REQUEST_CAREMA
-            startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
-        } else {
-            Toast.makeText(this, "未找到存储卡，无法拍照！", Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_RECORD:
+                if (resultCode == RESULT_OK) {
+                    String path = data.getStringExtra(IntentKey.VIDEO_PATH);
+                    editText.setText(path);
+                }
+                break;
+            case TAKE_CAMERA:
+                if (resultCode == RESULT_OK) {
+                    if (hasSdcard()) {
+                        if (temp != null) {
+                            uploadImage(temp.getPath());
+                        } else {
+                            Toast.makeText(this, "相机异常请稍后再试！", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case OPEN_ALBUM:
+                if (resultCode == RESULT_OK) {
+                    //TODO 判断手机系统版本号
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        //TODO 4.4及以上系统使用这个方法处理图片
+                        String path = handleImageOnKitKat(data);
+                        uploadImage(path);
+                    }
+                }
+                break;
+            case AT_FRIENDS:
+                if (resultCode == RESULT_OK) {
+                    String friends = data.getStringExtra(IntentKey.AT_FRIEND);
+                    editText.setText(editText.getText() + friends);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -186,107 +195,7 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
     public boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
-    /**
-     * 从相册获取
-     */
-    public void gallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PHOTO_REQUEST_GALLERY) {
-                //TODO  从相册返回的数据
-                if (data != null) {
-                    //TODO  得到图片的全路径
-                    Uri uri = data.getData();
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    //TODO 好像是android多媒体数据库的封装接口，具体的看Android文档
-                    Cursor cursor = managedQuery(uri, proj, null, null, null);
-                    //TODO 按我个人理解 这个是获得用户选择的图片的索引值
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    //TODO 将光标移至开头 ，这个很重要，不小心很容易引起越界
-                    cursor.moveToFirst();
-                    //TODO 最后根据索引值获取图片路径
-                    String path = cursor.getString(column_index);
-
-                    uploadImage(path);
-                }
-
-            } else if (requestCode == PHOTO_REQUEST_CAREMA) {
-                if (resultCode != RESULT_CANCELED) {
-                    //TODO  从相机返回的数据
-                    if (hasSdcard()) {
-                        if (tempFile != null) {
-                            uploadImage(tempFile.getPath());
-                        } else {
-                            Toast.makeText(this, "相机异常请稍后再试！", Toast.LENGTH_SHORT).show();
-                        }
-                        Log.e("images", "拿到照片path=" + tempFile.getPath());
-                    } else {
-                        Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-        }
-    }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0xAAAAAAAA) {
-                photoPath(msg.obj.toString());
-            }
-
-        }
-    };
-
-    /**
-     * 上传图片
-     *
-     * @param path
-     */
-    private void uploadImage(final String path) {
-        new Thread() {
-            @Override
-            public void run() {
-                if (new File(path).exists()) {
-                    Log.e("images", "源文件存在" + path);
-                } else {
-                    Log.e("images", "源文件不存在" + path);
-                }
-                File dir = new File(IMAGE_DIR);
-                if (!dir.exists()) {
-                    dir.mkdir();
-                }
-                final File file = new File(dir + "/temp_photo" + System.currentTimeMillis() + ".jpg");
-                //TODO 图片压缩
-                NativeUtil.compressBitmap(path, file.getAbsolutePath(), 50);
-                if (file.exists()) {
-                    Log.e("images", "压缩后的文件存在" + file.getAbsolutePath());
-                } else {
-                    Log.e("images", "压缩后的不存在" + file.getAbsolutePath());
-                }
-                Message message = new Message();
-                message.what = 0xAAAAAAAA;
-                message.obj = file.getAbsolutePath();
-                handler.sendMessage(message);
-            }
-        }.start();
-
-    }
-
-    public void photoPath(String path) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("path", path);
-        datas.add(map);
-        gridViewAddImgesAdpter.notifyDataSetChanged();
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -295,5 +204,131 @@ public class ShareActivity extends BaseActivity implements  View.OnClickListener
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void openCamera() {
+        //TODO 创建File的对象，用于存储拍照后图片的文件夹
+        File dir = new File(IMAGE_DIR);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        temp = new File(dir, System.currentTimeMillis() + PHOTO_NAME);
+        try {
+            if (temp.exists()) {
+                temp.delete();
+            }
+            temp.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT < 24) {
+            imageUri = Uri.fromFile(temp);
+        } else {
+            imageUri = FileProvider.getUriForFile(ShareActivity.this, "com.example.microblog.fileprovider", temp);
+        }
+        //TODO 启动相机程序
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_CAMERA);
+    }
+
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, OPEN_ALBUM); //TODO 打开相册
+    }
+
+    /**
+     * 上传图片到页面
+     * @param path
+     */
+    private void uploadImage(final String path) {
+        File dir = new File(IMAGE_DIR);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        Luban.with(this)
+                .load(path)                //TODO 传人要压缩的图片列表
+                .ignoreBy(100)             //TODO 忽略不压缩图片的大小
+                .setTargetDir(IMAGE_DIR)  //TODO 设置压缩后文件存储位置
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+                    @Override
+                    public void onSuccess(File file) {
+                        photoPath(file.getAbsolutePath());
+                        //TODO 删除拍照后的原图
+                        if (temp != null) {
+                            if (temp.exists()) {
+                                temp.delete();
+                            }
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }).launch();
+    }
+
+    public void photoPath(String path) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("path", path);
+        pictures.add(map);
+        adapter.notifyDataSetChanged();
+    }
+
+    private String  handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        return imagePath;
+    }
+
+    /**
+     * 获得图片的路径
+     *
+     * @param uri
+     * @param selection
+     * @return
+     */
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 1 && grantResults != null && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+        }else{
+            Toast.makeText(this,"拒绝了权限：" + permissions[0],Toast.LENGTH_SHORT).show();
+        }
     }
 }

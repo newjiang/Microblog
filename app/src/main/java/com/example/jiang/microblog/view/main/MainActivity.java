@@ -81,8 +81,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
+//        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
         startActivity(new Intent(MainActivity.this, ShareActivity.class));
 
 

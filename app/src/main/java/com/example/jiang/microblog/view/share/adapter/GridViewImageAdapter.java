@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by jiang on 2018/4/17.
  */
 
-public class GridViewAddImgesAdpter extends BaseAdapter {
+public class GridViewImageAdapter extends BaseAdapter {
 
     private List<Map<String, Object>> datas;
     private Context context;
@@ -29,7 +29,7 @@ public class GridViewAddImgesAdpter extends BaseAdapter {
     //TODO 设置最大上传图片数
     private int maxImages = 9;
 
-    public GridViewAddImgesAdpter(List<Map<String, Object>> datas, Context context) {
+    public GridViewImageAdapter(Context context, List<Map<String, Object>> datas) {
         this.datas = datas;
         this.context = context;
         inflater = LayoutInflater.from(context);

@@ -20,12 +20,6 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -57,8 +51,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.2.1'
     //ninegridimageview
     compile 'com.jaeger.ninegridimageview:library:1.1.1'
-    //压缩图片
-    compile(name: 'NativeImgCompress', ext: 'aar')
+    //鲁班压缩图片
+    compile 'top.zibin:Luban:1.1.3'
     //测试
     testCompile 'junit:junit:4.12'
 

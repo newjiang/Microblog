@@ -1,5 +1,6 @@
 package com.example.jiang.microblog.view.at;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.at.adapter.FriendAdapter;
 import com.example.jiang.microblog.view.at.adapter.HeaderAdapter;
 
@@ -88,5 +90,21 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        String friends = "";
+        for (int i = 0; i < headers.size(); i++) {
+            friends += "@" + headers.get(i).getName() + " ";
+        }
+        Intent intent = new Intent();
+        intent.putExtra(IntentKey.AT_FRIEND, friends);
+        if (headers.isEmpty()) {
+            setResult(RESULT_CANCELED, intent);
+        } else {
+            setResult(RESULT_OK, intent);
+        }
+        finish();
     }
 }
