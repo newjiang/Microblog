@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -82,9 +83,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 List<Hot> hotList = null;
                 try {
                     hotList = CrawlerTools.findTopSearch();
+                    Log.e("hotList", historyList.toString());
                     if (hotList != null) {
                         for (int i = 0; i < 10; i++) {
-                            hots.add(hotList.get(i));
+                            try {
+                                hots.add(hotList.get(i));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (NullPointerException n) {

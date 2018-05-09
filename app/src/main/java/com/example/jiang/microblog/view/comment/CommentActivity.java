@@ -29,6 +29,8 @@ import com.example.jiang.microblog.view.comment.fragment.CommentDialogFragment;
 import com.example.jiang.microblog.view.comment.fragment.DialogFragmentDataCallback;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import org.jsoup.Jsoup;
 
@@ -43,6 +45,8 @@ public class CommentActivity extends BaseActivity implements
         CommentContract.View, View.OnClickListener, DialogFragmentDataCallback {
 
     private static final String FRAGMENT = "CommentDialogFragment";
+
+    private Oauth2AccessToken token;
 
     private CommentContract.Presenter presenter;
 
@@ -95,6 +99,7 @@ public class CommentActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        token = AccessTokenKeeper.readAccessToken(this);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -103,7 +108,7 @@ public class CommentActivity extends BaseActivity implements
         actionBar.setTitle(bean.getUser().getName());
         presenter = new CommentPresenter(this);
         if (commentsBeen.isEmpty()) {
-            presenter.getComments(App.getToken().getToken(), bean.getMid(), 1);
+            presenter.getComments(token.getToken(), bean.getMid(), 1);
         }
 
     }

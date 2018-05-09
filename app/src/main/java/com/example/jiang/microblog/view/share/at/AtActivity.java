@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
@@ -17,6 +16,8 @@ import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.share.at.adapter.FriendAdapter;
 import com.example.jiang.microblog.view.share.at.adapter.HeaderAdapter;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,13 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
 
     private List<User> users = new ArrayList<>();
     private List<User> headers = new ArrayList<>();
+    private Oauth2AccessToken token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at);
+        token = AccessTokenKeeper.readAccessToken(this);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("选择@的好友");
@@ -63,7 +66,7 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
 
     private void initData() {
         if (users.isEmpty()) {
-            presenter.getNextFriendList(App.getToken().getToken(), App.getToken().getUid(), 0);
+            presenter.getNextFriendList(token.getToken(), token.getUid(), 0);
         }
     }
 

@@ -2,7 +2,7 @@
 <resources>
     <string-array name="title">
         <item>微博</item>
-        <item>热门 </item>
         <item>互相关注</item>
+        <item>公共微博</item>
     </string-array>
 </resources>

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
@@ -29,6 +28,8 @@ import com.example.jiang.microblog.view.profile.fragment.MicroblogFragment;
 import com.example.jiang.microblog.view.profile.fragment.ProfileFragment;
 import com.example.jiang.microblog.widget.GlideRoundTransform;
 import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,20 +63,23 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
 
     private User userBean;
     private int index = 0;
+    private Oauth2AccessToken token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        token = AccessTokenKeeper.readAccessToken(this);
         presenter = new UserPresenter(this);
         getUserInfo();
-        initViews();
+
 
     }
 
     @Override
     public void onSuccess(Object object) {
         userBean = (User) object;
+        initViews();
         initData();
         initEvents();
         initTab();
@@ -83,21 +87,22 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
 
     @Override
     public void onError(String result) {
-        Log.e("onError", result);
+        Log.e("ProfileActivity-E", result);
     }
 
     private void getUserInfo() {
         String json = getIntent().getStringExtra(IntentKey.USER_INFORMATION);
+        index = getIntent().getIntExtra(IntentKey.PROFILE_FRAGMENT_INDEX, 0);
         if (json == null || json.equals("")) {
             String username = getIntent().getStringExtra(IntentKey.USERNAME);
-            presenter.getProfileByName(App.getToken().getToken(), username);
+            presenter.getProfileByName(token.getToken(), username);
         } else {
             userBean = new Gson().fromJson(json, User.class);
+            initViews();
             initData();
             initEvents();
             initTab();
         }
-        index = getIntent().getIntExtra(IntentKey.PROFILE_FRAGMENT_INDEX, 0);
     }
 
     private void initTab() {

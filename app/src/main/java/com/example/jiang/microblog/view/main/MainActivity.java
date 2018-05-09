@@ -46,6 +46,7 @@ import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
 
@@ -75,6 +76,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private CircleImageView header;            //TODO　用户头像
     private TextView usernaem;                 //TODO　用户呢称
     private TextView description;              //TODO　用户描述
+    private ImageView homeNotice;
+    private ImageView messageNotice;
+
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
     private User user;
@@ -83,12 +87,16 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
     private WbShareHandler shareHandler;
     private HomeFragment homeFragment;
+    private Oauth2AccessToken token;
+    private TabLayout.Tab homeTab;
+    private TabLayout.Tab messageTab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        token = AccessTokenKeeper.readAccessToken(this);
 //        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
@@ -100,9 +108,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         initEvents();
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
-//        if (user == null) {
-//            presenter.getProfile(App.getToken().getToken(),App.getToken().getUid());
-//        }
+        if (user == null) {
+            presenter.getProfile(token.getToken(),token.getUid());
+        }
         user = new Gson().fromJson(UserJson.JSON, User.class);
         Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
         //TODO　设置用户昵称
@@ -165,17 +173,15 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         tabLayout.setSelectedTabIndicatorHeight(0);
         ViewCompat.setElevation(tabLayout, 10);
         tabLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < fragmentList.size(); i++) {
-            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
-            if (itemTab != null && i == 0) {
-                itemTab.setCustomView(R.layout.tabber_home_icon);
-            } else if (itemTab != null && i == 1) {
-                itemTab.setCustomView(R.layout.tabber_message_icon);
-            } else {
-                itemTab.setCustomView(R.layout.tabber_discover_icon);
-            }
-        }
+        homeTab = tabLayout.getTabAt(0);
+        messageTab = tabLayout.getTabAt(1);
+        TabLayout.Tab discoverTab = tabLayout.getTabAt(2);
+        homeTab.setCustomView(R.layout.tabber_home_icon);
+        messageTab.setCustomView(R.layout.tabber_message_icon);
+        discoverTab.setCustomView(R.layout.tabber_discover_icon);
         tabLayout.getTabAt(0).getCustomView().setSelected(true);
+        homeNotice = (ImageView) homeTab.getCustomView().findViewById(R.id.home_notice);
+        messageNotice = (ImageView) messageTab.getCustomView().findViewById(R.id.message_notice);
     }
 
     /**
@@ -302,12 +308,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                     spinner.setVisibility(View.VISIBLE);
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
+                    handleHomeNotice();
                 } else if (position == 1) {
                     //TODO message页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
+                    handleMessageNotice();
                 } else if (position == 2) {
                     //TODO discover页面
                     spinner.setVisibility(View.GONE);
@@ -322,6 +330,20 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             }
         });
     }
+
+    private void handleHomeNotice() {
+        Toast.makeText(this, "主页", Toast.LENGTH_SHORT).show();
+        homeNotice.setVisibility(View.VISIBLE);
+        messageNotice.setVisibility(View.INVISIBLE);
+    }
+
+    private void handleMessageNotice() {
+        Toast.makeText(this, "消息", Toast.LENGTH_SHORT).show();
+        homeNotice.setVisibility(View.INVISIBLE);
+        messageNotice.setVisibility(View.VISIBLE);
+    }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

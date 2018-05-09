@@ -12,9 +12,9 @@ import android.view.View;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
-import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
 import com.google.gson.Gson;
@@ -53,7 +53,7 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
 
     @Override
     public void initData() {
-        presenter = new MicroblogPresenter(context);
+        presenter = new MicroblogPresenter(this, context);
     }
 
     /**
