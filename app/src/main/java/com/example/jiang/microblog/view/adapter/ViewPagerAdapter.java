@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.profile.adapter;
+package com.example.jiang.microblog.view.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,13 +12,13 @@ import java.util.List;
  * Created by jiang on 2018/4/14.
  */
 
-public class InfoViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> navList;
 
     private List<BaseFragment> fragmentList;
 
-    public InfoViewPagerAdapter(FragmentManager fm, List<BaseFragment> fragmentList, List<String> navList) {
+    public ViewPagerAdapter(FragmentManager fm, List<BaseFragment> fragmentList, List<String> navList) {
         super(fm);
         this.fragmentList = fragmentList;
         this.navList = navList;

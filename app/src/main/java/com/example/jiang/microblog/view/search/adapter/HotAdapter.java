@@ -14,7 +14,7 @@ import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.search.activity.MoreActivity;
-import com.example.jiang.microblog.view.result.ResultActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 
 import java.util.List;
 import java.util.Random;

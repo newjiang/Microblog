@@ -21,7 +21,17 @@ public class MicroblogModel implements MicroblogContract.Model {
     }
 
     @Override
-    public Observable<Microblog> getHomeMicroblog(String access_token, int page) {
-        return microblogService.getHomeMicroblog(access_token, page);
+    public Observable<Microblog> home_timeline(String access_token, int page) {
+        return microblogService.home_timeline(access_token, page);
+    }
+
+    @Override
+    public Observable<Microblog> bilateral_timeline(String access_token, int page) {
+        return microblogService.bilateral_timeline(access_token, page);
+    }
+
+    @Override
+    public Observable<Microblog> public_timeline(String access_token, int page) {
+        return microblogService.public_timeline(access_token, page);
     }
 }

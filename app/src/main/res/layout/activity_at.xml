@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.jiang.microblog.view.at.AtActivity">
+    tools:context=".view.share.at.AtActivity">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friend_header"
         android:layout_width="match_parent"

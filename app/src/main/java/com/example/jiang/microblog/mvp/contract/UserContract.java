@@ -11,8 +11,10 @@ import rx.Observable;
 public interface UserContract {
 
     interface Model {
-        //TODO 获取用户信息
-        public Observable<User> getProfile(String uid, String access_token);
+        //TODO 通过uid获取用户信息
+        public Observable<User> getProfile(String access_token, String uid);
+        //TODO 通过用户名获取用户信息
+        public Observable<User> getProfileByName(String access_token, String screen_name);
 
         public Observable<Friend> getNextFriendList(String access_token, String uid, int next_cursor);
 
@@ -27,8 +29,10 @@ public interface UserContract {
     }
 
     interface Presenter {
-        //TODO 获取用户信息
-        void getProfile(String uid, String access_token);
+        //TODO 通过uid获取用户信息
+        void getProfile(String access_token, String uid);
+        //TODO 通过用户名获取用户信息
+        void getProfileByName(String access_token, String screen_name);
 
         void getNextFriendList(String access_token, String uid, int next_cursor);
 

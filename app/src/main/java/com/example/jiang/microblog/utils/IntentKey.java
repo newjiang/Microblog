@@ -14,7 +14,12 @@ public class IntentKey {
     //TODO 一条微博配图数量
     public static final String MICROBLOG_PICTURE_NUMBER = "microblog_picture_number";
 
+    //TODO 向ProfileFragment传递用户信息
     public static final String PROFILE_FRAGMENT = "profile_fragment";
+    //TODO ProfileActivity显示对应的Fragment索引
+    public static final String PROFILE_FRAGMENT_INDEX = "PROFILE_FRAGMENT_INDEX";
+    //TODO 关键字
+    public static final String KEY_WORD = "key_word";
     //TODO 切换账号
     public static String SWITCH_ACCOUNT = "switch_account";
     //TODO 搜索内容
@@ -24,4 +29,9 @@ public class IntentKey {
     //TODO 视频的存储路径
     public static String VIDEO_PATH = "video_path";
     public static String AT_FRIEND = "at_friend";
+    //TODO 启动MessageActivity显示的fragment
+    public static String MESSAGE_FRAGMENT_INDEX = "MESSAGE_FRAGMENT_INDEX";
+    //用户昵称
+    public static String USERNAME = "username";
+
 }

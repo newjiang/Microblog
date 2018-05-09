@@ -13,7 +13,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
-import com.example.jiang.microblog.view.result.ResultActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -44,13 +44,13 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
     }
 
     @Override
-    public AllHistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_history, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(AllHistoryAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.content.setText(historys.get(position).getHistory());
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override

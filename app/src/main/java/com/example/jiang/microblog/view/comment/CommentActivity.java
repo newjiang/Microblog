@@ -3,7 +3,6 @@ package com.example.jiang.microblog.view.comment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
+import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
@@ -39,7 +39,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CommentActivity extends AppCompatActivity implements
+public class CommentActivity extends BaseActivity implements
         CommentContract.View, View.OnClickListener, DialogFragmentDataCallback {
 
     private static final String FRAGMENT = "CommentDialogFragment";

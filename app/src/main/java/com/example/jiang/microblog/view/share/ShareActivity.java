@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.at.AtActivity;
+import com.example.jiang.microblog.view.share.at.AtActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
 
 import java.io.File;

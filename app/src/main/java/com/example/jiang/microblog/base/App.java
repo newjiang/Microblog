@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.LitePalApplication;
 
@@ -23,8 +24,10 @@ public class App extends Application {
         super.onCreate();
         this.context = getApplicationContext();
         LitePalApplication.initialize(context);
-        //TODO 获取token
+        //TODO 获取全局token
         token = AccessTokenKeeper.readAccessToken(context);
+        //TODO 通过全局Context初始化SkinManager
+        SkinManager.getInstance().init(this);
     }
 
     /**

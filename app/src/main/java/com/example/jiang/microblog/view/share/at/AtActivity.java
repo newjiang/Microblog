@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.at;
+package com.example.jiang.microblog.view.share.at;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.at.adapter.FriendAdapter;
-import com.example.jiang.microblog.view.at.adapter.HeaderAdapter;
+import com.example.jiang.microblog.view.share.at.adapter.FriendAdapter;
+import com.example.jiang.microblog.view.share.at.adapter.HeaderAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

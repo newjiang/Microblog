@@ -17,11 +17,14 @@ import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
+import com.example.jiang.microblog.view.main.MainActivity;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements MicroblogContract.View{
+
 
     private MicroblogContract.Presenter presenter;
     private RecyclerView recyclerView;
@@ -32,12 +35,16 @@ public class HomeFragment extends BaseFragment {
 
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
-    private boolean isDown = true;  //TODO 判断是否下拉操作
-    private int page = 2;//TODO 上拉操作的起始页
+    private boolean isDown = true;          //TODO 判断是否下拉操作
+    private boolean isRefreshing = false;  //TODO是否正在刷新
+    private int page = 2;                    //TODO 上拉操作的起始页
+
+    private int currentType = 0;            //TODO 当前显示微博类型
+    private boolean isTypeChange = false;
 
     @Override
     public View initView() {
-        presenter = new MicroblogPresenter(this,context);
+        presenter = new MicroblogPresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
@@ -47,19 +54,69 @@ public class HomeFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * 处理显示微博类型改变
+     *
+     * @param type
+     */
+    private void handleTypeChange(int type) {
+        if (currentType != type) {
+            isTypeChange = true;
+            currentType = type;
+            page = 2;
+            if (!microblogList.isEmpty()) {
+                microblogList.clear();
+                adapter.notifyDataSetChanged();
+            }
+            getFirstPage(type);
+        }
+    }
+
+    /**
+     * 获取第一页的数据
+     *
+     * @param type
+     */
+    private void getFirstPage(int type) {
+        switch (type) {
+            case MainActivity.HOME_TIMELINE:
+                presenter.home_timeline(App.getToken().getToken(), 1);
+                break;
+            case MainActivity.BILATERAL_TIMELINE:
+                presenter.bilateral_timeline(App.getToken().getToken(), 1);
+                break;
+            case MainActivity.PUBLIC_TIMELINE:
+                presenter.public_timeline(App.getToken().getToken(), 1);
+                break;
+        }
+    }
+
     @Override
     public void initData() {
         if (microblogList.isEmpty()) {
-            presenter.getHomeMicroblog(App.getToken().getToken(), 1);
+            presenter.home_timeline(App.getToken().getToken(), 1);
         }
+        MainActivity activity = (MainActivity) context;
+        activity.setListener(new MainActivity.OnTypeListener() {
+            @Override
+            public void onTypeListener(int type) {
+                handleTypeChange(type);
+            }
+        });
     }
+
     @Override
     public void onSuccess(Object object) {
         Microblog microblog = (Microblog) object;
         List<Microblog.StatusesBean> m = microblog.getStatuses();
+        String s = new Gson().toJson(m);
+
+        Log.e("onSuccess", s);
         //TODO 如果是null 则表示是初始化
         if (microblogList.isEmpty()) {
             microblogList = m;
+            isTypeChange = false;
+            loadingBar.setVisibility(View.GONE);
             setListView();
         } else {
             //TODO 添加数据
@@ -96,13 +153,10 @@ public class HomeFragment extends BaseFragment {
         adapter = new ListViewAdapter(context, microblogList);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        if (microblogList.isEmpty()) {
-            loadingBar.setVisibility(View.VISIBLE);
-        } else {
-            loadingBar.setVisibility(View.GONE);
-        }
+        loadingBar.setVisibility(View.GONE);
         handlerUpPullUpdate();
     }
+
     //TODO 下拉刷新
     private void downPullUpdate() {
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
@@ -111,8 +165,10 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.getHomeMicroblog(App.getToken().getToken(), 1);
-                isDown = true;
+                if (!isRefreshing) {
+                    getFirstPage(currentType);
+                    isDown = true;
+                }
             }
         });
     }
@@ -123,9 +179,26 @@ public class HomeFragment extends BaseFragment {
             ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
                 @Override
                 public void onUpPullRefresh(ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+                    Log.e("currentType上拉", "-" + currentType + "<>" + isTypeChange + "<>" + page);
                     loaderHolder = loaderMoreHolder;
-                    presenter.getHomeMicroblog(App.getToken().getToken(), page);
-                    page++;
+                    if (!isTypeChange) {
+                        if (!isRefreshing) {
+                            switch (currentType) {
+                                case MainActivity.HOME_TIMELINE:
+                                    presenter.home_timeline(App.getToken().getToken(), page);
+                                    break;
+                                case MainActivity.BILATERAL_TIMELINE:
+                                    presenter.bilateral_timeline(App.getToken().getToken(), page);
+                                    break;
+                                case MainActivity.PUBLIC_TIMELINE:
+                                    presenter.public_timeline(App.getToken().getToken(), page);
+                                    break;
+                            }
+                        } else {
+                            loaderHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
+                        }
+                        page++;
+                    }
                     isDown = false;
                 }
             });

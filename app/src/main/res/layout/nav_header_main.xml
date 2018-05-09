@@ -18,8 +18,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_gravity="center"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@mipmap/ic_launcher"/>
+        android:paddingTop="@dimen/nav_header_vertical_spacing"/>
 
     <TextView
         android:id="@+id/home_account_name"
@@ -30,7 +29,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/home_account_introduction"
+        android:id="@+id/home_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

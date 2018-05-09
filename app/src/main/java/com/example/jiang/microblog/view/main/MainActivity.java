@@ -24,21 +24,23 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
-import com.example.jiang.microblog.test.NotificationActivity;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
+import com.example.jiang.microblog.view.favorites.FavoriteActivity;
 import com.example.jiang.microblog.view.home.HomeFragment;
-import com.example.jiang.microblog.view.main.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.message.MessageFragment;
+import com.example.jiang.microblog.view.profile.ProfileActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
+import com.google.gson.Gson;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -53,7 +55,11 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements UserContract.View,
-        NavigationView.OnNavigationItemSelectedListener, WbShareCallback {
+        NavigationView.OnNavigationItemSelectedListener, WbShareCallback, View.OnClickListener {
+
+    public static final int HOME_TIMELINE = 0;//用户及好友微博
+    public static final int BILATERAL_TIMELINE = 1;//互相关注的微博
+    public static final int PUBLIC_TIMELINE = 2;//公共微博
 
     private UserContract.Presenter presenter;
     private CircleImageView composeMicroblog; //TODO　发布微博按钮
@@ -76,6 +82,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private AuthInfo mAuthInfo;
 
     private WbShareHandler shareHandler;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +100,15 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         initEvents();
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
-        if (user == null) {
-            presenter.getProfile(App.getToken().getUid(), App.getToken().getToken());
-        }
+//        if (user == null) {
+//            presenter.getProfile(App.getToken().getToken(),App.getToken().getUid());
+//        }
+        user = new Gson().fromJson(UserJson.JSON, User.class);
+        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
+        //TODO　设置用户昵称
+        usernaem.setText(user.getName());
+        //TODO　设置用户描述
+        description.setText(user.getDescription());
     }
 
     @Override
@@ -130,10 +143,11 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         headerLayout = navigationView.getHeaderView(0);
         header = (CircleImageView) headerLayout.findViewById(R.id.home_account_icon);
         usernaem = (TextView) headerLayout.findViewById(R.id.home_account_name);
-        description = (TextView) headerLayout.findViewById(R.id.home_account_introduction);
+        description = (TextView) headerLayout.findViewById(R.id.home_description);
         //TODO　添加fragment
         fragmentList = new ArrayList<>();
-        fragmentList.add(new HomeFragment());
+        homeFragment = new HomeFragment();
+        fragmentList.add(homeFragment);
         fragmentList.add(new MessageFragment());
         fragmentList.add(new DiscoverFragment());
         //TODO　初始化viewpager适配器
@@ -168,6 +182,12 @@ public class MainActivity extends BaseActivity implements UserContract.View,
      * 初始化事件
      */
     private void initEvents() {
+        composeMicroblog.setOnClickListener(this);
+        homeSearch.setOnClickListener(this);
+        header.setOnClickListener(this);
+        usernaem.setOnClickListener(this);
+        description.setOnClickListener(this);
+
         setSupportActionBar(toolbar);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -177,27 +197,42 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         spinnerEvent();
         //TODO　viewPager滑动监听事件
         viewPagerEvent();
-        //TODO　点击发布微博事件
-        composeMicroblog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.home_search:
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                overridePendingTransition(R.anim.right_in, R.anim.reft_out);
+                break;
+            case R.id.home_share_microblog:
                 boolean isInstall = WbSdk.isWbInstall(MainActivity.this);
                 if (isInstall) {
                     shareByClient();
                 } else {
                     startActivity(new Intent(MainActivity.this, ShareActivity.class));
                 }
+                break;
+            case R.id.home_account_icon:
+            case R.id.home_account_name:
+            case R.id.home_description:
+                startProfileActivity(0);
+                drawer.closeDrawers();
+                break;
+        }
 
-            }
-        });
-        //TODO　点击搜索框搜索事件
-        homeSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-                overridePendingTransition(R.anim.right_in, R.anim.reft_out);
-            }
-        });
+    }
+
+    /**
+     * 启动ProfileActivity
+     */
+    private void startProfileActivity(int index) {
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        intent.putExtra(IntentKey.USER_INFORMATION, new Gson().toJson(user));
+        intent.putExtra(IntentKey.USERNAME, "");
+        intent.putExtra(IntentKey.PROFILE_FRAGMENT_INDEX, index);
+        startActivity(intent);
     }
 
     /**
@@ -225,16 +260,28 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String[] languages = getResources().getStringArray(R.array.title);
-                //TODO 下拉框
-                //TODO 下拉框
-                //TODO 下拉框
-                //TODO 下拉框
-                //TODO 下拉框
+                switch (position) {
+                    case HOME_TIMELINE:
+                        if (listener != null) {
+                            listener.onTypeListener(0);
+                        }
+                        break;
+                    case BILATERAL_TIMELINE:
+                        if (listener != null) {
+                            listener.onTypeListener(1);
+                        }
+                        break;
+                    case PUBLIC_TIMELINE:
+                        if (listener != null) {
+                            listener.onTypeListener(2);
+                        }
+                        break;
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
@@ -244,7 +291,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private void viewPagerEvent() {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -269,7 +318,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
     }
 
@@ -278,20 +328,18 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_all) {
-            Toast.makeText(this, "全部", Toast.LENGTH_SHORT).show();
+            startProfileActivity(1);
         } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
+            startProfileActivity(2);
         } else if (id == R.id.nav_favorite) {
             Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_original) {
-            Toast.makeText(this, "原创", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
         } else if (id == R.id.nav_about) {
             Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_skin) {
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_setting) {
             Toast.makeText(this, "虽然是设置，现在用于测试通知", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         } else if (id == R.id.nav_switch_account) {//TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, true));
@@ -340,4 +388,15 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     public void onWbShareFail() {
 
     }
+
+    public interface OnTypeListener {
+        public void onTypeListener(int type);
+    }
+
+    public OnTypeListener listener;
+
+    public void setListener(OnTypeListener listener) {
+        this.listener = listener;
+    }
+
 }

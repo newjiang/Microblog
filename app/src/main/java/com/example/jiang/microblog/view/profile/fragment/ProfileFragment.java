@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.google.gson.Gson;
@@ -26,7 +26,7 @@ public class ProfileFragment extends BaseFragment implements MicroblogContract.V
     private static final String UNFOCUSED  = "未关注";
     private static final String FOLLOWED_ME = "关注我";
 
-    private Microblog.StatusesBean.UserBean userBean;
+    private User userBean;
 
     private TextView relationship;
     private TextView name;
@@ -50,7 +50,7 @@ public class ProfileFragment extends BaseFragment implements MicroblogContract.V
         //TODO　获取传递过来的数据
         String json = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
         Gson gson = new Gson();
-        userBean = gson.fromJson(json, Microblog.StatusesBean.UserBean.class);
+        userBean = gson.fromJson(json, User.class);
         //TODO 设置显示数据
         name.setText(userBean.getRemark());
         location.setText(userBean.getLocation());

@@ -141,7 +141,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
      * @return
      */
     private String getFormFormat(String source) {
-        return Jsoup.parse(source).text();
+        //TODO FIXME 判断是否为null
+        if (source == null) {
+            return null;
+        } else {
+            return Jsoup.parse(source).text();
+        }
     }
 
     /**

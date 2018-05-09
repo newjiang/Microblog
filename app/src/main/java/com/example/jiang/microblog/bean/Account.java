@@ -16,15 +16,25 @@ public class Account implements Serializable {
     private String imageUrl;
     //用户的个人描述
     private String description;
+    //关注数
+    private String friends;
+    //粉丝数
+    private String followers;
+    //微博数
+    private String statuses;
+
 
     public Account() {
     }
 
-    public Account(String name, String gender, String imageUrl, String description) {
+    public Account(String name, String gender, String imageUrl, String description, String friends, String followers, String statuses) {
         this.name = name;
         this.gender = gender;
         this.imageUrl = imageUrl;
         this.description = description;
+        this.friends = friends;
+        this.followers = followers;
+        this.statuses = statuses;
     }
 
     public String getName() {
@@ -59,6 +69,30 @@ public class Account implements Serializable {
         this.description = description;
     }
 
+    public String getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String friends) {
+        this.friends = friends;
+    }
+
+    public String getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(String followers) {
+        this.followers = followers;
+    }
+
+    public String getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(String statuses) {
+        this.statuses = statuses;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -66,6 +100,9 @@ public class Account implements Serializable {
                 ", gender='" + gender + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", description='" + description + '\'' +
+                ", friends='" + friends + '\'' +
+                ", followers='" + followers + '\'' +
+                ", statuses='" + statuses + '\'' +
                 '}';
     }
 }

@@ -18,7 +18,6 @@ import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
 import com.google.gson.Gson;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +83,7 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                     }
-                }, 3000);
+                }, 2000);
             }
         });
     }

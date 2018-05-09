@@ -1,12 +1,10 @@
 package com.example.jiang.microblog;
 
-import com.example.jiang.microblog.bean.Friend;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.bean.User;
-import com.example.jiang.microblog.json.FriendJson;
 import com.example.jiang.microblog.json.HosJson;
 import com.example.jiang.microblog.json.MicroblogJson;
+import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.ListUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -70,10 +68,8 @@ public class ExampleUnitTest {
     }
     @Test
     public void test4(){
-        Gson gson = new Gson();
-        Friend friend = gson.fromJson(FriendJson.JSON, Friend.class);
-        List<User> users = friend.getUsers();
-        for (User u : users) {
+        List<Hot> search = CrawlerTools.findTopSearch();
+        for (Hot u : search) {
             System.out.println(u.toString());
         }
     }

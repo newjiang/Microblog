@@ -22,8 +22,13 @@ public class UserModel implements UserContract.Model {
     }
 
     @Override
-    public Observable<User> getProfile(String uid, String access_token) {
-        return userService.getProfile(uid, access_token);
+    public Observable<User> getProfile(String access_token, String uid) {
+        return userService.getProfile(access_token, uid);
+    }
+
+    @Override
+    public Observable<User> getProfileByName(String access_token, String screen_name) {
+        return userService.getProfileByName(access_token, screen_name);
     }
 
     @Override

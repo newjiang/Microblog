@@ -8,13 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jiang.microblog.mvp.contract.MicroblogContract;
-
 /**
  * Created by jiang on 2018/4/14.
  */
 
-public abstract class BaseFragment extends Fragment implements MicroblogContract.View{
+public abstract class BaseFragment extends Fragment{
 
     protected Context context;
 

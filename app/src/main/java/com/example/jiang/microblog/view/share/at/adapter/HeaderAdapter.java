@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.at.adapter;
+package com.example.jiang.microblog.view.share.at.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

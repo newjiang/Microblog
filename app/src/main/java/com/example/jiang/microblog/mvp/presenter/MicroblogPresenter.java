@@ -48,9 +48,9 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
 
 
     @Override
-    public void getHomeMicroblog(String access_token, int page) {
+    public void home_timeline(String access_token, int page) {
         subscription.add(
-                model.getHomeMicroblog(access_token, page)
+                model.home_timeline(access_token, page)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<Microblog>() {
@@ -61,6 +61,58 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
                                 }
                             }
 
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(Microblog m) {
+                                microblog = m;
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void bilateral_timeline(String access_token, int page) {
+        subscription.add(
+                model.bilateral_timeline(access_token, page)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Microblog>() {
+                            @Override
+                            public void onCompleted() {
+                                if (microblog != null) {
+                                    view.onSuccess(microblog);
+                                }
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(Microblog m) {
+                                microblog = m;
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void public_timeline(String access_token, int page) {
+        subscription.add(
+                model.public_timeline(access_token, page)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Microblog>() {
+                            @Override
+                            public void onCompleted() {
+                                if (microblog != null) {
+                                    view.onSuccess(microblog);
+                                }
+                            }
                             @Override
                             public void onError(Throwable e) {
                                 view.onError(e.getMessage());

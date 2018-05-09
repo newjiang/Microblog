@@ -50,9 +50,36 @@ public class UserPresenter implements UserContract.Presenter {
     }
 
     @Override
-    public void getProfile(String uid, String access_token) {
+    public void getProfile(String access_token, String uid) {
         subscription.add(
-                model.getProfile(uid, access_token)
+                model.getProfile(access_token, uid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<User>() {
+                            @Override
+                            public void onCompleted() {
+                                if (user != null) {
+                                    view.onSuccess(user);
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(User u) {
+                                user = u;
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void getProfileByName(String access_token, String screen_name) {
+        subscription.add(
+                model.getProfileByName(access_token, screen_name)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<User>() {

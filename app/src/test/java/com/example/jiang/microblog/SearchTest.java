@@ -137,6 +137,7 @@ public class SearchTest {
         System.out.println("++++++++++++++++++++++++++++++++++++++++++");
     }
 
+    @Test
     public void testFindUser() {
         String html = "";
         try {
@@ -186,7 +187,13 @@ public class SearchTest {
         }
 //TODO 描述
         String description = element.getElementsByClass("person_card").html();
-        Account account = new Account(name, gender, imageUrl, description);
+        String friends = element.getElementsByClass("person_num")
+                .select("a").get(0).getElementsByClass("W_linkb").html();
+        String followers = element.getElementsByClass("person_num")
+                .select("a").get(1).getElementsByClass("W_linkb").html();
+        String statuses = element.getElementsByClass("person_num")
+                .select("a").get(2).getElementsByClass("W_linkb").html();
+        Account account = new Account(name, gender, imageUrl, description, friends, followers, statuses);
         System.out.println(account.toString());
     }
 

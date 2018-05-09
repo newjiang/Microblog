@@ -5,19 +5,15 @@
         <item
             android:id="@+id/nav_all"
             android:icon="@drawable/ic_attachment_black"
-            android:title="全部" />
-        <item
-            android:id="@+id/nav_favorite"
-            android:icon="@drawable/ic_favorite_border"
-            android:title="收藏" />
-        <item
-            android:id="@+id/nav_original"
-            android:icon="@drawable/ic_menu_send"
-            android:title="原创" />
+            android:title="微博" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="相册" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_favorite_border"
+            android:title="收藏" />
     </group>
 
     <item android:title="系统中心">

@@ -19,7 +19,7 @@ import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.result.ResultActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.activity.MoreActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.HotAdapter;
@@ -66,7 +66,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
-        List<History> historyList = DataSupport.findAll(History.class);
+        final List<History> historyList = DataSupport.findAll(History.class);
         //TODO 只显示5条历史记录
         if (historyList.size() > 5) {
             for (int i = 0; i < 5; i++) {
@@ -82,13 +82,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 List<Hot> hotList = null;
                 try {
                     hotList = CrawlerTools.findTopSearch();
+                    if (hotList != null) {
+                        for (int i = 0; i < 10; i++) {
+                            hots.add(hotList.get(i));
+                        }
+                    }
                 } catch (NullPointerException n) {
                     n.printStackTrace();
-                }
-                if (hotList != null) {
-                    for (int i = 0; i < 10; i++) {
-                        hots.add(hotList.get(i));
-                    }
                 }
                 runOnUiThread(new Runnable() {
                     @Override

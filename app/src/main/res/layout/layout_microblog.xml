@@ -13,7 +13,7 @@
            android:layout_margin="5dp"
            android:layout_width="35dp"
            android:layout_height="35dp"
-           android:src="@mipmap/ic_launcher"/>
+           android:src="@drawable/logo"/>
        <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
@@ -25,8 +25,7 @@
                android:id="@+id/microblog_remark"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textColor="#000000"
-               android:text="新健"/>
+               android:textColor="#000000"/>
            <TextView
                android:id="@+id/microblog_username"
                android:layout_width="wrap_content"
@@ -42,8 +41,7 @@
                android:layout_height="wrap_content"
                android:layout_marginBottom="3dp"
                android:textSize="12sp"
-               android:layout_below="@id/microblog_remark"
-               android:text="来自XXX"/>
+               android:layout_below="@id/microblog_remark"/>
            <!--时间-->
            <TextView
                android:id="@+id/microblog_time"
@@ -59,8 +57,7 @@
                android:id="@+id/microblog_content"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:layout_below="@id/microblog_from"
-               android:text="我要发微博了"/>
+               android:layout_below="@id/microblog_from"/>
            <!--微博配图-->
            <com.jaeger.ninegridimageview.NineGridImageView
                android:id="@+id/microblog_picture"
@@ -79,6 +76,7 @@
                android:layout_height="wrap_content"
                android:paddingLeft="5dp"
                android:paddingRight="5dp"
+               android:visibility="gone"
                android:background="@drawable/shape_retweeted_text_bg"/>
            <!--转发微博的配图-->
            <com.jaeger.ninegridimageview.NineGridImageView

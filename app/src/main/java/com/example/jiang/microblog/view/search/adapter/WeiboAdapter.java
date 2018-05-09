@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.result.adapter;
+package com.example.jiang.microblog.view.search.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -85,13 +85,13 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     }
 
     @Override
-    public WeiboAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_microblog, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(WeiboAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         //TODO 用户头像
         Glide.with(context).load("http:" + weibos.get(position).getHeader()).into(holder.header);
         //TODO 用户名字

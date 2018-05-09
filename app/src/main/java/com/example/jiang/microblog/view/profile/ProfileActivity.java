@@ -1,6 +1,5 @@
 package com.example.jiang.microblog.view.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,12 +16,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.mvp.contract.UserContract;
+import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.profile.adapter.InfoViewPagerAdapter;
+import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
 import com.example.jiang.microblog.view.profile.fragment.AlbumFragment;
 import com.example.jiang.microblog.view.profile.fragment.MicroblogFragment;
 import com.example.jiang.microblog.view.profile.fragment.ProfileFragment;
@@ -32,12 +33,12 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileActivity extends BaseActivity implements MicroblogContract.View {
+public class ProfileActivity extends BaseActivity implements UserContract.View {
 
     private static final String MALE = "m";
     private static final String FEMALE = "f";
 
-    private MicroblogContract.Presenter presenter;
+    private UserContract.Presenter presenter;
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
@@ -57,25 +58,27 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     //TODO BaseFragment
     private List<BaseFragment> fragmentList;
     //TODO PagerAdapter
-    private InfoViewPagerAdapter viewPagerAdapter;
+    private ViewPagerAdapter viewPagerAdapter;
 
-    private Microblog.StatusesBean.UserBean userBean;
+    private User userBean;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        presenter = new UserPresenter(this);
         getUserInfo();
         initViews();
-        initData();
-        initEvents();
-        initTab();
-    }
 
+    }
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("onSuccess", object.toString());
+        userBean = (User) object;
+        initData();
+        initEvents();
+        initTab();
     }
 
     @Override
@@ -84,9 +87,17 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
     }
 
     private void getUserInfo() {
-        Intent intent = getIntent();
-        String json = intent.getStringExtra(IntentKey.USER_INFORMATION);
-        userBean = new Gson().fromJson(json, Microblog.StatusesBean.UserBean.class);
+        String json = getIntent().getStringExtra(IntentKey.USER_INFORMATION);
+        if (json == null || json.equals("")) {
+            String username = getIntent().getStringExtra(IntentKey.USERNAME);
+            presenter.getProfileByName(App.getToken().getToken(), username);
+        } else {
+            userBean = new Gson().fromJson(json, User.class);
+            initData();
+            initEvents();
+            initTab();
+        }
+        index = getIntent().getIntExtra(IntentKey.PROFILE_FRAGMENT_INDEX, 0);
     }
 
     private void initTab() {
@@ -109,12 +120,13 @@ public class ProfileActivity extends BaseActivity implements MicroblogContract.V
         profileFragment.setArguments(bundle);
 
         //TODO 初始化viewpager适配器
-        viewPagerAdapter = new InfoViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setSelectedTabIndicatorHeight(2);
         ViewCompat.setElevation(tabLayout, 10);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(index);
     }
 
     /**

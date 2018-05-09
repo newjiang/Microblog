@@ -1,12 +1,13 @@
 package com.example.jiang.microblog.view.message;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
+import com.example.jiang.microblog.utils.IntentKey;
 
 /**
  * Created by jiang on 2018/4/14.
@@ -57,27 +58,26 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_at_me_weibos:
-                Toast.makeText(context, "@我的微博", Toast.LENGTH_SHORT).show();
+                Intent intent0 = new Intent(context, MessageActivity.class);
+                intent0.putExtra(IntentKey.MESSAGE_FRAGMENT_INDEX, 0);
+                context.startActivity(intent0);
                 break;
             case R.id.layout_at_me_commends:
-                Toast.makeText(context, "@我的评论", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(context, MessageActivity.class);
+                intent1.putExtra(IntentKey.MESSAGE_FRAGMENT_INDEX, 1);
+                context.startActivity(intent1);
                 break;
             case R.id.layout_receive_commends:
-                Toast.makeText(context, "收到的评论", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(context, MessageActivity.class);
+                intent2.putExtra(IntentKey.MESSAGE_FRAGMENT_INDEX, 2);
+                context.startActivity(intent2);
                 break;
             case R.id.layout_send_commends:
-                Toast.makeText(context, "发出的评论", Toast.LENGTH_SHORT).show();
+                Intent intent3 = new Intent(context, MessageActivity.class);
+                intent3.putExtra(IntentKey.MESSAGE_FRAGMENT_INDEX, 3);
+                context.startActivity(intent3);
                 break;
         }
     }
 
-    @Override
-    public void onSuccess(Object object) {
-
-    }
-
-    @Override
-    public void onError(String result) {
-
-    }
 }

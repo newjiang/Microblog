@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.result.ResultActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
 
@@ -47,13 +47,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     @Override
-    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_history, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(HistoryAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.content.setText(historys.get(position).getHistory());
 
         holder.content.setOnClickListener(new View.OnClickListener() {
