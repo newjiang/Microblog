@@ -29,7 +29,7 @@
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_menu_setting"
-                android:title="设置" />
+                android:title="系统设置" />
             <item
                 android:id="@+id/nav_switch_account"
                 android:icon="@drawable/ic_change_account_black"

@@ -39,6 +39,7 @@ import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.profile.ProfileActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
+import com.example.jiang.microblog.view.setting.SettingActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.WbSdk;
@@ -96,6 +97,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(this, SettingActivity.class));
+
         token = AccessTokenKeeper.readAccessToken(this);
 //        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
@@ -361,7 +365,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         } else if (id == R.id.nav_skin) {
             Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_setting) {
-            Toast.makeText(this, "虽然是设置，现在用于测试通知", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingActivity.class));
         } else if (id == R.id.nav_switch_account) {//TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, true));

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,8 +19,8 @@ import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.activity.MoreActivity;
+import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.HotAdapter;
 import com.google.gson.Gson;
@@ -83,8 +82,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 List<Hot> hotList = null;
                 try {
                     hotList = CrawlerTools.findTopSearch();
-                    Log.e("hotList", historyList.toString());
-                    if (hotList != null) {
+                    if (!hotList.isEmpty() && hotList.size() > 10) {
                         for (int i = 0; i < 10; i++) {
                             try {
                                 hots.add(hotList.get(i));
@@ -117,7 +115,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         searchIcon.setOnClickListener(this);
         clearText.setOnClickListener(this);
         moreRecommend.setOnClickListener(this);
-
         initHistory();
         initHots();
         showTips();

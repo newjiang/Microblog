@@ -31,7 +31,7 @@ public class NotificationActivity extends AppCompatActivity {
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 //音频uri
                 String uri = "android.resource://" + NotificationActivity.this.getPackageName() + "/" + R.raw.doge;
-
+                Uri parse = Uri.parse(uri);
                 Notification notification = new NotificationCompat.Builder(NotificationActivity.this)
                         .setContentTitle("这个是标题")
                         .setContentText("我是内容啊啊啊")

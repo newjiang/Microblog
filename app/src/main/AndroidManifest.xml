@@ -75,7 +75,9 @@
         </provider>
 
         <activity android:name=".view.share.RecordActivity" />
-        <activity android:name=".view.favorites.FavoriteActivity"></activity>
+        <activity android:name=".view.favorites.FavoriteActivity" />
+        <activity android:name=".view.setting.SettingActivity" />
+        <activity android:name=".view.setting.RingActivity"></activity>
     </application>
 
 </manifest>

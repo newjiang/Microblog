@@ -10,27 +10,26 @@ import java.io.Serializable;
 
 public class Setting extends DataSupport implements Serializable {
 
-    private int id;     //id
-    private boolean isNotification;//是否提醒
-    private boolean isRing;//是否有铃声
-    private boolean isVibrate;//是否有震动
-    private boolean isShareByDefault;//是否通过客户端分享
-    private String ring;//铃声
-    private String skinFuffix;//皮肤后缀
-
-    private long userId;
+    private int id;                       //id
+    private boolean isNotification;     //是否提醒
+    private boolean isRing;              //是否有铃声
+    private boolean isVibrate;           //是否有震动
+    private boolean isShareByDefault;   //是否通过客户端分享
+    private String ring;                   //铃声
+    private String skinFuffix;            //皮肤后缀
+    private String uid;
 
     public Setting() {
     }
 
-    public Setting(boolean isNotification, boolean isRing, boolean isVibrate, boolean isShareByDefault, String ring, String skinFuffix, long userId) {
+    public Setting(boolean isNotification, boolean isRing, boolean isVibrate, boolean isShareByDefault, String ring, String skinFuffix, String uid) {
         this.isNotification = isNotification;
         this.isRing = isRing;
         this.isVibrate = isVibrate;
         this.isShareByDefault = isShareByDefault;
         this.ring = ring;
         this.skinFuffix = skinFuffix;
-        this.userId = userId;
+        this.uid = uid;
     }
 
     public int getId() {
@@ -89,12 +88,12 @@ public class Setting extends DataSupport implements Serializable {
         this.skinFuffix = skinFuffix;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @Override
@@ -107,7 +106,7 @@ public class Setting extends DataSupport implements Serializable {
                 ", isShareByDefault=" + isShareByDefault +
                 ", ring='" + ring + '\'' +
                 ", skinFuffix='" + skinFuffix + '\'' +
-                ", userId=" + userId +
+                ", uid='" + uid + '\'' +
                 '}';
     }
 }

@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,6 +72,16 @@ public class ExampleUnitTest {
         List<Hot> search = CrawlerTools.findTopSearch();
         for (Hot u : search) {
             System.out.println(u.toString());
+        }
+    }
+    @Test
+    public void test5(){
+        List<String> list = new ArrayList<>();
+        List<String> data = new ArrayList<>();
+        if (list.isEmpty() && list.size() > 10) {
+            System.out.println("YYYYYY");
+        } else {
+            System.out.println("NNNNNN");
         }
     }
 }
