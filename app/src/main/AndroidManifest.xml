@@ -26,7 +26,7 @@
     <application
         android:name=".base.App"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -77,7 +77,8 @@
         <activity android:name=".view.share.RecordActivity" />
         <activity android:name=".view.favorites.FavoriteActivity" />
         <activity android:name=".view.setting.SettingActivity" />
-        <activity android:name=".view.setting.RingActivity"></activity>
+        <activity android:name=".view.setting.RingActivity" />
+
     </application>
 
 </manifest>

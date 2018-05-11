@@ -35,4 +35,7 @@ public class IntentKey {
     public static final String USERNAME = "username";
 
     public static final String RING = "ring";
+    public static final String BROADCAST = "broadcast";
+
+
 }

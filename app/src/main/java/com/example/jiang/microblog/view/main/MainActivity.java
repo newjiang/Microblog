@@ -1,6 +1,7 @@
 package com.example.jiang.microblog.view.main;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -28,9 +29,11 @@ import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.broadcast.MessageReceiver;
 import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
+import com.example.jiang.microblog.service.PollingService;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
@@ -57,7 +60,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements UserContract.View,
-        NavigationView.OnNavigationItemSelectedListener, WbShareCallback, View.OnClickListener {
+        NavigationView.OnNavigationItemSelectedListener, WbShareCallback, View.OnClickListener,
+        MessageReceiver.OnMessageListener {
 
     public static final int HOME_TIMELINE = 0;//用户及好友微博
     public static final int BILATERAL_TIMELINE = 1;//互相关注的微博
@@ -91,18 +95,23 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private Oauth2AccessToken token;
     private TabLayout.Tab homeTab;
     private TabLayout.Tab messageTab;
-
+    private MessageReceiver messageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
 
-        startActivity(new Intent(this, SettingActivity.class));
+
+        //注册广播接收器
+        messageReceiver = new MessageReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.jiang.microblog.MESSAGE_RECEIVER");
+        registerReceiver(messageReceiver, intentFilter);
+        messageReceiver.setOnMessageListener(this);
 
         token = AccessTokenKeeper.readAccessToken(this);
-//        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
-
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         WbSdk.install(this, mAuthInfo);
         shareHandler = new WbShareHandler(this);
@@ -186,6 +195,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         tabLayout.getTabAt(0).getCustomView().setSelected(true);
         homeNotice = (ImageView) homeTab.getCustomView().findViewById(R.id.home_notice);
         messageNotice = (ImageView) messageTab.getCustomView().findViewById(R.id.message_notice);
+        homeNotice.setVisibility(View.INVISIBLE);
+        messageNotice.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -312,14 +323,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                     spinner.setVisibility(View.VISIBLE);
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
-                    handleHomeNotice();
+                    homeNotice.setVisibility(View.INVISIBLE);
                 } else if (position == 1) {
                     //TODO message页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
-                    handleMessageNotice();
+                    messageNotice.setVisibility(View.INVISIBLE);
                 } else if (position == 2) {
                     //TODO discover页面
                     spinner.setVisibility(View.GONE);
@@ -335,19 +346,12 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         });
     }
 
-    private void handleHomeNotice() {
-        Toast.makeText(this, "主页", Toast.LENGTH_SHORT).show();
-        homeNotice.setVisibility(View.VISIBLE);
-        messageNotice.setVisibility(View.INVISIBLE);
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(messageReceiver);
     }
-
-    private void handleMessageNotice() {
-        Toast.makeText(this, "消息", Toast.LENGTH_SHORT).show();
-        homeNotice.setVisibility(View.INVISIBLE);
-        messageNotice.setVisibility(View.VISIBLE);
-    }
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -400,6 +404,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         return super.onKeyDown(keyCode, event);
     }
 
+
+
     @Override
     public void onWbShareSuccess() {
 
@@ -412,6 +418,22 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
     @Override
     public void onWbShareFail() {
+
+    }
+
+    @Override
+    public void onMessageListener(int status, int follower, int cmt, int mention_status, int mention_cmt) {
+        Log.e("MainActivity", status + "|" + follower + "|" + cmt + "|" + mention_status + "|" + mention_cmt);
+        if (status > 0) {
+            homeNotice.setVisibility(View.VISIBLE);
+        } else {
+            homeNotice.setVisibility(View.INVISIBLE);
+        }
+        if (cmt > 0 || mention_cmt > 0 || mention_status > 0) {
+            messageNotice.setVisibility(View.VISIBLE);
+        } else {
+            messageNotice.setVisibility(View.INVISIBLE);
+        }
 
     }
 

@@ -194,6 +194,7 @@
     <string name="at_me_comments" translatable="false">\@我的评论</string>
     <string name="receive_comments">收到的评论</string>
     <string name="send_comment">发出的评论</string>
+    <string name="new_follower">新粉丝</string>
     <string name="search_hint">搜点什么...</string>
 
 </resources>

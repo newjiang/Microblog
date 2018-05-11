@@ -3,6 +3,7 @@ package com.example.jiang.microblog.net;
 import android.content.Context;
 
 import com.example.jiang.microblog.net.service.CommentService;
+import com.example.jiang.microblog.net.service.MessageService;
 import com.example.jiang.microblog.net.service.MicroblogService;
 import com.example.jiang.microblog.net.service.UserService;
 import com.google.gson.GsonBuilder;
@@ -84,6 +85,10 @@ public class RetrofitHelper {
      */
     public CommentService getCommentService() {
         return mRetrofit.create(CommentService.class);
+    }
+
+    public MessageService getMessageService() {
+        return mRetrofit.create(MessageService.class);
     }
 }
 

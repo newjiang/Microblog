@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class Message extends DataSupport implements Serializable {
 
-    private int status;      //TODO 微博未读消息
+    private int status;      //TODO 未读微博
     private int follower;   //TODO 新粉丝
     private int cmt;         //TODO 新评论
     private int mention_status;     //TODO 新提及我的微博数

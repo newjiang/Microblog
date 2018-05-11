@@ -42,6 +42,15 @@
         <item name="android:background">@drawable/background_message_icon</item>
     </style>
 
+    <style name="message_count_style">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@drawable/background_message_count</item>
+    </style>
     <style name="message_tv_style">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

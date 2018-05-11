@@ -2,11 +2,12 @@
 <litepal>
     <dbname value="microblog" ></dbname>
 
-    <version value="3" ></version>
+    <version value="4" ></version>
 
     <list>
         <mapping class="com.example.jiang.microblog.bean.User"></mapping>
         <mapping class="com.example.jiang.microblog.bean.History"></mapping>
         <mapping class="com.example.jiang.microblog.bean.Setting"></mapping>
+        <mapping class="com.example.jiang.microblog.bean.Message"></mapping>
     </list>
 </litepal>
