@@ -37,7 +37,6 @@ import com.example.jiang.microblog.service.PollingService;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.MainViewPagerAdapter;
 import com.example.jiang.microblog.view.discover.DiscoverFragment;
-import com.example.jiang.microblog.view.favorites.FavoriteActivity;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.profile.ProfileActivity;

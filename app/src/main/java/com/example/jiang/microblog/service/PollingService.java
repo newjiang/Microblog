@@ -91,7 +91,7 @@ public class PollingService extends Service implements MessageContract.View {
         registerReceiver(receiver, filter);
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int time = 1000 * 300;   //TODO 请求间隔时间300秒
+        int time = 1000 * 1000;   //TODO 请求间隔时间300秒
         long triggerTime = SystemClock.elapsedRealtime() + time;
         Intent i = new Intent(this, PollingService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);

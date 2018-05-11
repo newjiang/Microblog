@@ -3,6 +3,7 @@ package com.example.jiang.microblog.net;
 import android.content.Context;
 
 import com.example.jiang.microblog.net.service.CommentService;
+import com.example.jiang.microblog.net.service.FavoriteService;
 import com.example.jiang.microblog.net.service.MessageService;
 import com.example.jiang.microblog.net.service.MicroblogService;
 import com.example.jiang.microblog.net.service.UserService;
@@ -28,6 +29,7 @@ public class RetrofitHelper {
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
 
     private static RetrofitHelper instance = null;
+    private FavoriteService favoriteService;
 
     private RetrofitHelper(Context mContext) {
         mCntext = mContext;
@@ -86,9 +88,21 @@ public class RetrofitHelper {
     public CommentService getCommentService() {
         return mRetrofit.create(CommentService.class);
     }
-
+    /**
+     * 获取MessageService的实例
+     *
+     * @return
+     */
     public MessageService getMessageService() {
         return mRetrofit.create(MessageService.class);
+    }
+    /**
+     * 获取FavoriteService的实例
+     *
+     * @return
+     */
+    public FavoriteService getFavoriteService() {
+        return mRetrofit.create(FavoriteService.class);
     }
 }
 
