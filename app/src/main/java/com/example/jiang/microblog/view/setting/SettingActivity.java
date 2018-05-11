@@ -3,7 +3,9 @@ package com.example.jiang.microblog.view.setting;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +20,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
 import java.util.List;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener{
@@ -34,6 +37,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("应用设置");
+        }
         token = AccessTokenKeeper.readAccessToken(this);
         Log.e("getUid", token.getUid());
         List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
@@ -66,7 +73,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (setting.getRing().equals("default")) {
             ringName.setText("系统默认");
         } else {
-            ringName.setText(setting.getRing());
+            ringName.setText(getRingName(setting.getRing()));
         }
         if (setting.isRing()) {
             ring.setBackgroundResource(R.drawable.on);
@@ -140,8 +147,33 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-
+            if (resultCode == RESULT_OK) {
+                String extra = data.getStringExtra(IntentKey.RETURN_RING);
+                setting.setRing(extra);
+                ringName.setText(getRingName(extra));
+                ContentValues values = new ContentValues();
+                values.put("ring", extra);
+                DataSupport.update(Setting.class, values, setting.getId());
+            }
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private String getRingName(String ring) {
+        if (ring.contains("ogg")) {
+            int start = ring.lastIndexOf(File.separator) + 1;
+            int end = ring.indexOf(".");
+            return ring.substring(start, end);
+        }
+        return ring;
     }
 }

@@ -72,8 +72,6 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new UserPresenter(this);
         getUserInfo();
-
-
     }
 
     @Override

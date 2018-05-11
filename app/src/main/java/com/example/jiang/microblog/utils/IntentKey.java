@@ -31,11 +31,13 @@ public class IntentKey {
     public static final String AT_FRIEND = "at_friend";
     //TODO 启动MessageActivity显示的fragment
     public static final String MESSAGE_FRAGMENT_INDEX = "MESSAGE_FRAGMENT_INDEX";
-    //用户昵称
+    //TODO 用户昵称
     public static final String USERNAME = "username";
-
+    //TODO 铃声名字
     public static final String RING = "ring";
+    //TODO 发送广播的数据
     public static final String BROADCAST = "broadcast";
-
+    //TODO  返回铃声名字
+    public static final String RETURN_RING = "return_ring";
 
 }

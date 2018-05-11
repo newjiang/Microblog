@@ -1,16 +1,20 @@
 package com.example.jiang.microblog.view.setting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
@@ -21,12 +25,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RingActivity extends AppCompatActivity {
+public class RingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
+    private TextView back;
+    private TextView sure;
+
     private List<String> list;
     private int split;
     private int position;
+    private String ringName;
 
     private SettingAdapter adapter;
     private MediaPlayer player;
@@ -34,9 +42,17 @@ public class RingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ring);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         list = new ArrayList<>();
         initData();
         player = new MediaPlayer();
+        back = (TextView) findViewById(R.id.back);
+        sure = (TextView) findViewById(R.id.sure);
+        back.setOnClickListener(this);
+        sure.setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.ring_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SettingAdapter(this, list, position, split);
@@ -45,6 +61,7 @@ public class RingActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new SettingAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(String name) {
+                ringName = name;
                 Uri uri = getUri(name);
                 Log.e("uri", uri.toString());
                 playRingtone(uri);
@@ -83,6 +100,41 @@ public class RingActivity extends AppCompatActivity {
             }
         });
     }
+    private void initData() {
+        String ringName = getIntent().getStringExtra(IntentKey.RING);
+        list.add("default");
+        list.addAll(getSystemRingtones());
+        split = list.size();
+        list.add("应用铃声");
+        for (int i = 0; i < 23; i++) {
+            list.add("ring" + i);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(ringName)) {
+                position = i;
+            }
+        }
+    }
+
+    private List<String> getSystemRingtones() {
+        List<String> list = new ArrayList<>();
+        String path = File.separator + "system"
+                + File.separator + "media"
+                + File.separator + "audio"
+                + File.separator + "ringtones";
+        File dir = new File(path);
+        if (dir.exists()) {
+            File[] files = dir.listFiles();
+            for (File f : files) {
+                list.add(f.toString());
+            }
+            return list;
+        } else {
+            return null;
+        }
+    }
+
+
 
     private Uri getUri(String name) {
         Uri uri = Uri.parse(name);
@@ -139,57 +191,31 @@ public class RingActivity extends AppCompatActivity {
         return uri;
     }
 
-    private void initData() {
-        String ringName = getIntent().getStringExtra(IntentKey.RING);
-        list.add("default");
-        list.addAll(getSystemRingtones());
-        split = list.size();
-        list.add("应用铃声");
-        for (int i = 0; i < 23; i++) {
-            list.add("ring" + i);
-        }
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(ringName)) {
-                position = i;
-            }
-        }
-    }
 
-    private List<String> getSystemRingtones() {
-        List<String> list = new ArrayList<>();
-        String path = File.separator + "system"
-                + File.separator + "media"
-                + File.separator + "audio"
-                + File.separator + "ringtones";
-        File dir = new File(path);
-        if (dir.exists()) {
-            File[] files = dir.listFiles();
-            for (File f : files) {
-                list.add(f.toString());
-            }
-            return list;
-        } else {
-            return null;
-        }
-    }
-
-//    public List<String> getRingtoneTitleList(int type){
-//        List<String> ringList = new ArrayList<String>();
-//        RingtoneManager manager = new RingtoneManager(this);
-//        manager.setType(type);
-//        Cursor cursor = manager.getCursor();
-//        if(cursor.moveToFirst()){
-//            do{
-//                ringList.add(cursor.getString(RingtoneManager.TYPE_RINGTONE));
-//            }while(cursor.moveToNext());
-//        }
-//        return ringList;
-//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         player.release();
         player = null;
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent();
+        switch (v.getId()) {
+            case R.id.back:
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
+            case R.id.sure:
+                intent.putExtra(IntentKey.RETURN_RING,ringName);
+                setResult(RESULT_OK,intent);
+                finish();
+                break;
+        }
+
     }
 }
