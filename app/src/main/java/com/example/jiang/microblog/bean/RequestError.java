@@ -33,4 +33,13 @@ public class RequestError {
     public void setRequest(String request) {
         this.request = request;
     }
+
+    @Override
+    public String toString() {
+        return "RequestError{" +
+                "error='" + error + '\'' +
+                ", error_code=" + error_code +
+                ", request='" + request + '\'' +
+                '}';
+    }
 }

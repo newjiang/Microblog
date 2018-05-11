@@ -1,6 +1,6 @@
 package com.example.jiang.microblog.utils;
 
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ public class ListUtils {
      * @param newList     新元素的结合
      * @param isDown      是否向下拉动操作
      */
-    public static void add(List<Microblog.StatusesBean> currentList,
-                           List<Microblog.StatusesBean> newList, boolean isDown) {
+    public static void add(List<Statuses> currentList,
+                           List<Statuses> newList, boolean isDown) {
         //TODO 下拉添加数据的位置索引
         int index = 0;
         for (int i = 0; i < newList.size(); i++) {

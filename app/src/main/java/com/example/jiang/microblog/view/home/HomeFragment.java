@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
@@ -35,7 +36,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar loadingBar;
     private RecyclerViewBaseAdapter adapter;
-    private List<Microblog.StatusesBean> microblogList = new ArrayList<>();
+    private List<Statuses> microblogList = new ArrayList<>();
 
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
@@ -111,7 +112,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     @Override
     public void onSuccess(Object object) {
         Microblog microblog = (Microblog) object;
-        List<Microblog.StatusesBean> m = microblog.getStatuses();
+        List<Statuses> m = microblog.getStatuses();
         String s = new Gson().toJson(m);
         //TODO 如果是null 则表示是初始化
         if (microblogList.isEmpty()) {

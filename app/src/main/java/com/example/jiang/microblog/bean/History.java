@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class History extends DataSupport implements Serializable {
+
     private String history;
 
     public History() {

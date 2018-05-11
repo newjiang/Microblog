@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.ListUtils;
 import com.example.jiang.microblog.utils.TextColorTools;
@@ -39,9 +39,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    protected final List<Microblog.StatusesBean> beanList;
+    protected final List<Statuses> beanList;
 
-    public RecyclerViewBaseAdapter(Context context, List<Microblog.StatusesBean> data) {
+    public RecyclerViewBaseAdapter(Context context, List<Statuses> data) {
         this.context = context;
         this.beanList = data;
     }
@@ -154,7 +154,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, CommentActivity.class);
-                    Microblog.StatusesBean statuses = beanList.get(mPosition);
+                    Statuses statuses = beanList.get(mPosition);
                     //TODO 通过json传递过去
                     intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
                     context.startActivity(intent);
@@ -165,7 +165,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         /**
          * 这个方法用于设置数据
          */
-        public void setData(final Microblog.StatusesBean bean, int position) {
+        public void setData(final Statuses bean, int position) {
             this.mPosition = position;
             //TODO 用户头像
             Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
@@ -208,7 +208,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
          *
          * @param bean
          */
-        private void setRetweetedData(Microblog.StatusesBean bean) {
+        private void setRetweetedData(Statuses bean) {
             if (bean.getRetweeted_status() != null) {
                 //TODO 转发微博的内容
                 String name = "@" + bean.getRetweeted_status().getUser().getName();
@@ -287,7 +287,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      * @param newList
      * @param flag
      */
-    public void add(List<Microblog.StatusesBean> newList, boolean flag) {
+    public void add(List<Statuses> newList, boolean flag) {
         ListUtils.add(beanList, newList, flag);
         notifyDataSetChanged();
     }

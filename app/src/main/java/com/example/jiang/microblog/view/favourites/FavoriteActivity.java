@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
 
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
@@ -22,7 +22,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar loadingBar;
     private RecyclerViewBaseAdapter adapter;
-    private List<Microblog.StatusesBean> microblogList = new ArrayList<>();
+    private List<Statuses> microblogList = new ArrayList<>();
 
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 

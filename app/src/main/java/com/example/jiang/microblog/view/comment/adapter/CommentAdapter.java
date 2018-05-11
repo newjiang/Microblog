@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.bean.Comment;
+import com.example.jiang.microblog.bean.CommentsBean;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 
@@ -40,13 +40,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private Context context;
 
-    private List<Comment.CommentsBean> comments;
+    private List<CommentsBean> comments;
 
     //TODO 声明一个接口的引用
     private OnItemClickListener onItemClickListener;
 
     //TODO 构造函数
-    public CommentAdapter(Context context, List<Comment.CommentsBean> comments) {
+    public CommentAdapter(Context context, List<CommentsBean> comments) {
         this.context = context;
         this.comments = comments;
     }
@@ -99,7 +99,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(final CommentAdapter.ViewHolder holder, final int position) {
         //TODO 按照时间顺序显示，list倒序
-        Comment.CommentsBean bean = comments.get(comments.size() - position - 1);
+        CommentsBean bean = comments.get(comments.size() - position - 1);
 
         Glide.with(context).load(bean.getUser().getAvatar_hd()).into(holder.header);
         holder.commentator.setText(bean.getUser().getName());

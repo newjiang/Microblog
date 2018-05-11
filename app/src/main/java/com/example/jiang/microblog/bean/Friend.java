@@ -45,4 +45,13 @@ public class Friend {
         this.users = users;
     }
 
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "next_cursor=" + next_cursor +
+                ", previous_cursor=" + previous_cursor +
+                ", total_number=" + total_number +
+                ", users=" + users +
+                '}';
+    }
 }

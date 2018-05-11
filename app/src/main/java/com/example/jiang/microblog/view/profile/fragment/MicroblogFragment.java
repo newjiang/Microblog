@@ -12,6 +12,7 @@ import android.view.View;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
@@ -37,7 +38,7 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
 
     private RecyclerViewBaseAdapter adapter;
 
-    List<Microblog.StatusesBean> microblogList = new ArrayList<>();
+    List<Statuses> microblogList = new ArrayList<>();
 
 
     @Override
@@ -75,7 +76,7 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
             @Override
             public void onRefresh() {
                 Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                List<Microblog.StatusesBean> statuses = microblog.getStatuses();
+                List<Statuses> statuses = microblog.getStatuses();
                 microblogList.add(0, statuses.get(1));
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -119,8 +120,8 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
                         Random random = new Random();
                         if (random.nextInt() % 2 == 0) {
                             Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                            List<Microblog.StatusesBean> statuses = microblog.getStatuses();
-                            for (Microblog.StatusesBean s : statuses) {
+                            List<Statuses> statuses = microblog.getStatuses();
+                            for (Statuses s : statuses) {
                                 microblogList.add(s);
                             }
                             adapter.notifyDataSetChanged();

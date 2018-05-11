@@ -6,8 +6,7 @@ import java.util.List;
  * Created by jiang on 2018/5/12.
  */
 
-
-public class Statuses {
+public class RetweetedStatusBean {
 
     private String created_at;
     private long id;
@@ -27,10 +26,11 @@ public class Statuses {
     private String thumbnail_pic;
     private String bmiddle_pic;
     private String original_pic;
-    private GeoBean geo;
+    private Object geo;
     private boolean is_paid;
     private int mblog_vip_type;
     private User user;
+    private String picStatus;
     private int reposts_count;
     private int comments_count;
     private int attitudes_count;
@@ -40,24 +40,17 @@ public class Statuses {
     private VisibleBean visible;
     private long biz_feature;
     private int hasActionTypeCard;
-    private String rid;
     private int userType;
+    private ExtendInfoBean extend_info;
     private int more_info_type;
+    private String cardid;
     private int positive_recom_flag;
     private int content_auth;
     private String gif_ids;
     private int is_show_bulletin;
     private CommentManageInfoBean comment_manage_info;
-    private RetweetedStatusBean retweeted_status;
-    private String cardid;
-    private String filterID;
-    private String picStatus;
-    private int edit_count;
-    private String edit_at;
-    private int page_type;
     private List<PicUrlsBean> pic_urls;
     private List<AnnotationsBean> annotations;
-    private List<Integer> biz_ids;
     private List<?> darwin_tags;
     private List<?> hot_weibo_tags;
     private List<?> text_tag_tips;
@@ -206,11 +199,11 @@ public class Statuses {
         this.original_pic = original_pic;
     }
 
-    public GeoBean getGeo() {
+    public Object getGeo() {
         return geo;
     }
 
-    public void setGeo(GeoBean geo) {
+    public void setGeo(Object geo) {
         this.geo = geo;
     }
 
@@ -236,6 +229,14 @@ public class Statuses {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPicStatus() {
+        return picStatus;
+    }
+
+    public void setPicStatus(String picStatus) {
+        this.picStatus = picStatus;
     }
 
     public int getReposts_count() {
@@ -310,14 +311,6 @@ public class Statuses {
         this.hasActionTypeCard = hasActionTypeCard;
     }
 
-    public String getRid() {
-        return rid;
-    }
-
-    public void setRid(String rid) {
-        this.rid = rid;
-    }
-
     public int getUserType() {
         return userType;
     }
@@ -326,12 +319,28 @@ public class Statuses {
         this.userType = userType;
     }
 
+    public ExtendInfoBean getExtend_info() {
+        return extend_info;
+    }
+
+    public void setExtend_info(ExtendInfoBean extend_info) {
+        this.extend_info = extend_info;
+    }
+
     public int getMore_info_type() {
         return more_info_type;
     }
 
     public void setMore_info_type(int more_info_type) {
         this.more_info_type = more_info_type;
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
     }
 
     public int getPositive_recom_flag() {
@@ -374,62 +383,6 @@ public class Statuses {
         this.comment_manage_info = comment_manage_info;
     }
 
-    public RetweetedStatusBean getRetweeted_status() {
-        return retweeted_status;
-    }
-
-    public void setRetweeted_status(RetweetedStatusBean retweeted_status) {
-        this.retweeted_status = retweeted_status;
-    }
-
-    public String getCardid() {
-        return cardid;
-    }
-
-    public void setCardid(String cardid) {
-        this.cardid = cardid;
-    }
-
-    public String getFilterID() {
-        return filterID;
-    }
-
-    public void setFilterID(String filterID) {
-        this.filterID = filterID;
-    }
-
-    public String getPicStatus() {
-        return picStatus;
-    }
-
-    public void setPicStatus(String picStatus) {
-        this.picStatus = picStatus;
-    }
-
-    public int getEdit_count() {
-        return edit_count;
-    }
-
-    public void setEdit_count(int edit_count) {
-        this.edit_count = edit_count;
-    }
-
-    public String getEdit_at() {
-        return edit_at;
-    }
-
-    public void setEdit_at(String edit_at) {
-        this.edit_at = edit_at;
-    }
-
-    public int getPage_type() {
-        return page_type;
-    }
-
-    public void setPage_type(int page_type) {
-        this.page_type = page_type;
-    }
-
     public List<PicUrlsBean> getPic_urls() {
         return pic_urls;
     }
@@ -444,14 +397,6 @@ public class Statuses {
 
     public void setAnnotations(List<AnnotationsBean> annotations) {
         this.annotations = annotations;
-    }
-
-    public List<Integer> getBiz_ids() {
-        return biz_ids;
-    }
-
-    public void setBiz_ids(List<Integer> biz_ids) {
-        this.biz_ids = biz_ids;
     }
 
     public List<?> getDarwin_tags() {
@@ -480,7 +425,7 @@ public class Statuses {
 
     @Override
     public String toString() {
-        return "Statuses{" +
+        return "RetweetedStatusBean{" +
                 "created_at='" + created_at + '\'' +
                 ", id=" + id +
                 ", mid='" + mid + '\'' +
@@ -503,6 +448,7 @@ public class Statuses {
                 ", is_paid=" + is_paid +
                 ", mblog_vip_type=" + mblog_vip_type +
                 ", user=" + user +
+                ", picStatus='" + picStatus + '\'' +
                 ", reposts_count=" + reposts_count +
                 ", comments_count=" + comments_count +
                 ", attitudes_count=" + attitudes_count +
@@ -512,27 +458,22 @@ public class Statuses {
                 ", visible=" + visible +
                 ", biz_feature=" + biz_feature +
                 ", hasActionTypeCard=" + hasActionTypeCard +
-                ", rid='" + rid + '\'' +
                 ", userType=" + userType +
+                ", extend_info=" + extend_info +
                 ", more_info_type=" + more_info_type +
+                ", cardid='" + cardid + '\'' +
                 ", positive_recom_flag=" + positive_recom_flag +
                 ", content_auth=" + content_auth +
                 ", gif_ids='" + gif_ids + '\'' +
                 ", is_show_bulletin=" + is_show_bulletin +
                 ", comment_manage_info=" + comment_manage_info +
-                ", retweeted_status=" + retweeted_status +
-                ", cardid='" + cardid + '\'' +
-                ", filterID='" + filterID + '\'' +
-                ", picStatus='" + picStatus + '\'' +
-                ", edit_count=" + edit_count +
-                ", edit_at='" + edit_at + '\'' +
-                ", page_type=" + page_type +
                 ", pic_urls=" + pic_urls +
                 ", annotations=" + annotations +
-                ", biz_ids=" + biz_ids +
                 ", darwin_tags=" + darwin_tags +
                 ", hot_weibo_tags=" + hot_weibo_tags +
                 ", text_tag_tips=" + text_tag_tips +
                 '}';
     }
 }
+
+

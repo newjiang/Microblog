@@ -6,18 +6,6 @@ package com.example.jiang.microblog.bean;
 
 public class Emotion {
 
-    /**
-     * phrase : [坏笑]
-     * type : face
-     * url : http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/4d/2018new_huaixiao_org.png
-     * hot : false
-     * common : true
-     * category :
-     * icon : http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/4d/2018new_huaixiao_org.png
-     * value : [坏笑]
-     * picid :
-     */
-
     private String phrase;
     private String type;
     private String url;
@@ -98,5 +86,20 @@ public class Emotion {
 
     public void setPicid(String picid) {
         this.picid = picid;
+    }
+
+    @Override
+    public String toString() {
+        return "Emotion{" +
+                "phrase='" + phrase + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", hot=" + hot +
+                ", common=" + common +
+                ", category='" + category + '\'' +
+                ", icon='" + icon + '\'' +
+                ", value='" + value + '\'' +
+                ", picid='" + picid + '\'' +
+                '}';
     }
 }

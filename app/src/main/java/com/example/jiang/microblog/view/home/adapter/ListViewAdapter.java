@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
     
     private OnRefreshListener onRefreshListener;
 
-    public ListViewAdapter(Context context, List<Microblog.StatusesBean> data) {
+    public ListViewAdapter(Context context, List<Statuses> data) {
         super(context, data);
     }
 

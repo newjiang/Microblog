@@ -2,6 +2,7 @@ package com.example.jiang.microblog;
 
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.json.HosJson;
 import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.utils.CrawlerTools;
@@ -48,22 +49,22 @@ public class ExampleUnitTest {
         Gson gson = new Gson();
         Microblog m1 = gson.fromJson(MicroblogJson.JSON, Microblog.class);
         Microblog m2 = gson.fromJson(MicroblogJson.JSON, Microblog.class);
-        List<Microblog.StatusesBean> old = m1.getStatuses();
-        List<Microblog.StatusesBean> xin = m2.getStatuses();
+        List<Statuses> old = m1.getStatuses();
+        List<Statuses> xin = m2.getStatuses();
         xin.remove(2);
         xin.remove(4);
         xin.get(1).setMid("1111111111111111");
         xin.get(3).setMid("3333333333333333");
         xin.get(5).setMid("5555555555555555");
         System.out.println("添加前" + old.size());
-        for (Microblog.StatusesBean m : old) {
+        for (Statuses m : old) {
             System.out.print(m.getMid() + "\t");
         }
         System.out.println("");
         ListUtils.add(old, xin, true);
         System.out.println();
         System.out.println("添加后");
-        for (Microblog.StatusesBean m : old) {
+        for (Statuses m : old) {
             System.out.print(m.getMid() + "\t");
         }
     }

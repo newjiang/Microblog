@@ -17,7 +17,9 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.Comment;
-import com.example.jiang.microblog.bean.Microblog;
+import com.example.jiang.microblog.bean.CommentsBean;
+import com.example.jiang.microblog.bean.Statuses;
+import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
@@ -85,13 +87,13 @@ public class CommentActivity extends BaseActivity implements
     //TODO 评论的adapter
     private CommentAdapter adapter;
     //TODO 该微博内容
-    private Microblog.StatusesBean bean;
+    private Statuses bean;
     //TODO 转发微博文字内容
     private TextView retweetedContent;
     //TODO 转发微博配图
     private NineGridImageView retweetedPicture;
     //TODO 该微博评论内容
-    private List<Comment.CommentsBean> commentsBeen = new ArrayList<>();
+    private List<CommentsBean> commentsBeen = new ArrayList<>();
     //TODO 点击评论内容的位置
     private int currentPosition;
 
@@ -131,7 +133,7 @@ public class CommentActivity extends BaseActivity implements
         Intent intent = getIntent();
         String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
         Gson gson = new Gson();
-        bean = gson.fromJson(json, Microblog.StatusesBean.class);
+        bean = gson.fromJson(json, Statuses.class);
     }
 
     private void initViews() {
@@ -175,14 +177,14 @@ public class CommentActivity extends BaseActivity implements
 
     @Override //TODO 模拟评论
     public void sendComment(String comment) {
-        Comment.CommentsBean addComment = new Comment.CommentsBean();
+        CommentsBean addComment = new CommentsBean();
         //TODO 头像
         addComment.setText(comment);
         Date date = new Date();
         //TODO 时间
         addComment.setCreated_at(new Date().toString());
         //TODO 来源
-        Comment.CommentsBean.UserBeanX userBeanX = new Comment.CommentsBean.UserBeanX();
+        User userBeanX = new User();
         //TODO 名字
         userBeanX.setName("嗯嗯");
         //TODO 头像
@@ -199,7 +201,7 @@ public class CommentActivity extends BaseActivity implements
             commentsBeen.add(addComment);
             adapter.notifyDataSetChanged();
             commentRecyclerview.scrollToPosition(0);
-            Comment.CommentsBean commentsBean = commentsBeen.get(currentPosition);
+            CommentsBean commentsBean = commentsBeen.get(currentPosition);
             String s = commentsBean.getText() + "-->" + comment;
             Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
         }
@@ -293,7 +295,7 @@ public class CommentActivity extends BaseActivity implements
     }
 
     //TODO 设置转发的内容
-    private void setRetweetedData(Microblog.StatusesBean bean) {
+    private void setRetweetedData(Statuses bean) {
         if (bean.getRetweeted_status() != null) {
             //TODO 转发微博的内容
             retweetedContent.setText(bean.getRetweeted_status().getText());
