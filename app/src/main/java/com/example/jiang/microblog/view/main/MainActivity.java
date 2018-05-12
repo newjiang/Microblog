@@ -43,6 +43,7 @@ import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.profile.ProfileActivity;
 import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.setting.SettingActivity;
+import com.example.jiang.microblog.view.setting.SkinActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.WbSdk;
@@ -362,12 +363,11 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         } else if (id == R.id.nav_gallery) {
             startProfileActivity(2);
         } else if (id == R.id.nav_favorite) {
-            Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
         } else if (id == R.id.nav_about) {
             Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_skin) {
-            Toast.makeText(this, "皮肤", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, SkinActivity.class));
         } else if (id == R.id.nav_setting) {
             startActivity(new Intent(this, SettingActivity.class));
         } else if (id == R.id.nav_switch_account) {//TODO　切换账号

@@ -15,6 +15,7 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -82,18 +83,6 @@ public class ExampleUnitTest {
             System.out.println("0000000");
         } else {
             System.out.printf("1111111");
-        }
-    }
-
-    @Test
-    public void test6(){
-        long id = 123467;
-        String uid = "1234567";
-
-        if (String.valueOf(id).equals(uid)) {
-            System.out.println("00000");
-        } else {
-            System.out.println("11111");
         }
     }
 }
