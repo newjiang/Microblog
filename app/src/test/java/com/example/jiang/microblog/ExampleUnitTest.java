@@ -78,11 +78,22 @@ public class ExampleUnitTest {
     @Test
     public void test5(){
         List<String> list = new ArrayList<>();
-        List<String> data = new ArrayList<>();
-        if (list.isEmpty() && list.size() > 10) {
-            System.out.println("YYYYYY");
+        if (list.isEmpty()) {
+            System.out.println("0000000");
         } else {
-            System.out.println("NNNNNN");
+            System.out.printf("1111111");
+        }
+    }
+
+    @Test
+    public void test6(){
+        long id = 123467;
+        String uid = "1234567";
+
+        if (String.valueOf(id).equals(uid)) {
+            System.out.println("00000");
+        } else {
+            System.out.println("11111");
         }
     }
 }

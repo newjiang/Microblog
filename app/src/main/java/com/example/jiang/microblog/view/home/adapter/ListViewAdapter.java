@@ -30,15 +30,18 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
         public static final int LOADER_STATE_LOADING = 0;
         public static final int LOADER_STATE_RELOAD = 1;
         public static final int LOADER_STATE_NORMAL = 2;
+        public static final int LOADER_STATE_COMPLETED = 3;
 
         private LinearLayout mLading;
         private TextView mReLoad;
+        private TextView mLoadCompleted;
 
         public LoaderMoreHolder(View itemView) {
             super(itemView);
 
             mLading = (LinearLayout) itemView.findViewById(R.id.loading);
             mReLoad = (TextView) itemView.findViewById(R.id.reload);
+            mLoadCompleted = (TextView) itemView.findViewById(R.id.load_completed);
 
             mReLoad.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -59,17 +62,25 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             switch (state) {
                 case LOADER_STATE_LOADING:
                     mLading.setVisibility(View.VISIBLE);
+                    mLoadCompleted.setVisibility(View.GONE);
                     //TODO 触发加载数据
                     startLoaderMore();
                     break;
 
                 case LOADER_STATE_RELOAD:
                     mReLoad.setVisibility(View.VISIBLE);
+                    mLoadCompleted.setVisibility(View.GONE);
                     break;
 
                 case LOADER_STATE_NORMAL:
                     mLading.setVisibility(View.GONE);
                     mReLoad.setVisibility(View.GONE);
+                    mLoadCompleted.setVisibility(View.GONE);
+                    break;
+                case LOADER_STATE_COMPLETED:
+                    mLading.setVisibility(View.GONE);
+                    mReLoad.setVisibility(View.GONE);
+                    mLoadCompleted.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -105,7 +116,11 @@ public class ListViewAdapter extends RecyclerViewBaseAdapter {
             //TODO 在这里设置数据
             ((InnerHolder) holder).setData(beanList.get(position), position);
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
-            ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
+            if (beanList.size() < 20) {
+                ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_COMPLETED);
+            } else {
+                ((LoaderMoreHolder) holder).update(LoaderMoreHolder.LOADER_STATE_LOADING);
+            }
         }
     }
 

@@ -6,16 +6,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.jiang.microblog.view.share.ShareActivity">
-    <EditText
-        android:id="@+id/share_content"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:padding="10dp"
-        android:gravity="top|left"
-        android:hint="说点什么..."
-        android:textColor="#AAAAAA"
-        android:background="@null"/>
-
+        android:layout_height="150dp">
+        <EditText
+            android:id="@+id/share_content"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="10dp"
+            android:gravity="top|left"
+            android:hint="说点什么..."
+            android:textColor="#AAAAAA"
+            android:background="@null"/>
+        <TextView
+            android:id="@+id/char_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:textColor="@color/red"
+            android:text="140"
+            android:layout_margin="10dp"/>
+    </FrameLayout>
     <GridView
         android:id="@+id/photo_gridview"
         android:numColumns="5"

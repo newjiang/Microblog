@@ -41,7 +41,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
     private boolean isDown = true;          //TODO 判断是否下拉操作
-    private boolean isRefreshing = false;  //TODO是否正在刷新
+    private boolean isRefreshing = false;  //TODO 是否正在刷新
     private int page = 2;                    //TODO 上拉操作的起始页
 
     private int currentType = -1;            //TODO 当前显示微博类型
@@ -121,24 +121,30 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
             loadingBar.setVisibility(View.GONE);
             setListView();
         } else {
-            //TODO 添加数据
-            adapter.add(m, isDown);
-            if (isDown) {
-                //TODO 延迟2S处理，关闭下拉操作提示
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
+            if (m.isEmpty()) {
+                loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
             } else {
-                //TODO 延迟2S处理，关闭上拉操作提示
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
-                    }
-                }, 2000);
+                //TODO 添加数据
+                adapter.add(m, isDown);
+                if (isDown) {
+                    //TODO 延迟2S处理，关闭下拉操作提示
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    }, 2000);
+                } else {
+                    //TODO 延迟2S处理，关闭上拉操作提示
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
+                            isRefreshing = false;
+                        }
+                    }, 2000);
+                }
             }
         }
     }
@@ -169,6 +175,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
             public void onRefresh() {
                 if (!isRefreshing) {
                     getFirstPage(currentType);
+                    isRefreshing = true;
                     isDown = true;
                 }
             }
@@ -195,6 +202,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
                                     presenter.public_timeline(token.getToken(), page);
                                     break;
                             }
+                            isRefreshing = true;
                         } else {
                             loaderHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
                         }

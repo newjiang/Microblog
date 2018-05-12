@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.view.activity.LoginActivity;
-import com.example.jiang.microblog.view.main.MainActivity;
+import com.example.jiang.microblog.view.share.ShareActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 
 import org.litepal.tablemanager.Connector;
@@ -40,7 +40,7 @@ public class WelcomeActivity extends BaseActivity {
         boolean isLogin = AccessTokenKeeper.readAccessToken(this).isSessionValid();
         if (isLogin) {
             //TODO　进入主页
-            intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            intent = new Intent(WelcomeActivity.this, ShareActivity.class);
         } else {
             //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);

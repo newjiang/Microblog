@@ -16,18 +16,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.share.at.AtActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
+import com.example.jiang.microblog.view.share.at.AtActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +57,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     private final String PHOTO_NAME = "temp.jpg";
 
     private EditText editText;
+    private TextView charCount;
 
     private ImageView takeVideo;
     private ImageView takePhoto;
@@ -99,7 +104,8 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         gridView.setAdapter(adapter);
 
         editText = (EditText) findViewById(R.id.share_content);
-
+        charCount = (TextView) findViewById(R.id.char_count);
+        editText .addTextChangedListener(watcher);
         takeVideo = (ImageView) findViewById(R.id.take_video);
         takePhoto = (ImageView) findViewById(R.id.take_photo);
         takeGallery = (ImageView) findViewById(R.id.select_gallery);
@@ -331,4 +337,23 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             Toast.makeText(this,"拒绝了权限：" + permissions[0],Toast.LENGTH_SHORT).show();
         }
     }
+
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() > 140) {
+                s.delete(140, s.length());
+            }
+            int num = 140 - s.length();
+            charCount.setText(String.valueOf(num));
+        }
+    };
 }

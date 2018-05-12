@@ -1,5 +1,6 @@
 package com.example.jiang.microblog.view.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
+import com.example.jiang.microblog.view.favourites.FavoriteActivity;
 import com.example.jiang.microblog.view.profile.fragment.AlbumFragment;
 import com.example.jiang.microblog.view.profile.fragment.MicroblogFragment;
 import com.example.jiang.microblog.view.profile.fragment.ProfileFragment;
@@ -34,7 +37,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileActivity extends BaseActivity implements UserContract.View {
+public class ProfileActivity extends BaseActivity implements UserContract.View ,View.OnClickListener {
 
     private static final String MALE = "m";
     private static final String FEMALE = "f";
@@ -69,6 +72,7 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        initViews();
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new UserPresenter(this);
         getUserInfo();
@@ -77,10 +81,14 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
     @Override
     public void onSuccess(Object object) {
         userBean = (User) object;
-        initViews();
         initData();
         initEvents();
         initTab();
+        if (String.valueOf(userBean.getId()).equals(token.getUid())) {
+            favourites_count.setVisibility(View.VISIBLE);
+        } else {
+            favourites_count.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -148,6 +156,9 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(3);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        friends_count.setOnClickListener(this);
+        followers_count.setOnClickListener(this);
+        favourites_count.setOnClickListener(this);
     }
 
     /**
@@ -190,5 +201,18 @@ public class ProfileActivity extends BaseActivity implements UserContract.View {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.friends_count:
+                break;
+            case R.id.followers_count:
+                break;
+            case R.id.favourites_count:
+                startActivity(new Intent(this, FavoriteActivity.class));
+                break;
+        }
     }
 }

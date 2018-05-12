@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.jiang.microblog.R;
@@ -43,6 +44,7 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
         token = AccessTokenKeeper.readAccessToken(this);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("选择@的好友");
         }
         presenter = new UserPresenter(this);
@@ -110,4 +112,25 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
         }
         finish();
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                String friends = "";
+                for (int i = 0; i < headers.size(); i++) {
+                    friends += "@" + headers.get(i).getName() + " ";
+                }
+                Intent intent = new Intent();
+                intent.putExtra(IntentKey.AT_FRIEND, friends);
+                if (headers.isEmpty()) {
+                    setResult(RESULT_CANCELED, intent);
+                } else {
+                    setResult(RESULT_OK, intent);
+                }
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
