@@ -87,7 +87,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
      * 添加历史记录
      * @param history
      */
-    public void addHistory(History history) {
+        public void addHistory(History history) {
         historys.add(0, history);
         history.save();
         notifyItemInserted(0);

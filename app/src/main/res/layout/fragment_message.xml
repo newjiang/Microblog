@@ -9,4 +9,5 @@
     tools:showIn="@layout/activity_main">
 
     <include layout="@layout/layout_message" />
+
 </android.support.v4.widget.NestedScrollView>

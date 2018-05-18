@@ -31,6 +31,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private ImageView ring;
     private TextView ringName;
     private ImageView vibrate;
+    private ImageView shareWays;
     private Oauth2AccessToken token;
     private Setting setting;
     @Override
@@ -39,6 +40,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_setting);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("应用设置");
         }
         token = AccessTokenKeeper.readAccessToken(this);
@@ -58,11 +60,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         ring = (ImageView) findViewById(R.id.ring);
         ringName = (TextView) findViewById(R.id.ring_name);
         vibrate = (ImageView) findViewById(R.id.vibrate);
+        shareWays = (ImageView) findViewById(R.id.share_ways);
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout);
         notification.setOnClickListener(this);
         ring.setOnClickListener(this);
         ringName.setOnClickListener(this);
         vibrate.setOnClickListener(this);
+        shareWays.setOnClickListener(this);
         if (setting.isNotification()) {
             notification.setBackgroundResource(R.drawable.on);
             linearLayout.setVisibility(View.VISIBLE);
@@ -85,6 +89,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         } else {
             vibrate.setBackgroundResource(R.drawable.off);
         }
+        if (setting.isShareByDefault()) {
+            shareWays.setBackgroundResource(R.drawable.on);
+        } else {
+            shareWays.setBackgroundResource(R.drawable.off);
+        }
     }
 
     @Override
@@ -104,7 +113,22 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 intent.putExtra(IntentKey.RING, setting.getRing());
                 startActivityForResult(intent, 1);
                 break;
+            case R.id.share_ways:
+                shareWaysOnClick();
+                break;
         }
+    }
+
+    private void shareWaysOnClick() {
+        if (setting.isShareByDefault()) {
+            shareWays.setBackgroundResource(R.drawable.off);
+        } else {
+            shareWays.setBackgroundResource(R.drawable.on);
+        }
+        setting.setShareByDefault(!setting.isShareByDefault());
+        ContentValues values = new ContentValues();
+        values.put("isShareByDefault", setting.isShareByDefault());
+        DataSupport.update(Setting.class, values, setting.getId());
     }
 
     private void ringOnClick() {
@@ -115,7 +139,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
         setting.setRing(!setting.isRing());
         ContentValues values = new ContentValues();
-        values.put("isRing", setting.isNotification());
+        values.put("isRing", setting.isRing());
         DataSupport.update(Setting.class, values, setting.getId());
     }
     private void vibrateOnClick() {

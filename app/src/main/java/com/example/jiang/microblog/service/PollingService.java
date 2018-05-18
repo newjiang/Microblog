@@ -47,7 +47,6 @@ public class PollingService extends Service implements MessageContract.View {
     private Setting setting;
 
     private Message message;
-    boolean f = true;
     private MessageReceiver receiver;
 
     public PollingService() {
@@ -77,18 +76,8 @@ public class PollingService extends Service implements MessageContract.View {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //TODO　请求－－－－
         Log.e("请求－－－－", token.getToken() + "|" + token.getUid());
         presenter.unread_count(token.getToken(), token.getUid());
-
-        //TODO 注册发送广播
-        Intent broadcast = new Intent("com.example.jiang.microblog.MESSAGE_RECEIVER");
-        broadcast.putExtra(IntentKey.BROADCAST, new Gson().toJson(message));
-        sendBroadcast(broadcast);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.example.jiang.microblog.MESSAGE_RECEIVER");
-        receiver = new MessageReceiver();
-        registerReceiver(receiver, filter);
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         int time = 1000 * 1000;   //TODO 请求间隔时间300秒
@@ -104,6 +93,14 @@ public class PollingService extends Service implements MessageContract.View {
     public void onSuccess(Object object) {
         Log.e("PollingService", "onSuccess");
         message = (Message) object;
+        //TODO 注册发送广播
+        Intent broadcast = new Intent("com.example.jiang.microblog.MESSAGE_RECEIVER");
+        broadcast.putExtra(IntentKey.BROADCAST, new Gson().toJson(message));
+        sendBroadcast(broadcast);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.example.jiang.microblog.MESSAGE_RECEIVER");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, filter);
         if (setting.isNotification()) {
             if (message.getFollower() > 0) {
                 show(FOLLOWER);

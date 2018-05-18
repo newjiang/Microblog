@@ -51,7 +51,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         layoutAtMeCommends.setOnClickListener(this);
         layoutReceiveCommends.setOnClickListener(this);
         layoutSendCommends.setOnClickListener(this);
-
         return v;
     }
 

@@ -7,7 +7,7 @@ package com.example.jiang.microblog.bean;
 public class VisibleBean {
 
     private int type;
-    private int list_id;
+    private long list_id;
 
     public int getType() {
         return type;
@@ -17,11 +17,11 @@ public class VisibleBean {
         this.type = type;
     }
 
-    public int getList_id() {
+    public long getList_id() {
         return list_id;
     }
 
-    public void setList_id(int list_id) {
+    public void setList_id(long list_id) {
         this.list_id = list_id;
     }
 

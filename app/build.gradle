@@ -53,6 +53,8 @@ dependencies {
     compile 'com.jaeger.ninegridimageview:library:1.1.1'
     //鲁班压缩图片
     compile 'top.zibin:Luban:1.1.3'
+    //播放器
+    compile 'cn.jzvd:jiaozivideoplayer:6.2.9'
     //换肤
     compile 'com.zhy:changeskin:4.0.2'
     //测试

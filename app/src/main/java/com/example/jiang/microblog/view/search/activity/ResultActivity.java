@@ -6,10 +6,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
@@ -19,7 +19,7 @@ import com.example.jiang.microblog.view.search.fragment.WeiboFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends BaseActivity {
 
     //TODO 导航栏标题
     private List<String> navList;

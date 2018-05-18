@@ -5,6 +5,8 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,9 +32,22 @@ import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TextColorTools;
+import com.example.jiang.microblog.view.main.MainActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
 import com.example.jiang.microblog.view.share.at.AtActivity;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.MultiImageObject;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.VideoSourceObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.share.WbShareCallback;
+import com.sina.weibo.sdk.share.WbShareHandler;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,13 +59,19 @@ import java.util.Map;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+import static com.example.jiang.microblog.R.id.share_weibo;
 
-public class ShareActivity extends BaseActivity implements View.OnClickListener {
+
+public class ShareActivity extends BaseActivity implements View.OnClickListener ,WbShareCallback{
 
     public static final int TAKE_RECORD = 0;
     public static final int TAKE_CAMERA = 1;
     public static final int OPEN_ALBUM = 2;
     public static final int AT_FRIENDS = 3;
+
+    WbShareHandler shareHandler = new WbShareHandler(ShareActivity.this);
+    private AuthInfo mAuthInfo;
+    private WeiboPageUtils pageUtils;
 
     //TODO　压缩后图片的存储位置
     private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/microblog/img/";
@@ -64,6 +86,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     private ImageView takeGallery;
     private ImageView atFrient;
     private ImageView topic;
+    private ImageView shareWeibo;
 
     private GridView gridView;
     private GridViewImageAdapter adapter;
@@ -72,6 +95,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
 
     private File temp;
     private Uri imageUri;
+    private String videoPath = "";
 
     static final String[] PERMISSIONS = new String[]{
             Manifest.permission.RECORD_AUDIO,
@@ -95,6 +119,10 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         if(ispermission){
             ActivityCompat.requestPermissions(this,PERMISSIONS,1);
         }
+        mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+        WbSdk.install(this, mAuthInfo);
+        shareHandler.registerApp();
+        pageUtils = WeiboPageUtils.getInstance(ShareActivity.this, mAuthInfo);
         initView();
     }
 
@@ -111,12 +139,14 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         takeGallery = (ImageView) findViewById(R.id.select_gallery);
         atFrient = (ImageView) findViewById(R.id.at_friend);
         topic = (ImageView) findViewById(R.id.topic);
+        shareWeibo = (ImageView) findViewById(share_weibo);
 
         takeVideo.setOnClickListener(this);
         takePhoto.setOnClickListener(this);
         takeGallery.setOnClickListener(this);
         atFrient.setOnClickListener(this);
         topic.setOnClickListener(this);
+        shareWeibo.setOnClickListener(this);
 
     }
 
@@ -124,30 +154,44 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.take_video:
-                startActivityForResult(new Intent(ShareActivity.this, RecordActivity.class), TAKE_RECORD);
+                if (pictures.isEmpty()) {
+                    startActivityForResult(new Intent(ShareActivity.this, RecordActivity.class), TAKE_RECORD);
+                } else {
+                    Toast.makeText(this, "不能同时分享图片和视频", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.take_photo:
-                if (pictures.size() < 9) {
-                    openCamera();
+                if (videoPath == null || videoPath.equals("")) {
+                    if (pictures.size() < 9) {
+                        openCamera();
+                    } else {
+                        Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "不能同时分享图片和视频", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.select_gallery:
-                if (pictures.size() < 9) {
-                    openAlbum();
+                if (videoPath == null || videoPath.equals("")) {
+                    if (pictures.size() < 9) {
+                        openAlbum();
+                    } else {
+                        Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "不能同时分享图片和视频", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.at_friend:
                 startActivityForResult(new Intent(ShareActivity.this, AtActivity.class), AT_FRIENDS);
                 break;
             case R.id.topic:
-                Toast.makeText(ShareActivity.this, "topic", Toast.LENGTH_SHORT).show();
+                pageUtils.shareToWeibo("");
                 break;
-            case R.id.share_weibo:
+            case share_weibo:
                 Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
+                String text = String.valueOf(editText.getText());
+                shareWeiboByH5(text,pictures,videoPath);
                 break;
         }
     }
@@ -158,7 +202,8 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             case TAKE_RECORD:
                 if (resultCode == RESULT_OK) {
                     String path = data.getStringExtra(IntentKey.VIDEO_PATH);
-                    editText.setText(path);
+                    videoPath = path;
+                    Log.e("视频路径：", videoPath);
                 }
                 break;
             case TAKE_CAMERA:
@@ -187,7 +232,8 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             case AT_FRIENDS:
                 if (resultCode == RESULT_OK) {
                     String friends = data.getStringExtra(IntentKey.AT_FRIEND);
-                    editText.setText(editText.getText() + friends);
+                    SpannableStringBuilder highlight = TextColorTools.highlight(editText.getText() + friends, friends);
+                    editText.setText(highlight);
                 }
                 break;
             default:
@@ -202,15 +248,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     private void openCamera() {
         //TODO 创建File的对象，用于存储拍照后图片的文件夹
         File dir = new File(IMAGE_DIR);
@@ -264,12 +301,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                     @Override
                     public void onSuccess(File file) {
                         photoPath(file.getAbsolutePath());
-                        //TODO 删除拍照后的原图
-                        if (temp != null) {
-                            if (temp.exists()) {
-                                temp.delete();
-                            }
-                        }
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -338,6 +369,9 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * 字数监听
+     */
     TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -356,4 +390,126 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             charCount.setText(String.valueOf(num));
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//TODO ------------------------------------------------------------------------------------------------------
+    @Override
+    public void onWbShareSuccess() {
+        startActivity(new Intent(ShareActivity.this, MainActivity.class));
+    }
+    @Override
+    public void onWbShareCancel() {
+
+    }
+    @Override
+    public void onWbShareFail() {
+
+    }
+//TODO ------------------------------------------------------------------------------------------------------
+
+    /**
+     *  第三方应用发送请求消息到微博，唤起微博分享界面。
+     * @param text
+     * @param pictures
+     * @param videoPath
+     */
+    private void shareWeiboByH5(String text, List<Map<String, Object>> pictures, String videoPath) {
+
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+        if (text != null || !text.equals("")) {
+            weiboMessage.textObject = getTextObj(text);
+        }
+        if (pictures.size() == 1) {
+            weiboMessage.imageObject = getImageObj(pictures);
+        }
+        if(pictures.size() > 1){
+            weiboMessage.multiImageObject = getMultiImageObject(pictures);
+        }
+        if (videoPath != null || !videoPath.equals("")) {
+            Log.e("videoPath", "111111111");
+            weiboMessage.videoSourceObject = getVideoObject(videoPath);
+        }
+        shareHandler.shareMessage(weiboMessage, false);
+    }
+    /**
+     * 获取分享的文本模板。
+     */
+    private String getSharedText(String str) {
+        int formatId = R.string.weibosdk_demo_share_text_template;
+        String format = getString(formatId);
+        String text = format;
+        text = str;
+        return text;
+    }
+
+    /**
+     * 创建文本消息对象。
+     * @return 文本消息对象。
+     */
+    private TextObject getTextObj(String text) {
+        TextObject textObject = new TextObject();
+        textObject.text = getSharedText(text);
+        textObject.title = "";
+        textObject.actionUrl = "http://www.sina.com";
+        return textObject;
+    }
+    /**
+     * 创建图片消息对象。
+     * @return 图片消息对象。
+     * @param pictures
+     */
+    private ImageObject getImageObj(List<Map<String, Object>> pictures) {
+        ImageObject imageObject = new ImageObject();
+        Bitmap bitmap  = BitmapFactory.decodeFile(pictures.get(0).get("path").toString());
+        imageObject.setImageObject(bitmap);
+        return imageObject;
+    }
+
+    /***
+     * 创建多图
+     * @return
+     * @param pictures
+     */
+    private MultiImageObject getMultiImageObject(List<Map<String, Object>> pictures){
+        MultiImageObject multiImageObject = new MultiImageObject();
+        //pathList设置的是本地本件的路径,并且是当前应用可以访问的路径，
+        // 现在不支持网络路径（多图分享依靠微博最新版本的支持，所以当分享到低版本的微博应用时，多图分享失效
+        // 可以通过WbSdk.hasSupportMultiImage 方法判断是否支持多图分享,h5分享微博暂时不支持多图）
+        // 多图分享接入程序必须有文件读写权限，否则会造成分享失败
+        boolean b = WbSdk.supportMultiImage(this);
+
+        if (b) {
+            Log.e("yyyyyy", "yyyyyy");
+        } else {
+            Log.e("nnnnnn", "nnnnnn");
+        }
+
+        ArrayList<Uri> pathList = new ArrayList<Uri>();
+        for (int i = 0; i < pictures.size(); i++) {
+            pathList.add(Uri.fromFile(new File(pictures.get(i).get("path").toString())));
+        }
+        return multiImageObject;
+    }
+
+    private VideoSourceObject getVideoObject(String videoPath) {
+        Log.e("videoPath", "2222222222");
+        VideoSourceObject videoSourceObject = new VideoSourceObject();
+        videoSourceObject.videoPath = Uri.fromFile(new File(videoPath));
+        File file = new File(videoPath);
+        if (file.exists()) {
+            Log.e("videoPath", videoSourceObject.videoPath.toString());
+        } else {
+            Log.e("videoPath", "NNNNNNNNNNN");
+        }
+        return videoSourceObject;
+    }
 }

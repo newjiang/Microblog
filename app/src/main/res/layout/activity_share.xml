@@ -22,7 +22,7 @@
             android:id="@+id/char_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end|right"
             android:textColor="@color/orangered"
             android:text="140"
             android:layout_margin="10dp"/>

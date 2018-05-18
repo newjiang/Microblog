@@ -1,6 +1,8 @@
 package com.example.jiang.microblog.view.share;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,7 +18,6 @@ import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.share.utils.FileUtil;
 import com.example.jiang.microblog.view.share.utils.RecordUtils;
 
-import java.io.File;
 import java.util.UUID;
 
 public class RecordActivity extends AppCompatActivity implements View.OnClickListener{
@@ -27,17 +28,23 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     int maxTime = 10;//TODO 录制最大时间
     int recordTime;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record);
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
-
+        setContentView(R.layout.activity_record);
         recordTip = (TextView) findViewById(R.id.record_tip);
         surfaceView = (SurfaceView) findViewById(R.id.surface_view);
 
@@ -108,16 +115,10 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        String path = recordUtils.getTargetFilePath();
-        boolean exists = new File(path).exists();
-        if (exists) {
-            returnPath();
-        } else {
-            Intent intent = new Intent();
-            intent.putExtra(IntentKey.VIDEO_PATH, "cancel");
-            setResult(RESULT_CANCELED, intent);
-            finish();
-        }
+        Toast.makeText(RecordActivity.this, "未录制视频", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra(IntentKey.VIDEO_PATH, "cancel");
+        setResult(RESULT_CANCELED, intent);
+        finish();
     }
-
 }

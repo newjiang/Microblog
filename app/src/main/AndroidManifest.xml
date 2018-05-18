@@ -48,8 +48,6 @@
         <activity android:name=".view.comment.CommentActivity" />
         <activity android:name=".GoodbyeActivity" />
         <activity android:name=".view.share.ShareActivity" />
-        <activity android:name=".test.NotificationActivity" />
-        <activity android:name=".test.NotificationContentActivity" />
         <activity android:name=".view.search.SearchActivity" />
         <activity android:name=".view.search.activity.ResultActivity" />
         <activity android:name=".view.search.activity.AllHistoryActivity" />

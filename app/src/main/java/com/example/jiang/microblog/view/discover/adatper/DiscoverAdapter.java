@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.home.adapter;
+package com.example.jiang.microblog.view.discover.adatper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,12 +36,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by jiang on 2018/4/14.
  */
 
-public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     protected final List<Statuses> beanList;
 
-    public RecyclerViewBaseAdapter(Context context, List<Statuses> data) {
+    public DiscoverAdapter(Context context, List<Statuses> data) {
         this.context = context;
         this.beanList = data;
     }
@@ -291,4 +291,5 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         ListUtils.add(beanList, newList, flag);
         notifyDataSetChanged();
     }
+
 }

@@ -18,7 +18,6 @@ import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
 import com.example.jiang.microblog.view.main.MainActivity;
-import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
@@ -113,7 +112,6 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     public void onSuccess(Object object) {
         Microblog microblog = (Microblog) object;
         List<Statuses> m = microblog.getStatuses();
-        String s = new Gson().toJson(m);
         //TODO 如果是null 则表示是初始化
         if (microblogList.isEmpty()) {
             microblogList = m;

@@ -28,6 +28,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.base.Constants;
+import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.broadcast.MessageReceiver;
 import com.example.jiang.microblog.json.UserJson;
@@ -54,6 +55,8 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -231,7 +234,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             case R.id.home_share_microblog:
                 boolean isInstall = WbSdk.isWbInstall(MainActivity.this);
                 if (isInstall) {
-                    shareByClient();
+                    List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
+                    boolean b = settings.get(0).isShareByDefault();
+                    Log.e("Main-Setting:",settings.get(0).toString());
+                    if (b) {
+                        shareByClient();
+                    } else {
+                        startActivity(new Intent(MainActivity.this, ShareActivity.class));
+                    }
                 } else {
                     startActivity(new Intent(MainActivity.this, ShareActivity.class));
                 }

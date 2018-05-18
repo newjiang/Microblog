@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#00afff</color>
+    <color name="colorPrimaryDark">#00afff</color>
+    <color name="colorAccent">#02a9cf</color>
 
     <color name="white">#ffffff</color> <!-- 白色 -->
     <color name="ivory">#fffff0</color> <!-- 象牙色 -->
@@ -138,7 +138,7 @@
     <color name="springgreen">#00ff7f</color> <!-- 春绿色 -->
     <color name="lime">#00ff00</color> <!-- 酸橙色 -->
     <color name="mediumspringgreen">#00fa9a</color> <!-- 中春绿色 -->
-    <color name="darkturquoise">#00ced1</color> <!-- 暗宝石绿 -->
+    <color name="darkturquoise">#20b2aa</color> <!-- 暗宝石绿 -->
     <color name="deepskyblue">#00bfff</color> <!-- 深天蓝色 -->
     <color name="darkcyan">#008b8b</color> <!-- 暗青色 -->
     <color name="teal">#008080</color> <!-- 水鸭色 -->

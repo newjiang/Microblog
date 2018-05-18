@@ -11,7 +11,7 @@ import com.example.jiang.microblog.utils.ActivityController;
  * Created by jiang on 2018/4/14.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity{
 
     /**
      * 启动Activity添加到ActivityController中
@@ -20,7 +20,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("BaseActivity——add",getClass().getSimpleName());
+        Log.e("BaseActivity——add", getClass().getSimpleName());
         ActivityController.add(this);
     }
 
@@ -33,7 +33,6 @@ public class BaseActivity extends AppCompatActivity {
         Log.e("BaseActivity——delete",getClass().getSimpleName());
         ActivityController.remove(this);
     }
-
 }
 
 

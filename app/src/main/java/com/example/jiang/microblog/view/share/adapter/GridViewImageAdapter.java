@@ -99,7 +99,6 @@ public class GridViewImageAdapter extends BaseAdapter {
                 }
             });
         } else {
-            Glide.with(context).load(R.mipmap.image_add).priority(Priority.HIGH).centerCrop().into(holder.imageView);
             holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.delete.setVisibility(View.GONE);
         }

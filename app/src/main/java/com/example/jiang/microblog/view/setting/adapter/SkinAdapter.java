@@ -1,6 +1,5 @@
 package com.example.jiang.microblog.view.setting.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Skin;
-import com.example.jiang.microblog.utils.ActivityController;
 
 import java.util.List;
 
