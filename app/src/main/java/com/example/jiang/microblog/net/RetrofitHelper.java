@@ -6,6 +6,7 @@ import com.example.jiang.microblog.net.service.CommentService;
 import com.example.jiang.microblog.net.service.FavoriteService;
 import com.example.jiang.microblog.net.service.MessageService;
 import com.example.jiang.microblog.net.service.MicroblogService;
+import com.example.jiang.microblog.net.service.ShortUrlService;
 import com.example.jiang.microblog.net.service.UserService;
 import com.google.gson.GsonBuilder;
 
@@ -103,6 +104,14 @@ public class RetrofitHelper {
      */
     public FavoriteService getFavoriteService() {
         return mRetrofit.create(FavoriteService.class);
+    }
+    /**
+     * 获取ShortUrlService的实例
+     *
+     * @return
+     */
+    public ShortUrlService getShortUrlService() {
+        return mRetrofit.create(ShortUrlService.class);
     }
 }
 

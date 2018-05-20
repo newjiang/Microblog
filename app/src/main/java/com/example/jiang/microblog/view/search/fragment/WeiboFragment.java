@@ -21,6 +21,7 @@ import java.util.List;
  */
 
 public class WeiboFragment extends BaseFragment {
+
     private static final String TAG = WeiboFragment.class.getSimpleName();
 
     private RecyclerView weiboRecyclerview;
@@ -28,6 +29,7 @@ public class WeiboFragment extends BaseFragment {
     private List<Weibo> weibos;
     private WeiboAdapter weiboAdapter;
     private boolean isFinish = false;
+
     @Override
     public View initView() {
         View view = View.inflate(context, R.layout.fragment_weibo, null);
@@ -36,6 +38,7 @@ public class WeiboFragment extends BaseFragment {
         weiboBar.setVisibility(View.VISIBLE);
         return view;
     }
+
     @Override
     public void initData() {
         final String key = (String) getArguments().get(IntentKey.KEY_WORD);

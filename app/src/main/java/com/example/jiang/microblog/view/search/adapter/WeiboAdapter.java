@@ -3,7 +3,6 @@ package com.example.jiang.microblog.view.search.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     public WeiboAdapter(Context context, List<Weibo> weibos) {
         this.context = context;
         this.weibos = weibos;
-        Log.e("WeiboAdapter", weibos.toString());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,6 +97,9 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         //TODO 微博文字内容
         holder.content.setText(Html.fromHtml(weibos.get(position).getContent()));
 //TODO 微博配图
+        holder.picture.setAdapter(new SearchNineImgAdapter());
+        //TODO 微博配图数据源
+        holder.picture.setImagesData(weibos.get(position).getPictureList());
         //TODO 发布时间
         holder.time.setText(weibos.get(position).getTime());
         //TODO 来源
@@ -118,7 +119,14 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             //TODO 转发微博文字内容
             holder.retweetedContent.setText(Html.fromHtml(weibos.get(position).getRetweetedUser() + weibos.get(position).getRetweetedContent()));
         }
-//TODO 转发微博配图
+        if (weibos.get(position).getRetweetedPicture().equals("")) {
+            holder.retweetedPicture.setVisibility(View.GONE);
+        } else {
+            //TODO 转发微博配图
+            holder.retweetedPicture.setAdapter(new SearchNineImgAdapter());
+            //TODO 微博配图数据源
+            holder.retweetedPicture.setImagesData(weibos.get(position).getRetweetedPicture());
+        }
     }
 
     @Override

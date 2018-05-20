@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class TextColorTools {
 
-    private static final int COLOR = 0xFF007DE0;
+    public static final int COLOR = 0xFF007DE0;
 
     /**
      * 关键字高亮显示

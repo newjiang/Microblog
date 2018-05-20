@@ -39,5 +39,6 @@ public class IntentKey {
     public static final String BROADCAST = "broadcast";
     //TODO  返回铃声名字
     public static final String RETURN_RING = "return_ring";
-
+    //TODO 微博内容中的url
+    public static final String WEIBO_URL = "weibo_url";
 }

@@ -12,10 +12,11 @@ import com.google.gson.reflect.TypeToken;
 
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -85,4 +86,37 @@ public class ExampleUnitTest {
             System.out.printf("1111111");
         }
     }
+
+
+    @Test
+    public void test6(){
+        String url = "#米粉福利委员会#曾经有份大奖摆在我眼前，而我差点错过！幸好我眼疾手快，喜大普奔！ http://t.cn/R3jplAS";
+        if (url.contains("http://t.cn")) {
+            int i = url.lastIndexOf("http://t.cn");
+            String substring = url.substring(0, i);
+            System.out.println(substring);
+        }else {
+            System.out.println(url);
+        }
+
+        if (url.contains("http://t.cn")) {
+            int i = url.lastIndexOf("http://t.cn");
+            String substring = url.substring(i, url.length());
+            System.out.println(substring);
+        }else {
+            System.out.println(url);
+        }
+
+    }
+
+    @Test
+    public void test7(){
+        try {
+            String s = URLEncoder.encode("http://t.cn/R3HR8dZ", "GBK");
+            System.out.println(s);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

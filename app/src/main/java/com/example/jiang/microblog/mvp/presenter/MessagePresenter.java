@@ -37,11 +37,11 @@ public class MessagePresenter implements MessageContract.Presenter {
     /**
      * 初始化Fragment
      *
-     * @param frag
+     * @param fragment
      * @param context
      */
-    public MessagePresenter(BaseFragment frag, Context context) {
-        this.view = (MessageContract.View) frag;
+    public MessagePresenter(BaseFragment fragment, Context context) {
+        this.view = (MessageContract.View) fragment;
         this.model = new MessageModel(context);
         subscription = new CompositeSubscription();
     }

@@ -290,8 +290,6 @@ public class CommentActivity extends BaseActivity implements
         picture.setImagesData(bean.getPic_urls());
         //TODO 设置转发微博配图
         setRetweetedData(bean);
-
-        Log.e("from", getFormFormat(bean.getSource()));
     }
 
     //TODO 设置转发的内容

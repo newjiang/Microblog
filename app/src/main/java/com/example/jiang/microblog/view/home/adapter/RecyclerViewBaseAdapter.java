@@ -3,7 +3,12 @@ package com.example.jiang.microblog.view.home.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +25,7 @@ import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
 import com.example.jiang.microblog.view.adapter.RetweetedImageAdapter;
 import com.example.jiang.microblog.view.comment.CommentActivity;
+import com.example.jiang.microblog.view.home.WebActivity;
 import com.example.jiang.microblog.view.profile.ProfileActivity;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
@@ -37,6 +43,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final String SHORT_URL = "http://t.cn";
 
     private Context context;
     protected final List<Statuses> beanList;
@@ -75,7 +83,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public int getItemCount() {
         if (beanList != null) {
-            return beanList.size()+1;
+            return beanList.size() + 1;
         }
         return 0;
     }
@@ -181,9 +189,16 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 username.setText(bean.getUser().getRemark());
             }
             //TODO 微博文字内容
-            content.setText(bean.getText());
-            //TODO 微博内容
-            content.setText(bean.getText());
+            if (hasWeiboUrl(bean.getText())) {
+                int start = bean.getText().lastIndexOf(SHORT_URL);
+                int end = bean.getText().length();
+                SpannableString spanableInfo = new SpannableString(bean.getText());
+                spanableInfo.setSpan(new Clickable(onClickListener), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                content.setText(spanableInfo);
+                content.setMovementMethod(LinkMovementMethod.getInstance());
+            } else {
+                content.setText(bean.getText());
+            }
             //TODO 发布时间
             time.setText(getTimeFormat(bean.getCreated_at()));
             //TODO 来源
@@ -198,6 +213,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             picture.setAdapter(new NineImageAdapter());
             //TODO 微博配图数据源
             picture.setImagesData(beanList.get(position).getPic_urls());
+
+            //TODO 设置转发微博信息
             setRetweetedData(bean);
             //TODO 设置头像点击事件,根据传递用户的信息
             setHeaderOnClickListener(header, new Gson().toJson(bean.getUser()));
@@ -211,10 +228,14 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         private void setRetweetedData(Statuses bean) {
             if (bean.getRetweeted_status() != null) {
                 //TODO 转发微博的内容
-                String name = "@" + bean.getRetweeted_status().getUser().getName();
-                String text =  name + bean.getRetweeted_status().getText();
-                SpannableStringBuilder sb = TextColorTools.highlight(text, name);
-                retweetedContent.setText(sb);
+                if (bean.getRetweeted_status().getUser() != null) {
+                    String name = "@" + bean.getRetweeted_status().getUser().getName();
+                    String text = name + bean.getRetweeted_status().getText();
+                    SpannableStringBuilder sb = TextColorTools.highlight(text, name);
+                    retweetedContent.setText(sb);
+                } else {
+                    retweetedContent.setText(bean.getRetweeted_status().getText());
+                }
                 //TODO 转发微博的配图
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
@@ -245,6 +266,44 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 }
             });
         }
+
+        private View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView textView = (TextView) view;
+                String text = textView.getText().toString();
+                Intent intent = new Intent(context, WebActivity.class);
+                intent.putExtra(IntentKey.WEIBO_URL, text);
+                context.startActivity(intent);
+            }
+        };
+
+        class Clickable extends ClickableSpan{
+            private final View.OnClickListener mListener;
+
+            public Clickable(View.OnClickListener listener) {
+                mListener = listener;
+            }
+            @Override
+            public void onClick(View v) {
+                mListener.onClick(v);
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.setColor(TextColorTools.COLOR);
+            }
+        }
+    }
+    /**
+     * 微博内容是否含有url
+     * @param text
+     * @return
+     */
+    protected boolean hasWeiboUrl(String text) {
+        if (text.contains(SHORT_URL)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -291,4 +350,5 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         ListUtils.add(beanList, newList, flag);
         notifyDataSetChanged();
     }
+
 }

@@ -1,22 +1,21 @@
 package com.example.jiang.microblog.view.message.fragment;
 
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
-import com.example.jiang.microblog.bean.Microblog;
-import com.example.jiang.microblog.bean.Statuses;
+import com.example.jiang.microblog.bean.Comment;
+import com.example.jiang.microblog.bean.CommentsBean;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
-import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
-import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
+import com.example.jiang.microblog.view.message.adapter.CommentListViewAdapter;
+import com.example.jiang.microblog.view.message.adapter.CommentRecyclerViewAdapter;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
@@ -27,20 +26,18 @@ import java.util.List;
  * Created by jiang on 2018/4/14.
  */
 
-public class AtMeWeibosFragment extends BaseFragment implements CommentContract.View {
-
-    private static final String TAG = AtMeWeibosFragment.class.getSimpleName();
-
+public class ToMeFragment extends BaseFragment implements CommentContract.View {
+    private static final String TAG = ToMeFragment.class.getSimpleName();
     private CommentPresenter presenter;
     private Oauth2AccessToken token;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar loadingBar;
-    private RecyclerViewBaseAdapter adapter;
-    private List<Statuses> microblogList = new ArrayList<>();
+    private CommentRecyclerViewAdapter adapter;
+    private List<CommentsBean> commentsBeen = new ArrayList<>();
 
-    private ListViewAdapter.LoaderMoreHolder loaderHolder;
+    private CommentListViewAdapter.LoaderMoreHolder loaderHolder;
 
     private boolean isDown = true;          //TODO 判断是否下拉操作
     private boolean isRefreshing = false;  //TODO 是否正在刷新
@@ -59,67 +56,36 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
         downPullUpdate();
         return view;
     }
+
     @Override
     public void initData() {
-        Log.e(TAG, TAG + " ...data...init ...");
-        if (microblogList.isEmpty()) {
-            Log.e("请求", "第一次");
-            presenter.getAtMeWeibo(token.getToken(), 1);
+        if (commentsBeen.isEmpty()) {
+            Log.e(TAG,"第一次请求");
+            presenter.toMeComment(token.getToken(), 1);
         }
     }
 
     @Override
     public void onSuccess(Object object) {
-        Microblog microblog = (Microblog) object;
-        List<Statuses> m = microblog.getStatuses();
-        Log.e("onSuccess", m.toString());
-        //TODO 如果是null 则表示是初始化
-        if (microblogList.isEmpty()) {
-            microblogList = m;
-            loadingBar.setVisibility(View.GONE);
+        Log.e("onSuccess","onSuccess");
+        Comment comment = (Comment) object;
+        List<CommentsBean> comments = comment.getComments();
+        if (commentsBeen.isEmpty()) {
+            commentsBeen = comments;
             setListView();
-        } else {
-            //TODO 添加数据
-            adapter.add(m, isDown);
-            if (isDown) {
-                //TODO 延迟2S处理，关闭下拉操作提示
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        isRefreshing = false;
-                    }
-                }, 2000);
-            } else {
-                if (m.isEmpty()) {
-                    loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
-                    isRefreshing = false;
-                } else {
-                    //TODO 延迟2S处理，关闭上拉操作提示
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
-                            isRefreshing = false;
-                        }
-                    }, 2000);
-                }
-            }
         }
     }
 
     @Override
     public void onError(String result) {
-        Log.e("onError", result);
+        Log.e("onError",result);
     }
 
     private void setListView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new ListViewAdapter(context, microblogList);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));
+        adapter = new CommentListViewAdapter(context, commentsBeen);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         loadingBar.setVisibility(View.GONE);
         handlerUpPullUpdate();
     }
@@ -133,7 +99,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
             @Override
             public void onRefresh() {
                 if (!isRefreshing) {
-                    presenter.getAtMeWeibo(token.getToken(), 1);
+                    presenter.getAtMeComment(token.getToken(), 1);
                     isRefreshing = true;
                     isDown = true;
                 }
@@ -143,13 +109,13 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
 
     //TODO 上拉刷新
     private void handlerUpPullUpdate() {
-        if (adapter instanceof ListViewAdapter) {
-            ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
+        if (adapter instanceof CommentListViewAdapter) {
+            ((CommentListViewAdapter) adapter).setOnRefreshListener(new CommentListViewAdapter.OnRefreshListener() {
                 @Override
-                public void onUpPullRefresh(ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+                public void onUpPullRefresh(CommentListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
                     loaderHolder = loaderMoreHolder;
                     if (!isRefreshing) {
-                        presenter.getAtMeWeibo(token.getToken(), page);
+                        presenter.getAtMeComment(token.getToken(), page);
                         isRefreshing = true;
                         isDown = false;
                         page++;

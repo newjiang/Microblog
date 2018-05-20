@@ -11,11 +11,11 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
 import com.example.jiang.microblog.view.message.fragment.AtMeCommentsFragment;
 import com.example.jiang.microblog.view.message.fragment.AtMeWeibosFragment;
-import com.example.jiang.microblog.view.message.fragment.ReciveFragment;
-import com.example.jiang.microblog.view.message.fragment.SendFragment;
-import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
+import com.example.jiang.microblog.view.message.fragment.ToMeFragment;
+import com.example.jiang.microblog.view.message.fragment.ByMeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,13 +59,13 @@ public class MessageActivity extends BaseActivity {
         fragmentList = new ArrayList<>();
         AtMeWeibosFragment awf = new AtMeWeibosFragment();
         AtMeCommentsFragment acf = new AtMeCommentsFragment();
-        ReciveFragment cf = new ReciveFragment();
-        SendFragment sf = new SendFragment();
+        ToMeFragment tmf = new ToMeFragment();
+        ByMeFragment bmf = new ByMeFragment();
 
         fragmentList.add(awf);
         fragmentList.add(acf);
-        fragmentList.add(cf);
-        fragmentList.add(sf);
+        fragmentList.add(tmf);
+        fragmentList.add(bmf);
 
         //TODO 初始化viewpager适配器
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
@@ -85,4 +85,5 @@ public class MessageActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
