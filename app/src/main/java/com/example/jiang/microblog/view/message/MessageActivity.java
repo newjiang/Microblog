@@ -22,13 +22,13 @@ import java.util.List;
 
 public class MessageActivity extends BaseActivity {
 
-    //TODO 导航栏标题
+    // 导航栏标题
     private List<String> navList;
-    //TODO 底部导航栏
+    // 底部导航栏
     private TabLayout tabLayout;
-    //TODO 页面切换viewPager控件
+    // 页面切换viewPager控件
     private ViewPager viewPager;
-    //TODO BaseFragment
+    // BaseFragment
     private List<BaseFragment> fragmentList;
     private ViewPagerAdapter adapter;
     private int index;
@@ -55,7 +55,7 @@ public class MessageActivity extends BaseActivity {
         navList.add("@我的评论");
         navList.add("收到的评论");
         navList.add("发出的评论");
-        //TODO 添加fragment
+        // 添加fragment
         fragmentList = new ArrayList<>();
         AtMeWeibosFragment awf = new AtMeWeibosFragment();
         AtMeCommentsFragment acf = new AtMeCommentsFragment();
@@ -67,7 +67,7 @@ public class MessageActivity extends BaseActivity {
         fragmentList.add(tmf);
         fragmentList.add(bmf);
 
-        //TODO 初始化viewpager适配器
+        // 初始化viewpager适配器
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);

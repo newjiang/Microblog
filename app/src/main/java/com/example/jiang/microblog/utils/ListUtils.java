@@ -19,7 +19,7 @@ public class ListUtils {
      */
     public static void add(List<Statuses> currentList,
                            List<Statuses> newList, boolean isDown) {
-        //TODO 下拉添加数据的位置索引
+        // 下拉添加数据的位置索引
         int index = 0;
         for (int i = 0; i < newList.size(); i++) {
             //TODO 比较次数
@@ -29,11 +29,11 @@ public class ListUtils {
                     count++;
                     if (count == currentList.size()) {
                         if (isDown) {
-                            //TODO 从开始节点添加
+                            // 从开始节点添加
                             currentList.add(index, newList.get(i));
                             index++;
                         } else {
-                            //TODO 从末尾添加
+                            // 从末尾添加
                             currentList.add(newList.get(i));
                         }
                         count = 0;

@@ -1,13 +1,15 @@
 package com.example.jiang.microblog.view.comment.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
@@ -29,26 +31,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
-    //TODO at字符
+    // at字符
     private static final char AT = '@';
-    //TODO at字符串
+    // at字符串
     private static final String AT_STRING = "@";
-    //TODO 冒号字符
+    // 冒号字符
     private static final char COLON = ':';
-    //TODO 冒号字符串
+    // 冒号字符串
     private static final String COLON_STIRNG= ":";
 
     private Context context;
 
-    private List<CommentsBean> comments;
+    private List<CommentsBean> beanList;
 
-    //TODO 声明一个接口的引用
+    // 声明一个接口的引用
     private OnItemClickListener onItemClickListener;
 
-    //TODO 构造函数
-    public CommentAdapter(Context context, List<CommentsBean> comments) {
+    // 构造函数
+    public CommentAdapter(Context context, List<CommentsBean> beanList) {
         this.context = context;
-        this.comments = comments;
+        this.beanList = beanList;
     }
 
     //设置监听器
@@ -56,19 +58,48 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         this.onItemClickListener = onItemClickListener;
     }
 
+    /**
+     * 添加新评论
+     *
+     * @param comment
+     */
+    public void add(CommentsBean comment) {
+        beanList.add(comment);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除新评论
+     *
+     * @param comment
+     */
+    public void delete(CommentsBean comment) {
+        if (comment != null) {
+            for (int i = 0; i < beanList.size(); i++) {
+                if (comment.getId() == beanList.get(i).getId()) {
+                    beanList.remove(beanList.size() - i - 1);
+                }
+            }
+            notifyDataSetChanged();
+        }
+    }
+
+    public void clear() {
+        beanList.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        //TODO 评论者头像
+        // 评论者头像
         CircleImageView header;
-        //TODO 评论者
+        // 评论者
         TextView commentator;
-        //TODO 评论内容
+        // 评论内容
         TextView content;
-        //TODO 时间
+        // 时间
         TextView time;
-        //TODO 来源
+        // 来源
         TextView from;
-        //TODO 点赞
-        ImageView like;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,7 +109,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             time = (TextView) itemView.findViewById(R.id.comment_time);
             from = (TextView) itemView.findViewById(R.id.comment_sources);
             commentator = (TextView) itemView.findViewById(R.id.commentator);
-            like = (ImageView) itemView.findViewById(R.id.comment_like);
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,13 +128,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final CommentAdapter.ViewHolder holder, final int position) {
-        //TODO 按照时间顺序显示，list倒序
-        CommentsBean bean = comments.get(comments.size() - position - 1);
+        // 按照时间顺序显示，list倒序
+        CommentsBean bean = beanList.get(beanList.size() - position - 1);
 
         Glide.with(context).load(bean.getUser().getAvatar_hd()).into(holder.header);
         holder.commentator.setText(bean.getUser().getName());
 
-        //TODO 关键字高亮
+        // 关键字高亮
         if (bean.getText().contains(AT_STRING) && bean.getText().contains(COLON_STIRNG)) {
             SpannableStringBuilder sb = TextColorTools.highlight(bean.getText(), getKeyWord(bean.getText()));
             holder.content.setText(sb);
@@ -113,6 +143,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
         holder.time.setText(getTimeFormat(bean.getCreated_at()));
         holder.from.setText(getFormFormat(bean.getSource()));
+        holder.content.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setMessage("删除该评论?");
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, "取消", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, "确定", Toast.LENGTH_SHORT).show();
+                        if (deleteCommentListener != null) {
+                            deleteCommentListener.onDeleteCommentListener(beanList.get(position).getId());
+                        }
+                    }
+                });
+                dialog.show();
+                return true;
+            }
+        });
+
 
     }
 
@@ -131,7 +187,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return comments.size();
+        return beanList.size();
     }
 
     /**
@@ -141,7 +197,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
      * @return
      */
     private String getFormFormat(String source) {
-        //TODO FIXME 判断是否为null
+        // FIXME 判断是否为null
         if (source == null) {
             return null;
         } else {
@@ -157,26 +213,37 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
-        //TODO 修改显示时间格式 如2018-01-01 00：00
+        // 修改显示时间格式 如2018-01-01 00：00
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-            //TODO 返回真正时间 如2018-1-1 00：00
+            // 返回真正时间 如2018-1-1 00：00
             return format.format(d);
         } else {
 
             if (f.equals(TimeFormat.YESTERDAY)) {
-                //TODO 返回昨天 yyyy-MM-dd HH:mm
+                // 返回昨天 yyyy-MM-dd HH:mm
                 return f + format.format(d);
             } else {
-                //TODO 返回xx秒前，xx分钟前，xx小时前
+                // 返回xx秒前，xx分钟前，xx小时前
                 return f;
             }
         }
     }
 
-    //TODO 点击事件监听器
+    // 点击事件监听器
     public interface OnItemClickListener {
         void OnItemclick(View view, int position);
+    }
+
+    //删除评论的接口
+    public interface OnDeleteCommentListener{
+        void onDeleteCommentListener(long cid);
+    }
+
+    public OnDeleteCommentListener deleteCommentListener;
+
+    public void setDeleteCommentListener(OnDeleteCommentListener deleteCommentListener) {
+        this.deleteCommentListener = deleteCommentListener;
     }
 }

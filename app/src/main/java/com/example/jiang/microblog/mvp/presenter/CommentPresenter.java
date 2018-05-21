@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Comment;
+import com.example.jiang.microblog.bean.CommentsBean;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.model.CommentModel;
@@ -22,8 +23,9 @@ public class CommentPresenter implements CommentContract.Presenter {
     private CommentContract.Model model;
     private CommentContract.View view;
 
-    private Comment comment;
+    private Comment comments;
     private Microblog microblog;
+    private CommentsBean commentsBean;
 
     public CommentPresenter(Context context) {
         this.view = (CommentContract.View) context;
@@ -47,8 +49,8 @@ public class CommentPresenter implements CommentContract.Presenter {
                         new Observer<Comment>() {
                             @Override
                             public void onCompleted() {
-                                if (comment != null) {
-                                    view.onSuccess(comment);
+                                if (comments != null) {
+                                    view.onSuccess(comments);
                                 }
                             }
 
@@ -59,7 +61,7 @@ public class CommentPresenter implements CommentContract.Presenter {
 
                             @Override
                             public void onNext(Comment c) {
-                                comment = c;
+                                comments = c;
                             }
                         }
                 )
@@ -104,8 +106,8 @@ public class CommentPresenter implements CommentContract.Presenter {
                                 new Observer<Comment>() {
                                     @Override
                                     public void onCompleted() {
-                                        if (comment != null) {
-                                            view.onSuccess(comment);
+                                        if (comments != null) {
+                                            view.onSuccess(comments);
                                         }
                                     }
 
@@ -116,7 +118,7 @@ public class CommentPresenter implements CommentContract.Presenter {
 
                                     @Override
                                     public void onNext(Comment c) {
-                                        comment = c;
+                                        comments = c;
                                     }
                                 }
                         )
@@ -133,8 +135,8 @@ public class CommentPresenter implements CommentContract.Presenter {
                                 new Observer<Comment>() {
                                     @Override
                                     public void onCompleted() {
-                                        if (comment != null) {
-                                            view.onSuccess(comment);
+                                        if (comments != null) {
+                                            view.onSuccess(comments);
                                         }
                                     }
 
@@ -145,7 +147,7 @@ public class CommentPresenter implements CommentContract.Presenter {
 
                                     @Override
                                     public void onNext(Comment c) {
-                                        comment = c;
+                                        comments = c;
                                     }
                                 }
                         )
@@ -162,8 +164,8 @@ public class CommentPresenter implements CommentContract.Presenter {
                                 new Observer<Comment>() {
                                     @Override
                                     public void onCompleted() {
-                                        if (comment != null) {
-                                            view.onSuccess(comment);
+                                        if (comments != null) {
+                                            view.onSuccess(comments);
                                         }
                                     }
 
@@ -174,7 +176,94 @@ public class CommentPresenter implements CommentContract.Presenter {
 
                                     @Override
                                     public void onNext(Comment c) {
-                                        comment = c;
+                                        comments = c;
+                                    }
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public void create(String access_token, final String comment, long id, int comment_ori) {
+        subscription.add(
+                model.create(access_token, comment, id, comment_ori)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                new Observer<Comment>() {
+                                    @Override
+                                    public void onCompleted() {
+                                        if (CommentPresenter.this.comments != null) {
+                                            view.onSuccess(CommentPresenter.this.comments);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        view.onError(e.getMessage());
+                                    }
+
+                                    @Override
+                                    public void onNext(Comment c) {
+                                        CommentPresenter.this.comments = c;
+                                    }
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public void reply(String access_token, long cid, long id, String comment, int without_mention, int comment_ori) {
+        subscription.add(
+                model.reply(access_token, cid, id, comment, without_mention, comment_ori)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                new Observer<Comment>() {
+                                    @Override
+                                    public void onCompleted() {
+                                        if (comments != null) {
+                                            view.onSuccess(comments);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        view.onError(e.getMessage());
+                                    }
+
+                                    @Override
+                                    public void onNext(Comment c) {
+                                        comments = c;
+                                    }
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public void destroy(String access_token, long cid) {
+        subscription.add(
+                model.destroy(access_token, cid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                new Observer<CommentsBean>() {
+                                    @Override
+                                    public void onCompleted() {
+                                        if (commentsBean != null) {
+                                            view.onSuccess(commentsBean);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        view.onSuccess(e.getMessage());
+                                    }
+
+                                    @Override
+                                    public void onNext(CommentsBean bean) {
+                                        commentsBean = bean;
                                     }
                                 }
                         )

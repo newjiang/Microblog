@@ -37,23 +37,24 @@ public class WelcomeActivity extends BaseActivity {
             actionBar.hide();
         }
         setContentView(R.layout.activity_welcome);
+        //TODO 判断是否登陆过
         boolean isLogin = AccessTokenKeeper.readAccessToken(this).isSessionValid();
         if (isLogin) {
             //TODO　进入主页
-            intent = new Intent(WelcomeActivity.this, MainActivity.class);
+           intent = new Intent(WelcomeActivity.this, MainActivity.class);
         } else {
             //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);
         }
         //TODO 创建数据库
         Connector.getDatabase();
-        //3s秒后启动主页面
+        //1s秒后启动主页面
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(intent);
                 finish();
             }
-        }, 500);
+        }, 1000);
     }
 }

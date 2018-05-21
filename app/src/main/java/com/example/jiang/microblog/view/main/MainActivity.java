@@ -71,41 +71,60 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     public static final int PUBLIC_TIMELINE = 2;//公共微博
 
     private UserContract.Presenter presenter;
-    private CircleImageView composeMicroblog; //TODO　发布微博按钮
-    private ImageView homeSearch;              //TODO 搜索按钮
-    private NavigationView navigationView;    //TODO　信息导航栏
-    private ActionBarDrawerToggle toggle;      //TODO　旋转效果
-    private TabLayout tabLayout;               //TODO　底部导航栏
-    private ViewPager viewPager;               //TODO　页面切换viewPager控件
-    private DrawerLayout drawer;               //TODO　抽屉侧滑栏
-    private Toolbar toolbar;                   //TODO　Toolbar
-    private Spinner spinner;                   //TODO　下拉框
-    private View headerLayout;                //TODO　导航界面头部
-    private CircleImageView header;            //TODO　用户头像
-    private TextView usernaem;                 //TODO　用户呢称
-    private TextView description;              //TODO　用户描述
+    //　发布微博按钮
+    private CircleImageView composeMicroblog;
+    // 搜索按钮
+    private ImageView homeSearch;
+    //　信息导航栏
+    private NavigationView navigationView;
+    //　旋转效果
+    private ActionBarDrawerToggle toggle;
+    //　底部导航栏
+    private TabLayout tabLayout;
+    //　页面切换viewPager控件
+    private ViewPager viewPager;
+    //　抽屉侧滑栏
+    private DrawerLayout drawer;
+    //　Toolbar
+    private Toolbar toolbar;
+    //　下拉框
+    private Spinner spinner;
+    //　导航界面头部
+    private View headerLayout;
+    //　用户头像
+    private CircleImageView header;
+    //　用户呢称
+    private TextView usernaem;
+    //　用户描述
+    private TextView description;
+    // 主页提示红点
     private ImageView homeNotice;
+    // 消息页页提示红点
     private ImageView messageNotice;
 
     private List<BaseFragment> fragmentList;
     private MainViewPagerAdapter mainViewPagerAdapter;
+    private HomeFragment homeFragment;
     private User user;
 
-    private AuthInfo mAuthInfo;
-
-    private WbShareHandler shareHandler;
-    private HomeFragment homeFragment;
-    private Oauth2AccessToken token;
+    // 主页fragment
     private TabLayout.Tab homeTab;
+    // 消息页fragment
     private TabLayout.Tab messageTab;
-    private MessageReceiver messageReceiver;
+    // 发现fragment
     private TabLayout.Tab discoverTab;
+
+    // 消息监听器
+    private MessageReceiver messageReceiver;
+    private AuthInfo mAuthInfo;
+    private WbShareHandler shareHandler;
+    private Oauth2AccessToken token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
+        startService(new Intent(MainActivity.this, PollingService.class)); // 启动定时任务
         //注册广播接收器
         messageReceiver = new MessageReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -121,7 +140,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         initViews();
         initTabs();
         initEvents();
-        //TODO 请求获取用户信息
+        // 请求获取用户信息
         presenter = new UserPresenter(this);
         if (user == null) {
             presenter.getProfile(token.getToken(),token.getUid());
@@ -131,12 +150,14 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public void onSuccess(Object object) {
         user = (User) object;
-        //TODO　设置用户头像
+        //　设置用户头像
         Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　设置用户昵称
+        //　设置用户昵称
         usernaem.setText(user.getName());
-        //TODO　设置用户描述
+        //　设置用户描述
         description.setText(user.getDescription());
+
+        user.save();
     }
 
     @Override
@@ -161,16 +182,16 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         header = (CircleImageView) headerLayout.findViewById(R.id.home_account_icon);
         usernaem = (TextView) headerLayout.findViewById(R.id.home_account_name);
         description = (TextView) headerLayout.findViewById(R.id.home_description);
-        //TODO　添加fragment
+        //　添加fragment
         fragmentList = new ArrayList<>();
         homeFragment = new HomeFragment();
         fragmentList.add(homeFragment);
         fragmentList.add(new MessageFragment());
         fragmentList.add(new DiscoverFragment());
-        //TODO　初始化viewpager适配器
+        //　初始化viewpager适配器
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(mainViewPagerAdapter);
-        //TODO　设置隐藏和显示之和的fragment总数数
+        //　设置隐藏和显示之和的fragment总数数
         viewPager.setOffscreenPageLimit(3);
     }
 
@@ -193,7 +214,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         messageNotice = (ImageView) messageTab.getCustomView().findViewById(R.id.message_notice);
         homeNotice.setVisibility(View.INVISIBLE);
         messageNotice.setVisibility(View.INVISIBLE);
-
     }
 
     /**
@@ -211,9 +231,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        //TODO　下拉框事件
+        //　下拉框事件
         spinnerEvent();
-        //TODO　viewPager滑动监听事件
+        //　viewPager滑动监听事件
         viewPagerEvent();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -304,7 +324,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         String[] mItems = getResources().getStringArray(R.array.title);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner, mItems);
         adapter.setDropDownViewResource(R.layout.style_spinner_dialog);
-        //TODO　绑定 Adapter到控件
+        //　绑定 Adapter到控件
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -346,21 +366,21 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    //TODO home页面
+                    // home页面
                     toolbar.setTitle("");
                     spinner.setVisibility(View.VISIBLE);
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                     homeNotice.setVisibility(View.INVISIBLE);
                 } else if (position == 1) {
-                    //TODO message页面
+                    // message页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
                     homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                     messageNotice.setVisibility(View.INVISIBLE);
                 } else if (position == 2) {
-                    //TODO discover页面
+                    // discover页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("热门");
                     homeSearch.setVisibility(View.VISIBLE);
@@ -396,10 +416,10 @@ public class MainActivity extends BaseActivity implements UserContract.View,
             startActivity(new Intent(MainActivity.this, SkinActivity.class));
         } else if (id == R.id.nav_setting) {
             startActivity(new Intent(this, SettingActivity.class));
-        } else if (id == R.id.nav_switch_account) {//TODO　切换账号
+        } else if (id == R.id.nav_switch_account) {//　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, true));
-        } else if (id == R.id.nav_quit) {//TODO　退出
+        } else if (id == R.id.nav_quit) {//　退出
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, false));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -420,7 +440,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            //TODO 按下back键时，不退出，返回桌面
+            // 按下back键时，不退出，返回桌面
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             home.addCategory(Intent.CATEGORY_HOME);

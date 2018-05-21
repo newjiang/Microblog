@@ -32,12 +32,12 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener{
 
-    private EditText searchContent;     //TODO 搜索框内容
-    private ImageView searchIcon;       //TODO 去搜索图标
+    private EditText searchContent;     // 搜索框内容
+    private ImageView searchIcon;       // 去搜索图标
 
-    private TextView clearText;         //TODO 清除搜索的历史记录
+    private TextView clearText;         // 清除搜索的历史记录
 
-    private TextView moreRecommend;     //TODO 更多
+    private TextView moreRecommend;     // 更多
 
     private RecyclerView historyRecyclerView;
     private RecyclerView recommendRecyclerView;
@@ -45,8 +45,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private HistoryAdapter historyAdapter;
     private HotAdapter hotAdapter;
 
-    private List<History> historys;     //TODO 历史记录
-    private List<Hot> hots;             //TODO 热门搜索
+    private List<History> historys;     // 历史记录
+    private List<Hot> hots;             // 热门搜索
 
     public TextView getClearText() {
         return clearText;
@@ -67,7 +67,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private void initData() {
         final List<History> historyList = DataSupport.findAll(History.class);
-        //TODO 只显示5条历史记录
+        // 只显示5条历史记录
         if (historyList.size() > 5) {
             for (int i = 0; i < 5; i++) {
                 historys.add(historyList.get(i));
@@ -75,7 +75,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         } else {
             historys = historyList;
         }
-        //TODO 搜索热搜榜
+        // 搜索热搜榜
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -182,7 +182,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         finish();
-        //TODO　设置退出该activit时的动画
+        //　设置退出该activit时的动画
         overridePendingTransition(R.anim.search_reft_in, R.anim.search_right_out);
     }
 

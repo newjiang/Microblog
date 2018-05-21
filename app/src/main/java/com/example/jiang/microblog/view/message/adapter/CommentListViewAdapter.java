@@ -14,9 +14,9 @@ import java.util.List;
 
 public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
 
-    //TODO 普通的条目类型
+    // 普通的条目类型
     public static final int TYPE_NORMAL = 0;
-    //TODO 加载更多
+    // 加载更多
     public static final int TYPE_LOADER_MORE = 1;
 
     private OnRefreshListener onRefreshListener;
@@ -46,7 +46,7 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
             mReLoad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 这里面要去触发加载数据
+                    // 这里面要去触发加载数据
                     update(LOADER_STATE_LOADING);
                 }
             });
@@ -55,7 +55,7 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
 
         public void update(int state) {
 
-            //TODO 重置控件的状态
+            // 重置控件的状态
             mLading.setVisibility(View.GONE);
             mReLoad.setVisibility(View.GONE);
 
@@ -63,7 +63,7 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
                 case LOADER_STATE_LOADING:
                     mLading.setVisibility(View.VISIBLE);
                     mLoadCompleted.setVisibility(View.GONE);
-                    //TODO 触发加载数据
+                    // 触发加载数据
                     startLoaderMore();
                     break;
 
@@ -113,7 +113,7 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (getItemViewType(position) == TYPE_NORMAL && holder instanceof InnerHolder) {
-            //TODO 在这里设置数据
+            // 在这里设置数据
             ((InnerHolder) holder).setData(beanList.get(position), position);
         } else if (getItemViewType(position) == TYPE_LOADER_MORE && holder instanceof LoaderMoreHolder) {
             if (beanList.size() < 20) {
@@ -128,12 +128,12 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
     @Override
     protected View getSubView(ViewGroup parent, int viewType) {
         View view;
-        //TODO 根据类型来创建view
+        // 根据类型来创建view
         if (viewType == TYPE_NORMAL) {
-            //TODO 加载微博的布局
+            // 加载微博的布局
             view = View.inflate(parent.getContext(), R.layout.layout_comment_message, null);
         } else {
-            //TODO 这个是加载更多的布局
+            // 这个是加载更多的布局
             view = View.inflate(parent.getContext(), R.layout.layout_item_load, null);
         }
         return view;
@@ -142,13 +142,13 @@ public class CommentListViewAdapter extends CommentRecyclerViewAdapter {
     @Override
     public int getItemViewType(int position) {
         if (position == getItemCount() - 1) {
-            //TODO 最后一个则返回加载更多、
+            // 最后一个则返回加载更多、
             return TYPE_LOADER_MORE;
         }
         return TYPE_NORMAL;
     }
 
-    //TODO 定义接口
+    // 定义接口
     public interface OnRefreshListener {
         void onUpPullRefresh(LoaderMoreHolder loaderMoreHolder);
     }

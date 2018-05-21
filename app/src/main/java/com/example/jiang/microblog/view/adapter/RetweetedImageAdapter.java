@@ -22,9 +22,9 @@ import java.util.List;
  */
 public class RetweetedImageAdapter extends NineGridImageViewAdapter<PicUrlsBean> {
 
-    //TODO 小图
+    // 小图
     private static final String THUMBNAIL = "thumbnail";
-    //TODO 中图
+    // 中图
     private static final String BMIDDLE = "bmiddle";
 
     @Override

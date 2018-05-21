@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,10 +26,15 @@ import com.example.jiang.microblog.R;
 
 public class CommentDialogFragment extends DialogFragment implements View.OnClickListener{
 
-    private EditText commentEditText;
-    private ImageView albumButton;
-    private ImageView atImage;
+    //评论内容
+    private EditText commentText;
+    //@图标
+    private ImageView icAt;
+    //是否转发选择框
+    private CheckBox isRetweeted;
+    //发送评论图片
     private ImageView sendCommemt;
+
     private InputMethodManager inputMethodManager;
     private DialogFragmentDataCallback dataCallback;
 
@@ -57,27 +63,25 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
             window.setAttributes(layoutParams);
         }
 
-        commentEditText = (EditText) mDialog.findViewById(R.id.edit_comment);
-        albumButton = (ImageView) mDialog.findViewById(R.id.image_photo);
-        atImage = (ImageView) mDialog.findViewById(R.id.image_at);
+        commentText = (EditText) mDialog.findViewById(R.id.edit_comment);
+        icAt = (ImageView) mDialog.findViewById(R.id.image_ic_at);
+        isRetweeted = (CheckBox) mDialog.findViewById(R.id.is_retweeted);
         sendCommemt = (ImageView) mDialog.findViewById(R.id.image_comment_send);
 
         fillEditText();
         setSoftKeyboard();
 
-        commentEditText.addTextChangedListener(mTextWatcher);
-        albumButton.setOnClickListener(this);
-        atImage.setOnClickListener(this);
-
+        commentText.addTextChangedListener(mTextWatcher);
+        icAt.setOnClickListener(this);
+        isRetweeted.setOnClickListener(this);
         sendCommemt.setOnClickListener(this);
-
         return mDialog;
     }
 
     private void fillEditText() {
         dataCallback = (DialogFragmentDataCallback) getActivity();
-        commentEditText.setText(dataCallback.getCommentText());
-        commentEditText.setSelection(dataCallback.getCommentText().length());
+        commentText.setText(dataCallback.getCommentText());
+        commentText.setSelection(dataCallback.getCommentText().length());
         if (dataCallback.getCommentText().length() == 0) {
             sendCommemt.setEnabled(false);
             sendCommemt.setColorFilter(ContextCompat.getColor(getActivity(), R.color.iconCover));
@@ -85,18 +89,18 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     }
 
     private void setSoftKeyboard() {
-        commentEditText.setFocusable(true);
-        commentEditText.setFocusableInTouchMode(true);
-        commentEditText.requestFocus();
+        commentText.setFocusable(true);
+        commentText.setFocusableInTouchMode(true);
+        commentText.requestFocus();
 
         //TODO 为commentEditText 设置监听器，在 DialogFragment 绘制完后立即呼出软键盘，呼出成功后即注销
-        commentEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        commentText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (inputMethodManager != null) {
-                    if (inputMethodManager.showSoftInput(commentEditText, 0)) {
-                        commentEditText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    if (inputMethodManager.showSoftInput(commentText, 0)) {
+                        commentText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }
             }
@@ -132,15 +136,22 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_photo:
+            case R.id.image_ic_at:
                 Toast.makeText(getActivity(), "点击了图片", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.image_at:
+            case R.id.is_retweeted:
                 Toast.makeText(getActivity(), "点击了@", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.image_comment_send:
-                dataCallback.sendComment(commentEditText.getText().toString());
-                commentEditText.setText("");
+                int comment_ori;
+                boolean checked = isRetweeted.isChecked();
+                if (checked) {
+                    comment_ori = 0;
+                } else {
+                    comment_ori = 1;
+                }
+                dataCallback.sendComment(commentText.getText().toString(), comment_ori);
+                commentText.setText("");
                 dismiss();
                 break;
             default:

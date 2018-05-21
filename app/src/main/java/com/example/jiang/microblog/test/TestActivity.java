@@ -2,58 +2,58 @@ package com.example.jiang.microblog.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.view.View;
-import android.webkit.WebView;
+import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.json.UserJson;
+import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 public class TestActivity extends AppCompatActivity {
-    WebView webView;
+
     TextView textView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-//        webView = (WebView) findViewById(R.id.web_view);
-//        webView.getSettings().setJavaScriptEnabled(true);
-//        webView.setWebViewClient(new WebViewClient());
-//        webView.loadUrl("http://video.weibo.com/show?fid=1034:8e7a1ff0ce8464f5f9786961b08cc020");
+        Oauth2AccessToken token = AccessTokenKeeper.readAccessToken(this);
         textView = (TextView) findViewById(R.id.test_view);
-
-        SpannableString spanableInfo = new SpannableString("这是一个测试"+": "+"点击我");
-        spanableInfo.setSpan(new Clickable(clickListener),8,11,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textView.setText(spanableInfo);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        User user = new Gson().fromJson(UserJson.JSON, User.class);
+        user.save();
+        List<User> users = DataSupport.where("idstr = ?", token.getUid()).find(User.class);
+        Log.e("TestActivity", users.get(0).toString());
+        textView.setText(users.get(0).getName());
+//        textView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(TestActivity.this);
+//                dialog.setMessage("删除该评论?");
+//                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(TestActivity.this, "取消", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(TestActivity.this, "确定", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                dialog.show();
+//                return true;
+//            }
+//        });
     }
 
-    private View.OnClickListener clickListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            TextView textView = (TextView) v;
-            Toast.makeText(TestActivity.this, textView.getText(),Toast.LENGTH_SHORT).show();
-        }
-    };
 
-    class Clickable extends ClickableSpan{
-        private final View.OnClickListener mListener;
-
-        public Clickable(View.OnClickListener l) {
-            mListener = l;
-        }
-        @Override
-        public void onClick(View v) {
-            mListener.onClick(v);
-        }
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            ds.setColor(getResources().getColor(R.color.red));
-        }
-    }
 }

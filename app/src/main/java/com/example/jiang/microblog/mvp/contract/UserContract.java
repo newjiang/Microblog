@@ -11,9 +11,20 @@ import rx.Observable;
 public interface UserContract {
 
     interface Model {
-        //TODO 通过uid获取用户信息
+        /**
+         * 通过uid获取用户信息
+         * @param access_token
+         * @param uid
+         * @return
+         */
         public Observable<User> getProfile(String access_token, String uid);
-        //TODO 通过用户名获取用户信息
+
+        /**
+         * 通过用户名获取用户信息
+         * @param access_token
+         * @param screen_name
+         * @return
+         */
         public Observable<User> getProfileByName(String access_token, String screen_name);
 
         public Observable<Friend> getNextFriendList(String access_token, String uid, int next_cursor);
@@ -22,16 +33,32 @@ public interface UserContract {
     }
 
     interface View {
-        //TODO 成功
+        /**
+         * 成功
+         * @param object
+         */
         void onSuccess(Object object);
-        //TODO 错误
+
+        /**
+         * 错误
+         * @param result
+         */
         void onError(String result);
     }
 
     interface Presenter {
-        //TODO 通过uid获取用户信息
+        /**
+         * 通过uid获取用户信息
+         * @param access_token
+         * @param uid
+         */
         void getProfile(String access_token, String uid);
-        //TODO 通过用户名获取用户信息
+
+        /**
+         * 通过用户名获取用户信息
+         * @param access_token
+         * @param screen_name
+         */
         void getProfileByName(String access_token, String screen_name);
 
         void getNextFriendList(String access_token, String uid, int next_cursor);

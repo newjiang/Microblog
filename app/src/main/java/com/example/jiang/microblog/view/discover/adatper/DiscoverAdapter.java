@@ -62,7 +62,7 @@ public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        //TODO 在这里设置数据
+        // 在这里设置数据
         ((InnerHolder) holder).setData(beanList.get(position), position);
     }
 
@@ -81,81 +81,81 @@ public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
-        //TODO 用户头像
+        // 用户头像
         CircleImageView header;
-        //TODO 用户名字
+        // 用户名字
         TextView username;
-        //TODO 用户备注信息
+        // 用户备注信息
         TextView remark;
-        //TODO 微博文字内容
+        // 微博文字内容
         TextView content;
-        //TODO 微博配图
+        // 微博配图
         NineGridImageView picture;
-        //TODO 发布时间
+        // 发布时间
         TextView time;
-        //TODO 来源
+        // 来源
         TextView from;
-        //TODO 点赞数
+        // 点赞数
         TextView like;
-        //TODO 转发数
+        // 转发数
         TextView redirect;
-        //TODO 评论数
+        // 评论数
         TextView comment;
-        //TODO 点赞图标
+        // 点赞图标
         ImageView likeImage;
-        //TODO 转发图标
+        // 转发图标
         ImageView redirectImage;
-        //TODO 评论图标
+        // 评论图标
         ImageView commentImage;
 
-        //TODO 微博文字内容
+        // 微博文字内容
         TextView retweetedContent;
-        //TODO 微博配图
+        // 微博配图
         NineGridImageView retweetedPicture;
 
-        //TODO 位置
+        // 位置
         private int mPosition;
 
         public InnerHolder(View itemView) {
             super(itemView);
-            //TODO 用户头像
+            // 用户头像
             header = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
-            //TODO 用户名字
+            // 用户名字
             username = (TextView) itemView.findViewById(R.id.microblog_remark);
-            //TODO 用户备注
+            // 用户备注
             remark = (TextView) itemView.findViewById(R.id.microblog_username);
-            //TODO 微博文字内容
+            // 微博文字内容
             content = (TextView) itemView.findViewById(R.id.microblog_content);
-            //TODO 微博配图
+            // 微博配图
             picture = (NineGridImageView) itemView.findViewById(R.id.microblog_picture);
-            //TODO 发布时间
+            // 发布时间
             time = (TextView) itemView.findViewById(R.id.microblog_time);
-            //TODO 来源
+            // 来源
             from = (TextView) itemView.findViewById(R.id.microblog_from);
-            //TODO 点赞数
+            // 点赞数
             like = (TextView) itemView.findViewById(R.id.attitudes_count);
-            //TODO 转发数
+            // 转发数
             redirect = (TextView) itemView.findViewById(R.id.reposts_count);
-            //TODO 评论数
+            // 评论数
             comment = (TextView) itemView.findViewById(R.id.comments_count);
-            //TODO 点赞图标
+            // 点赞图标
             likeImage = (ImageView) itemView.findViewById(R.id.attitudes_count_iv);
-            //TODO 转发图标
+            // 转发图标
             redirectImage = (ImageView) itemView.findViewById(R.id.reposts_count_iv);
-            //TODO 评论图标
+            // 评论图标
             commentImage = (ImageView) itemView.findViewById(R.id.comments_count_iv);
-            //TODO 转发微博文字内容
+            // 转发微博文字内容
             retweetedContent = (TextView) itemView.findViewById(R.id.retweeted_content);
-            //TODO 转发微博配图
+            // 转发微博配图
             retweetedPicture = (NineGridImageView) itemView.findViewById(R.id.retweeted_picture);
 
-            //TODO 进入微博详情页面
+            // 进入微博详情页面
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, CommentActivity.class);
                     Statuses statuses = beanList.get(mPosition);
-                    //TODO 通过json传递过去
+                    // 通过json传递过去
                     intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
                     context.startActivity(intent);
                 }
@@ -167,39 +167,39 @@ public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.
          */
         public void setData(final Statuses bean, int position) {
             this.mPosition = position;
-            //TODO 用户头像
+            // 用户头像
             Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
             if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
-                //TODO 用户备注显示用户的名字
+                // 用户备注显示用户的名字
                 remark.setText(bean.getUser().getRemark());
-                //TODO 用户名字内容是空
+                // 用户名字内容是空
                 username.setText(bean.getUser().getName());
             } else {
-                //TODO 用户备注
+                // 用户备注
                 remark.setText(bean.getUser().getName());
-                //TODO 用户名字
+                // 用户名字
                 username.setText(bean.getUser().getRemark());
             }
-            //TODO 微博文字内容
+            // 微博文字内容
             content.setText(bean.getText());
-            //TODO 微博内容
+            // 微博内容
             content.setText(bean.getText());
-            //TODO 发布时间
+            // 发布时间
             time.setText(getTimeFormat(bean.getCreated_at()));
-            //TODO 来源
+            // 来源
             from.setText(getFormFormat(bean.getSource()));
-            //TODO 点赞数
+            // 点赞数
             like.setText(String.valueOf(bean.getAttitudes_count()));
-            //TODO 转发数
+            // 转发数
             redirect.setText(String.valueOf(bean.getReposts_count()));
-            //TODO 评论数
+            // 评论数
             comment.setText(String.valueOf(bean.getComments_count()));
-            //TODO 微博配图
+            // 微博配图
             picture.setAdapter(new NineImageAdapter());
-            //TODO 微博配图数据源
+            // 微博配图数据源
             picture.setImagesData(beanList.get(position).getPic_urls());
             setRetweetedData(bean);
-            //TODO 设置头像点击事件,根据传递用户的信息
+            // 设置头像点击事件,根据传递用户的信息
             setHeaderOnClickListener(header, new Gson().toJson(bean.getUser()));
         }
 
@@ -210,12 +210,12 @@ public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.
          */
         private void setRetweetedData(Statuses bean) {
             if (bean.getRetweeted_status() != null) {
-                //TODO 转发微博的内容
+                // 转发微博的内容
                 String name = "@" + bean.getRetweeted_status().getUser().getName();
                 String text =  name + bean.getRetweeted_status().getText();
                 SpannableStringBuilder sb = TextColorTools.highlight(text, name);
                 retweetedContent.setText(sb);
-                //TODO 转发微博的配图
+                // 转发微博的配图
                 retweetedPicture.setAdapter(new RetweetedImageAdapter());
                 retweetedPicture.setImagesData(bean.getRetweeted_status().getPic_urls());
                 retweetedPicture.setMinimumHeight(retweetedPicture.getHeight());
@@ -265,14 +265,14 @@ public abstract class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     private String getTimeFormat(String time) {
         Date d = new Date(time);
-        //TODO 修改显示时间格式 如2018-01-01 00：00
+        // 修改显示时间格式 如2018-01-01 00：00
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String f = TimeFormat.format(d);
         if (f.equals(TimeFormat.FLAG)) {
-            //TODO 返回真正时间 如2018-1-1 00：00
+            // 返回真正时间 如2018-1-1 00：00
             return format.format(d);
         } else {
-            //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
+            // 返回xx秒前，xx分钟前，xx小时前，昨天
             if (f.equals(TimeFormat.YESTERDAY)) {
                 return f + format.format(d);
             } else {

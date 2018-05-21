@@ -41,9 +41,9 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
 
     private CommentListViewAdapter.LoaderMoreHolder loaderHolder;
 
-    private boolean isDown = true;          //TODO 判断是否下拉操作
-    private boolean isRefreshing = false;  //TODO 是否正在刷新
-    private int page = 2;                    //TODO 上拉操作的起始页
+    private boolean isDown = true;          // 判断是否下拉操作
+    private boolean isRefreshing = false;  // 是否正在刷新
+    private int page = 2;                    // 上拉操作的起始页
 
     @Override
     public View initView() {
@@ -54,7 +54,7 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         loadingBar = (ProgressBar) view.findViewById(R.id.loading_bar);
-        //TODO 下拉刷新
+        // 下拉刷新
         downPullUpdate();
         return view;
     }
@@ -92,7 +92,7 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
         handlerUpPullUpdate();
     }
 
-    //TODO 下拉刷新
+    // 下拉刷新
     private void downPullUpdate() {
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         refreshLayout.setEnabled(true);
@@ -109,7 +109,7 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
         });
     }
 
-    //TODO 上拉刷新
+    // 上拉刷新
     private void handlerUpPullUpdate() {
         if (adapter instanceof CommentListViewAdapter) {
             ((CommentListViewAdapter) adapter).setOnRefreshListener(new CommentListViewAdapter.OnRefreshListener() {

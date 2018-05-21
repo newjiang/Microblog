@@ -42,9 +42,9 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
 
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
-    private boolean isDown = true;          //TODO 判断是否下拉操作
-    private boolean isRefreshing = false;  //TODO 是否正在刷新
-    private int page = 2;                    //TODO 上拉操作的起始页
+    private boolean isDown = true;          // 判断是否下拉操作
+    private boolean isRefreshing = false;  // 是否正在刷新
+    private int page = 2;                    // 上拉操作的起始页
 
     @Override
     public View initView() {
@@ -55,7 +55,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         loadingBar = (ProgressBar) view.findViewById(R.id.loading_bar);
-        //TODO 下拉刷新
+        // 下拉刷新
         downPullUpdate();
         return view;
     }
@@ -73,16 +73,16 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
         Microblog microblog = (Microblog) object;
         List<Statuses> m = microblog.getStatuses();
         Log.e("onSuccess", m.toString());
-        //TODO 如果是null 则表示是初始化
+        // 如果是null 则表示是初始化
         if (microblogList.isEmpty()) {
             microblogList = m;
             loadingBar.setVisibility(View.GONE);
             setListView();
         } else {
-            //TODO 添加数据
+            // 添加数据
             adapter.add(m, isDown);
             if (isDown) {
-                //TODO 延迟2S处理，关闭下拉操作提示
+                // 延迟2S处理，关闭下拉操作提示
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -95,7 +95,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
                     loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
                     isRefreshing = false;
                 } else {
-                    //TODO 延迟2S处理，关闭上拉操作提示
+                    // 延迟2S处理，关闭上拉操作提示
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -124,7 +124,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
         handlerUpPullUpdate();
     }
 
-    //TODO 下拉刷新
+    // 下拉刷新
     private void downPullUpdate() {
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         refreshLayout.setEnabled(true);
@@ -141,7 +141,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
         });
     }
 
-    //TODO 上拉刷新
+    // 上拉刷新
     private void handlerUpPullUpdate() {
         if (adapter instanceof ListViewAdapter) {
             ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {

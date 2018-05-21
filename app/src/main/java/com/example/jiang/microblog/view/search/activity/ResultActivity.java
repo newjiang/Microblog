@@ -21,13 +21,13 @@ import java.util.List;
 
 public class ResultActivity extends BaseActivity {
 
-    //TODO 导航栏标题
+    // 导航栏标题
     private List<String> navList;
-    //TODO 底部导航栏
+    // 底部导航栏
     private TabLayout tabLayout;
-    //TODO 页面切换viewPager控件
+    // 页面切换viewPager控件
     private ViewPager viewPager;
-    //TODO BaseFragment
+    // BaseFragment
     private List<BaseFragment> fragmentList;
     private ViewPagerAdapter adapter;
 
@@ -40,7 +40,7 @@ public class ResultActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("搜索结果");
         }
-        //TODO 获取关键字
+        // 获取关键字
         Intent intent = getIntent();
         String key = intent.getStringExtra(IntentKey.SEARCH_CONTENT);
         initTab(key);
@@ -54,7 +54,7 @@ public class ResultActivity extends BaseActivity {
         navList = new ArrayList<>();
         navList.add("用户");
         navList.add("微博");
-        //TODO 添加fragment
+        // 添加fragment
         fragmentList = new ArrayList<>();
         AccountFragment af = new AccountFragment();
         WeiboFragment wf = new WeiboFragment();
@@ -66,7 +66,7 @@ public class ResultActivity extends BaseActivity {
 
         fragmentList.add(af);
         fragmentList.add(wf);
-        //TODO 初始化viewpager适配器
+        // 初始化viewpager适配器
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);

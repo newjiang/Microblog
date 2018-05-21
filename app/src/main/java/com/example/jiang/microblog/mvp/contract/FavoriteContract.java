@@ -10,28 +10,66 @@ import rx.Observable;
 public interface FavoriteContract {
 
     interface Model {
-        //TODO 获取收藏列表
+        /**
+         * 获取收藏列表
+         * @param access_token
+         * @param page
+         * @return
+         */
         public Observable<Favorites> getFavorites(String access_token, int page);
-        //TODO 添加一条收藏
+
+        /**
+         * 添加一条收藏
+         * @param access_token
+         * @param id
+         * @return
+         */
         public Observable<Favorites> createFavorites(String access_token, long id);
-        //TODO 删除一条
+
+        /**
+         * 删除一条
+         * @param access_token
+         * @param id
+         * @return
+         */
         public Observable<Favorites> destroyFavorites(String access_token, long id);
 
     }
 
     interface View {
-        //TODO 成功
+        /**
+         * 请求成功
+         * @param object
+         */
         void onSuccess(Object object);
-        //TODO 错误
+
+        /**
+         * 请求错误
+         * @param result
+         */
         void onError(String result);
     }
 
     interface Presenter {
-        //TODO 获取收藏列表
+        /**
+         * 获取收藏列表
+         * @param access_token
+         * @param page
+         */
         void getFavorites(String access_token, int page);
-        //TODO 添加一条收藏
+
+        /**
+         * 添加一条收藏
+         * @param access_token
+         * @param id
+         */
         void createFavorites(String access_token, long id);
-        //TODO 删除一条
+
+        /**
+         * 删除一条
+         * @param access_token
+         * @param id
+         */
         void destroyFavorites(String access_token, long id);
     }
 }

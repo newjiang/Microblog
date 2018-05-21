@@ -2,6 +2,7 @@ package com.example.jiang.microblog.net.service;
 
 import com.example.jiang.microblog.bean.ShortUrl;
 
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -12,7 +13,9 @@ import rx.Observable;
 
 public interface ShortUrlService {
 
+    @FormUrlEncoded
     @GET("short_url/expand.json")
-    Observable<ShortUrl> expand(@Query("access_token") String access_token, @Query("url_short") String url_short);
+    Observable<ShortUrl> expand(@Query("access_token") String access_token,
+                                @Query(value = "url_short", encoded = true) String url_short);
 
 }

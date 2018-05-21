@@ -10,18 +10,33 @@ import rx.Observable;
 public interface ShortUrlContract {
 
     interface Model {
-        //TODO 获取微博评论列表
+        /**
+         * 获取微博评论列表
+         * @param access_token
+         * @param url_short
+         * @return
+         */
         public Observable<ShortUrl> expand(String access_token, String url_short);
     }
     interface View {
-        //TODO 成功
+        /**
+         * 成功
+         * @param object
+         */
         void onSuccess(Object object);
 
-        //TODO 错误
+        /**
+         * 错误
+         * @param result
+         */
         void onError(String result);
     }
     interface Presenter {
-        //TODO 获取微博评论列表
+        /**
+         * 获取微博评论列表
+         * @param access_token
+         * @param url_short
+         */
         void expand(String access_token, String url_short);
     }
 }

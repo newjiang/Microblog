@@ -5,40 +5,40 @@ package com.example.jiang.microblog.utils;
  */
 
 public class IntentKey {
-    //TODO 微博中用户的信息
+    // 微博中用户的信息
     public static final String USER_INFORMATION = "user_information";
-    //TODO 一条微博json
+    // 一条微博json
     public static final String MICROBLOG_JSON = "microblog_json";
-    //TODO 一条微博的图片
+    // 一条微博的图片
     public static final String MICROBLOG_PICTURE = "microblog_picture";
-    //TODO 一条微博配图数量
+    // 一条微博配图数量
     public static final String MICROBLOG_PICTURE_NUMBER = "microblog_picture_number";
 
-    //TODO 向ProfileFragment传递用户信息
+    // 向ProfileFragment传递用户信息
     public static final String PROFILE_FRAGMENT = "profile_fragment";
-    //TODO ProfileActivity显示对应的Fragment索引
+    // ProfileActivity显示对应的Fragment索引
     public static final String PROFILE_FRAGMENT_INDEX = "PROFILE_FRAGMENT_INDEX";
-    //TODO 关键字
+    // 关键字
     public static final String KEY_WORD = "key_word";
-    //TODO 切换账号
+    // 切换账号
     public static final String SWITCH_ACCOUNT = "switch_account";
-    //TODO 搜索内容
+    // 搜索内容
     public static final String SEARCH_CONTENT = "search_content";
-    //TODO 更多的热搜
+    // 更多的热搜
     public static final String MORE_TOP = "MORE_TOP";
-    //TODO 视频的存储路径
+    // 视频的存储路径
     public static final String VIDEO_PATH = "video_path";
     public static final String AT_FRIEND = "at_friend";
-    //TODO 启动MessageActivity显示的fragment
+    // 启动MessageActivity显示的fragment
     public static final String MESSAGE_FRAGMENT_INDEX = "MESSAGE_FRAGMENT_INDEX";
-    //TODO 用户昵称
+    // 用户昵称
     public static final String USERNAME = "username";
-    //TODO 铃声名字
+    // 铃声名字
     public static final String RING = "ring";
-    //TODO 发送广播的数据
+    // 发送广播的数据
     public static final String BROADCAST = "broadcast";
-    //TODO  返回铃声名字
+    //  返回铃声名字
     public static final String RETURN_RING = "return_ring";
-    //TODO 微博内容中的url
+    // 微博内容中的url
     public static final String WEIBO_URL = "weibo_url";
 }

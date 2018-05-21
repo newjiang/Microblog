@@ -2,7 +2,6 @@ package com.example.jiang.microblog.view.message.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -51,7 +50,7 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        //TODO 在这里设置数据
+        // 在这里设置数据
         ((InnerHolder) holder).setData(beanList.get(position), position);
     }
 
@@ -70,7 +69,7 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
-        //TODO 位置
+        // 位置
         private int mPosition;
         CircleImageView header;
         ImageView reply;
@@ -141,14 +140,14 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
          */
         private String getTimeFormat(String time) {
             Date d = new Date(time);
-            //TODO 修改显示时间格式 如2018-01-01 00：00
+            // 修改显示时间格式 如2018-01-01 00：00
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String f = TimeFormat.format(d);
             if (f.equals(TimeFormat.FLAG)) {
-                //TODO 返回真正时间 如2018-1-1 00：00
+                // 返回真正时间 如2018-1-1 00：00
                 return format.format(d);
             } else {
-                //TODO 返回xx秒前，xx分钟前，xx小时前，昨天
+                // 返回xx秒前，xx分钟前，xx小时前，昨天
                 if (f.equals(TimeFormat.YESTERDAY)) {
                     return f + format.format(d);
                 } else {

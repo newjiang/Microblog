@@ -53,15 +53,15 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
     private TextView favourites_count;
     private TextView description;
     private ImageView gender;
-    //TODO 导航栏标题
+    // 导航栏标题
     private List<String> navList;
-    //TODO 底部导航栏
+    // 底部导航栏
     private TabLayout tabLayout;
-    //TODO 页面切换viewPager控件
+    // 页面切换viewPager控件
     private ViewPager viewPager;
-    //TODO BaseFragment
+    // BaseFragment
     private List<BaseFragment> fragmentList;
-    //TODO PagerAdapter
+    // PagerAdapter
     private ViewPagerAdapter viewPagerAdapter;
 
     private User userBean;
@@ -116,7 +116,7 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
         navList.add("关于");
         navList.add("微博(" + userBean.getStatuses_count() + ")");
         navList.add("相册");
-        //TODO 添加fragment
+        // 添加fragment
         fragmentList = new ArrayList<>();
         ProfileFragment profileFragment = new ProfileFragment();
         MicroblogFragment microblogFragment = new MicroblogFragment();
@@ -130,7 +130,7 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
         bundle.putString(IntentKey.PROFILE_FRAGMENT, getIntent().getStringExtra(IntentKey.USER_INFORMATION));
         profileFragment.setArguments(bundle);
 
-        //TODO 初始化viewpager适配器
+        // 初始化viewpager适配器
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);

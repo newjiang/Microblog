@@ -22,7 +22,7 @@ public class MoreActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private HotAdapter adapter;
-    private List<Hot> hots; //TODO 热门搜索
+    private List<Hot> hots; // 热门搜索
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

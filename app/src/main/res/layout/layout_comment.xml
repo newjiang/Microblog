@@ -42,14 +42,6 @@
                 android:layout_marginLeft="5dp"
                 android:textSize="12sp"
                 android:text="share客户端"/>
-            <ImageView
-                android:id="@+id/comment_like"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/ic_like_black"
-                android:layout_alignParentRight="true"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/comment_content"

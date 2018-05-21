@@ -38,9 +38,9 @@ public class FavoriteActivity extends BaseActivity implements
 
     private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
-    private boolean isDown = true;          //TODO 判断是否下拉操作
-    private boolean isRefreshing = false;  //TODO 是否正在刷新
-    private int page = 2;                    //TODO 上拉操作的起始页
+    private boolean isDown = true;          // 判断是否下拉操作
+    private boolean isRefreshing = false;  // 是否正在刷新
+    private int page = 2;                    // 上拉操作的起始页
     private Oauth2AccessToken token;
 
     @Override
@@ -56,7 +56,7 @@ public class FavoriteActivity extends BaseActivity implements
         recyclerView.setOnLongClickListener(this);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipere_freshlayout);
         loadingBar = (ProgressBar) findViewById(R.id.progress_bar);
-        //TODO 下拉刷新
+        // 下拉刷新
         downPullUpdate();
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new FavoritePresenter(this);
@@ -80,10 +80,10 @@ public class FavoriteActivity extends BaseActivity implements
             if (s.isEmpty()) {
                 loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
             } else {
-                //TODO 添加数据
+                // 添加数据
                 adapter.add(s, isDown);
                 if (isDown) {
-                    //TODO 延迟2S处理，关闭下拉操作提示
+                    // 延迟2S处理，关闭下拉操作提示
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -92,7 +92,7 @@ public class FavoriteActivity extends BaseActivity implements
                         }
                     }, 2000);
                 } else {
-                    //TODO 延迟2S处理，关闭上拉操作提示
+                    // 延迟2S处理，关闭上拉操作提示
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -121,6 +121,7 @@ public class FavoriteActivity extends BaseActivity implements
 
     }
 
+    //TODO 上拉刷新
     private void downPullUpdate() {
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         refreshLayout.setEnabled(true);

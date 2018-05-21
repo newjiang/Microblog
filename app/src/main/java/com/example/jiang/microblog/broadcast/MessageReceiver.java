@@ -9,6 +9,7 @@ import com.example.jiang.microblog.utils.IntentKey;
 import com.google.gson.Gson;
 
 public class MessageReceiver extends BroadcastReceiver {
+
     public MessageReceiver() {
     }
 
@@ -18,16 +19,19 @@ public class MessageReceiver extends BroadcastReceiver {
         Message message = new Gson().fromJson(extra, Message.class);
         if (onMessageListener != null) {
             if (message != null) {
+                //发送消息
                 onMessageListener.onMessageListener(message.getStatus(), message.getFollower()
                         , message.getCmt(), message.getMention_status(), message.getMention_cmt());
             }
         }
-
-
     }
 
+
+    /**
+     * 消息监听器
+     */
     public interface OnMessageListener {
-        void onMessageListener(int status,int follower,int cmt,int mention_status,int mention_cmt);
+        void onMessageListener(int status, int follower, int cmt, int mention_status, int mention_cmt);
     }
 
     private OnMessageListener onMessageListener;

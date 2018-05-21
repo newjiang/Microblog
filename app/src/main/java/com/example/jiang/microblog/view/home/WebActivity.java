@@ -15,14 +15,8 @@ import com.example.jiang.microblog.utils.IntentKey;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class WebActivity extends BaseActivity implements ShortUrlContract.View {
 
@@ -46,30 +40,9 @@ public class WebActivity extends BaseActivity implements ShortUrlContract.View {
         int start = text.lastIndexOf("http://t.cn");
         int end = text.length();
         final String url_short = text.substring(start, end).trim();
-       token = AccessTokenKeeper.readAccessToken(this);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getLongUrl(url_short);
-            }
-        }).start();
+        token = AccessTokenKeeper.readAccessToken(this);
+//        presenter.expand(token.getToken(), url_short);
     }
-
-    private void getLongUrl(String url_short) {
-        String url = "https://api.weibo.com/2/short_url/expand.json?access_token=" + token.getToken() + "&url_short=" + "http://t.cn/R3HR8dZ";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        try {
-            Response response = call.execute();
-            Log.e("长连接：", response.body().string());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void onSuccess(Object object) {

@@ -22,11 +22,11 @@ import java.util.ArrayList;
 public class ShowPictureActivity extends BaseActivity {
 
     private ViewPager viewPager;
-    //TODO 显示的图片源
+    // 显示的图片源
     private ImageView[] imageViews;
-    //TODO 图片源的集合
+    // 图片源的集合
     private ArrayList<String> picList;
-    //TODO 是否第一次打开
+    // 是否第一次打开
     private boolean isFirst = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,10 @@ public class ShowPictureActivity extends BaseActivity {
         //TODO 获取点击的图片的索引
         final int index = intent.getIntExtra(IntentKey.MICROBLOG_PICTURE_NUMBER, 0);
 
-        //TODO　初始化
+        //　初始化
         imageViews = new ImageView[picList.size()];
 
-        //TODO 设置当前显示的图片
+        // 设置当前显示的图片
         viewPager.setCurrentItem(index);
 
         viewPager.setAdapter(new PagerAdapter() {

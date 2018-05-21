@@ -59,13 +59,10 @@ public class LoginActivity extends BaseActivity {
 
                     if (mAccessToken.isSessionValid()) {
 
-                        //TODO  保存 Token 到 SharedPreferences
+                        // 保存 Token 到 SharedPreferences
                         AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
-                        //TODO 启动主页面
+                        // 启动主页面
                         startMainActivity();
-
-                        Toast.makeText(LoginActivity.this,
-                                R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();
                     }
                 }
             });

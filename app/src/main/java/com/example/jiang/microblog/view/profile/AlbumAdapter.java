@@ -24,9 +24,9 @@ import java.util.List;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
 
-    //TODO 小图
+    // 小图
     private static final String THUMBNAIL = "thumbnail";
-    //TODO 中图
+    // 中图
     private static final String BMIDDLE = "bmiddle";
 
     private Context context;

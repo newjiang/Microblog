@@ -15,37 +15,82 @@ import rx.Observable;
 public interface MicroblogContract {
 
     interface Model {
-        //TODO 获取用户及用户关注好友的微博
+        /**
+         * 获取用户及用户关注好友的微博
+         * @param access_token
+         * @param page
+         * @return
+         */
         public Observable<Microblog> home_timeline(String access_token, int page);
 
-        //TODO 获取双向关注用户的最新微博
+        /**
+         * 获取双向关注用户的最新微博
+         * @param access_token
+         * @param page
+         * @return
+         */
         public Observable<Microblog> bilateral_timeline(String access_token, int page);
 
-        //TODO 获取最新的公共微博
+        /**
+         * 获取最新的公共微博
+         * @param access_token
+         * @param page
+         * @return
+         */
         public Observable<Microblog> public_timeline(String access_token, int page);
 
-        //TODO 当前用户的微博
+        /**
+         * 当前用户的微博
+         * @param access_token
+         * @param page
+         * @param feature
+         * @return
+         */
         public Observable<Microblog> user_timeline(String access_token, int page, int feature);
     }
 
     interface View {
-        //TODO 成功
+        /**
+         * 成功
+         * @param object
+         */
         void onSuccess(Object object);
-        //TODO 错误
+
+        /**
+         * 错误
+         * @param result
+         */
         void onError(String result);
     }
 
     interface Presenter {
-        //TODO 获取用户及用户关注好友的微博
+        /**
+         * 获取用户及用户关注好友的微博
+         * @param access_token
+         * @param page
+         */
         void home_timeline(String access_token, int page);
 
-        //TODO 获取双向关注用户的最新微博
+        /**
+         * 获取双向关注用户的最新微博
+         * @param access_token
+         * @param page
+         */
         void bilateral_timeline(String access_token, int page);
 
-        //TODO 获取最新的公共微博
+        /**
+         * 获取最新的公共微博
+         * @param access_token
+         * @param page
+         */
         void public_timeline(String access_token, int page);
 
-        //TODO 当前用户的微博
+        /**
+         * 当前用户的微博
+         * @param access_token
+         * @param page
+         * @param feature
+         */
         void user_timeline(String access_token, int page, int feature);
     }
 }

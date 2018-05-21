@@ -10,18 +10,33 @@ import rx.Observable;
 public interface MessageContract {
 
     interface Model {
-        //TODO 获取未读消息
+        /**
+         * 获取未读消息
+         * @param access_token
+         * @param uid
+         * @return
+         */
         public Observable<Message> unread_count(String access_token, String uid);
     }
     interface View {
-        //TODO 成功
+        /**
+         * 成功
+         * @param object
+         */
         void onSuccess(Object object);
 
-        //TODO 错误
+        /**
+         * 错误
+         * @param result
+         */
         void onError(String result);
     }
     interface Presenter {
-        //TODO 获取未读消息
+        /**
+         * 获取未读消息
+         * @param access_token
+         * @param uid
+         */
         void unread_count(String access_token, String uid);
     }
 }
