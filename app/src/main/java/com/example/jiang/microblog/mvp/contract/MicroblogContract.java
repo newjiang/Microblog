@@ -17,10 +17,15 @@ public interface MicroblogContract {
     interface Model {
         //TODO 获取用户及用户关注好友的微博
         public Observable<Microblog> home_timeline(String access_token, int page);
+
         //TODO 获取双向关注用户的最新微博
         public Observable<Microblog> bilateral_timeline(String access_token, int page);
+
         //TODO 获取最新的公共微博
         public Observable<Microblog> public_timeline(String access_token, int page);
+
+        //TODO 当前用户的微博
+        public Observable<Microblog> user_timeline(String access_token, int page, int feature);
     }
 
     interface View {
@@ -33,9 +38,14 @@ public interface MicroblogContract {
     interface Presenter {
         //TODO 获取用户及用户关注好友的微博
         void home_timeline(String access_token, int page);
+
         //TODO 获取双向关注用户的最新微博
         void bilateral_timeline(String access_token, int page);
+
         //TODO 获取最新的公共微博
         void public_timeline(String access_token, int page);
+
+        //TODO 当前用户的微博
+        void user_timeline(String access_token, int page, int feature);
     }
 }

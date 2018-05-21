@@ -2,6 +2,7 @@ package com.example.jiang.microblog.view.message.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -103,7 +104,11 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
             if (bean.getStatus().getPic_urls() == null) {
                 Glide.with(context).load(bean.getStatus().getUser().getAvatar_large()).into(picture);
             } else {
-                Glide.with(context).load(bean.getStatus().getPic_urls().get(0).getThumbnail_pic()).into(picture);
+                if (bean.getStatus().getPic_urls().size() > 0) {
+                    Glide.with(context).load(bean.getStatus().getPic_urls().get(0).getThumbnail_pic()).into(picture);
+                } else {
+                    Glide.with(context).load(bean.getStatus().getUser().getAvatar_large()).into(picture);
+                }
             }
             name.setText(bean.getUser().getName());
             time.setText(getTimeFormat(bean.getCreated_at()));
@@ -121,7 +126,11 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
          * @return
          */
         private String getFormFormat(String source) {
-            return Jsoup.parse(source).text();
+            if ("".equals(source) || source == null) {
+                return source;
+            } else {
+                return Jsoup.parse(source).text();
+            }
         }
 
         /**

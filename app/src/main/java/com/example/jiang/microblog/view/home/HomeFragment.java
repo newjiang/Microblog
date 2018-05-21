@@ -106,8 +106,6 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         }
     }
 
-
-
     @Override
     public void onSuccess(Object object) {
         Microblog microblog = (Microblog) object;
@@ -119,20 +117,20 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
             loadingBar.setVisibility(View.GONE);
             setListView();
         } else {
-            if (m.isEmpty()) {
-                loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
+            //TODO 添加数据
+            adapter.add(m, isDown);
+            if (isDown) {
+                //TODO 延迟2S处理，关闭下拉操作提示
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        isRefreshing = false;
+                    }
+                }, 2000);
             } else {
-                //TODO 添加数据
-                adapter.add(m, isDown);
-                if (isDown) {
-                    //TODO 延迟2S处理，关闭下拉操作提示
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            isRefreshing = false;
-                        }
-                    }, 2000);
+                if (m.isEmpty()) {
+                    loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
                 } else {
                     //TODO 延迟2S处理，关闭上拉操作提示
                     new Handler().postDelayed(new Runnable() {
@@ -144,6 +142,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
                     }, 2000);
                 }
             }
+
         }
     }
 

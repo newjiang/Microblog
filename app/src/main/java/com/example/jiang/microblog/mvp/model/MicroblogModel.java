@@ -34,4 +34,9 @@ public class MicroblogModel implements MicroblogContract.Model {
     public Observable<Microblog> public_timeline(String access_token, int page) {
         return microblogService.public_timeline(access_token, page);
     }
+
+    @Override
+    public Observable<Microblog> user_timeline(String access_token, int page,int feature) {
+        return microblogService.user_timeline(access_token, page, feature);
+    }
 }

@@ -125,4 +125,31 @@ public class MicroblogPresenter implements MicroblogContract.Presenter {
                         })
         );
     }
+
+    @Override
+    public void user_timeline(String access_token, int page,int feature) {
+        subscription.add(
+                model.user_timeline(access_token, page, feature)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Microblog>() {
+                            @Override
+                            public void onCompleted() {
+                                if (microblog != null) {
+                                    view.onSuccess(microblog);
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(Microblog m) {
+                                microblog = m;
+                            }
+                        })
+        );
+    }
 }

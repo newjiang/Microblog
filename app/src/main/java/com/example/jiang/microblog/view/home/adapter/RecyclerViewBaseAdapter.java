@@ -313,7 +313,11 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
      * @return
      */
     private String getFormFormat(String source) {
-        return Jsoup.parse(source).text();
+        if ("".equals(source) || source == null) {
+            return source;
+        } else {
+            return Jsoup.parse(source).text();
+        }
     }
 
     /**

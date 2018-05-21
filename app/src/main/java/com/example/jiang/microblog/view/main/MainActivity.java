@@ -31,7 +31,6 @@ import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.broadcast.MessageReceiver;
-import com.example.jiang.microblog.json.UserJson;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.service.PollingService;
@@ -100,14 +99,13 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private TabLayout.Tab homeTab;
     private TabLayout.Tab messageTab;
     private MessageReceiver messageReceiver;
+    private TabLayout.Tab discoverTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startService(new Intent(MainActivity.this, PollingService.class)); //TODO 启动定时任务
-
-
         //注册广播接收器
         messageReceiver = new MessageReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -128,12 +126,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         if (user == null) {
             presenter.getProfile(token.getToken(),token.getUid());
         }
-        user = new Gson().fromJson(UserJson.JSON, User.class);
-        Glide.with(MainActivity.this).load(user.getAvatar_hd()).into(header);
-        //TODO　设置用户昵称
-        usernaem.setText(user.getName());
-        //TODO　设置用户描述
-        description.setText(user.getDescription());
     }
 
     @Override
@@ -192,7 +184,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         tabLayout.setupWithViewPager(viewPager);
         homeTab = tabLayout.getTabAt(0);
         messageTab = tabLayout.getTabAt(1);
-        TabLayout.Tab discoverTab = tabLayout.getTabAt(2);
+        discoverTab = tabLayout.getTabAt(2);
         homeTab.setCustomView(R.layout.tabber_home_icon);
         messageTab.setCustomView(R.layout.tabber_message_icon);
         discoverTab.setCustomView(R.layout.tabber_discover_icon);
@@ -201,6 +193,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         messageNotice = (ImageView) messageTab.getCustomView().findViewById(R.id.message_notice);
         homeNotice.setVisibility(View.INVISIBLE);
         messageNotice.setVisibility(View.INVISIBLE);
+
     }
 
     /**
@@ -222,6 +215,32 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         spinnerEvent();
         //TODO　viewPager滑动监听事件
         viewPagerEvent();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        homeNotice.setVisibility(View.INVISIBLE);
+                        break;
+                    case 1:
+                        messageNotice.setVisibility(View.INVISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
@@ -236,7 +255,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                 if (isInstall) {
                     List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
                     boolean b = settings.get(0).isShareByDefault();
-                    Log.e("Main-Setting:",settings.get(0).toString());
                     if (b) {
                         shareByClient();
                     } else {
@@ -253,7 +271,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                 drawer.closeDrawers();
                 break;
         }
-
     }
 
     /**
@@ -350,7 +367,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                     composeMicroblog.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -448,7 +464,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     }
 
     public interface OnTypeListener {
-        public void onTypeListener(int type);
+        void onTypeListener(int type);
     }
 
     public OnTypeListener listener;

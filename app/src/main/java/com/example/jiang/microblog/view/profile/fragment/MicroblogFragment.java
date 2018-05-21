@@ -2,27 +2,26 @@ package com.example.jiang.microblog.view.profile.fragment;
 
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.bean.Statuses;
-import com.example.jiang.microblog.json.MicroblogJson;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
-import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by jiang on 2018/4/14.
@@ -30,120 +29,127 @@ import java.util.Random;
 
 public class MicroblogFragment extends BaseFragment implements MicroblogContract.View {
 
+    private Oauth2AccessToken token;
+
     private MicroblogContract.Presenter presenter;
-
     private RecyclerView recyclerView;
-
     private SwipeRefreshLayout refreshLayout;
-
+    private ProgressBar loadingBar;
     private RecyclerViewBaseAdapter adapter;
+    private List<Statuses> microblogList = new ArrayList<>();
 
-    List<Statuses> microblogList = new ArrayList<>();
+    private ListViewAdapter.LoaderMoreHolder loaderHolder;
 
+    private boolean isDown = true;          //TODO 判断是否下拉操作
+    private boolean isRefreshing = false;  //TODO 是否正在刷新
+    private int page = 2;                    //TODO 上拉操作的起始页
 
     @Override
     public View initView() {
+        token = AccessTokenKeeper.readAccessToken(context);
+        presenter = new MicroblogPresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
-        setRecyclerViewStyle();
-        handlerDownPullUpdate();
-        getMicroblogById();
+        loadingBar = (ProgressBar) view.findViewById(R.id.loading_bar);
+        //TODO 下拉刷新
+        downPullUpdate();
         return view;
     }
-
     @Override
     public void initData() {
-        presenter = new MicroblogPresenter(this, context);
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void getMicroblogById() {
-        Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-        microblogList = microblog.getStatuses();
-    }
-
-    private void handlerDownPullUpdate() {
-        refreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        refreshLayout.setEnabled(true);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                List<Statuses> statuses = microblog.getStatuses();
-                microblogList.add(0, statuses.get(1));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-            }
-        });
-    }
-
-    /**
-     * 这个方法用于现实ListView一样的效果
-     */
-    private void setRecyclerViewStyle() {
-        //RecyclerView需要设置样式,其实就是设置布局管理器
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        //设置布局管理器来控制
-        //设置水平还是垂直
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        //创建适配器
-        adapter = new ListViewAdapter(context, microblogList);
-        //设置到RecyclerView里头
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-        //初始化事件
-        initListener();
-    }
-
-    private void initListener() {
-        if (adapter instanceof ListViewAdapter) {
-            ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
-                @Override
-                public void onUpPullRefresh(final ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                        Random random = new Random();
-                        if (random.nextInt() % 2 == 0) {
-                            Microblog microblog = new Gson().fromJson(MicroblogJson.JSON, Microblog.class);
-                            List<Statuses> statuses = microblog.getStatuses();
-                            for (Statuses s : statuses) {
-                                microblogList.add(s);
-                            }
-                            adapter.notifyDataSetChanged();
-                            loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_NORMAL);
-                        } else {
-                            loaderMoreHolder.update(loaderMoreHolder.LOADER_STATE_RELOAD);
-                        }
-                        }
-                    }, 2000);
-                }
-            });
+        if (microblogList.isEmpty()) {
+            presenter.user_timeline(token.getToken(), 1, 0);
         }
     }
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("onSuccess", object.toString());
+        Microblog microblog = (Microblog) object;
+        List<Statuses> m = microblog.getStatuses();
+        //TODO 如果是null 则表示是初始化
+        if (microblogList.isEmpty()) {
+            microblogList = m;
+            setListView();
+        } else {
+            //TODO 添加数据
+            adapter.add(m, isDown);
+            if (isDown) {
+                //TODO 延迟2S处理，关闭下拉操作提示
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        isRefreshing = false;
+                    }
+                }, 2000);
+            } else {
+                //TODO 延迟2S处理，关闭上拉操作提示
+                if (m.isEmpty()) {
+                    loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
+                    isRefreshing = false;
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
+                            isRefreshing = false;
+                        }
+                    }, 2000);
+                }
+            }
+        }
     }
 
     @Override
     public void onError(String result) {
-        Log.e("onError", result);
+        Log.e("MicroblogFragment-E", result);
+    }
+
+    private void setListView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ListViewAdapter(context, microblogList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        loadingBar.setVisibility(View.GONE);
+        handlerUpPullUpdate();
+    }
+
+    //TODO 下拉刷新
+    private void downPullUpdate() {
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        refreshLayout.setEnabled(true);
+        refreshLayout.setProgressViewOffset(true, 0, 200);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isRefreshing) {
+                    presenter.user_timeline(token.getToken(), 1, 0);
+                    isRefreshing = true;
+                    isDown = true;
+                }
+            }
+        });
+    }
+
+    //TODO 上拉刷新
+    private void handlerUpPullUpdate() {
+        if (adapter instanceof ListViewAdapter) {
+            ((ListViewAdapter) adapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
+                @Override
+                public void onUpPullRefresh(ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+                    loaderHolder = loaderMoreHolder;
+                        if (!isRefreshing) {
+                            presenter.user_timeline(token.getToken(), page, 0);
+                            isRefreshing = true;
+                            isDown = false;
+                            page++;
+                        }
+                }
+            });
+        }
     }
 
 }
