@@ -14,6 +14,7 @@ import com.example.jiang.microblog.mvp.presenter.ShortUrlPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class WebActivity extends BaseActivity implements ShortUrlContract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         webView = (WebView) findViewById(R.id.web_view);
@@ -57,5 +59,11 @@ public class WebActivity extends BaseActivity implements ShortUrlContract.View {
     @Override
     public void onError(String result) {
         Log.e("WebActivity-E", result);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

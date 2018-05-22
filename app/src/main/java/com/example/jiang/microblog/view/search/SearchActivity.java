@@ -24,6 +24,7 @@ import com.example.jiang.microblog.view.search.activity.ResultActivity;
 import com.example.jiang.microblog.view.search.adapter.HistoryAdapter;
 import com.example.jiang.microblog.view.search.adapter.HotAdapter;
 import com.google.gson.Gson;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.crud.DataSupport;
 
@@ -54,6 +55,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ActionBar actionBar = getSupportActionBar();
@@ -200,5 +202,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
         initHistory();
         showTips();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().register(this);
     }
 }

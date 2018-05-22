@@ -8,7 +8,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.setting.adapter.SettingAdapter;
+import com.zhy.changeskin.SkinManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RingActivity extends AppCompatActivity implements View.OnClickListener {
+public class RingActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private TextView back;
@@ -40,6 +41,7 @@ public class RingActivity extends AppCompatActivity implements View.OnClickListe
     private MediaPlayer player;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ring);
         ActionBar actionBar = getSupportActionBar();
@@ -198,8 +200,7 @@ public class RingActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         player.release();
         player = null;
-
-
+        SkinManager.getInstance().unregister(this);
     }
 
     @Override
@@ -218,4 +219,5 @@ public class RingActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
 }

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_grey"
+    android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.setting.SettingActivity">
 
     <LinearLayout

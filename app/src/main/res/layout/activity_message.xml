@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.message.MessageActivity">
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"

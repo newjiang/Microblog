@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.Constants;
-import com.example.jiang.microblog.view.main.MainActivity;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;

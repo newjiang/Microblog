@@ -4,6 +4,7 @@
     android:id="@+id/activity_comment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.comment.CommentActivity">
     <!--<android.support.v4.widget.SwipeRefreshLayout-->
         <!--android:layout_width="match_parent"-->

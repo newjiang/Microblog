@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.profile.ProfileActivity">
 
     <android.support.design.widget.AppBarLayout

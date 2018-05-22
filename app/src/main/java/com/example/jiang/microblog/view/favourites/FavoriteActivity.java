@@ -22,6 +22,7 @@ import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class FavoriteActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -171,5 +173,11 @@ public class FavoriteActivity extends BaseActivity implements
     public boolean onLongClick(View v) {
         Toast.makeText(this, "长安", Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

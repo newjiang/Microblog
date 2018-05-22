@@ -29,7 +29,6 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:textSize="18sp"
                     android:gravity="center_vertical"
                     android:text="哈哈哈哈哈"
                     android:textColor="@color/black"/>
@@ -64,7 +63,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:textSize="18sp"
             android:text="什么来的？？"/>
         <!--微博内容-->
         <LinearLayout
@@ -87,7 +85,6 @@
                     android:id="@+id/user"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:textSize="16sp"
                     android:gravity="center_vertical"
                     android:text="哈哈哈哈哈"
                     android:textColor="@color/black"/>

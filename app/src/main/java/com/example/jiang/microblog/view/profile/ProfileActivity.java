@@ -33,6 +33,7 @@ import com.example.jiang.microblog.widget.GlideRoundTransform;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,7 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initViews();
@@ -214,5 +216,11 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
                 startActivity(new Intent(this, FavoriteActivity.class));
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

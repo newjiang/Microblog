@@ -4,6 +4,23 @@
     <color name="colorPrimaryDark">#00afff</color>
     <color name="colorAccent">#02a9cf</color>
 
+    <!--换肤-背景颜色-->
+    <color name="main_bg">#ffffff</color>
+    <color name="main_bg_default">#ccffffff</color>
+    <color name="main_bg_night">#a7818181</color>
+
+    <!--换肤-字体颜色-->
+    <color name="text_style">#ffffff</color>
+    <color name="text_style_default">#ccffffff</color>
+    <color name="text_style_night">#cc393939</color>
+
+    <color name="textblack">#c8000000</color> <!-- 黑色 -->
+    <color name="background_light">#fffafafa</color>
+    <color name="background_grey">#ededed</color>
+    <color name="iconCover">#cc979797</color>
+    <color name="iconCoverDark">#cc393939</color>
+    <color name="transparent">#00000000</color>
+
     <color name="white">#ffffff</color> <!-- 白色 -->
     <color name="ivory">#fffff0</color> <!-- 象牙色 -->
     <color name="lightyellow">#ffffe0</color> <!-- 亮黄色 -->
@@ -149,13 +166,5 @@
     <color name="darkblue">#00008b</color> <!-- 暗蓝色 -->
     <color name="navy">#000080</color> <!-- 海军色 -->
     <color name="black">#000000</color> <!-- 黑色 -->
-
-    <color name="textblack">#c8000000</color> <!-- 黑色 -->
-
-    <color name="background_light">@color/material_grey_50</color>
-    <color name="background_grey">#ededed</color>
-    <color name="iconCover">#cc979797</color>
-    <color name="iconCoverDark">#cc393939</color>
-    <color name="transparent">#00000000</color>
 
 </resources>

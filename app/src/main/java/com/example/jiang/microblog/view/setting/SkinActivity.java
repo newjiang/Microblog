@@ -1,29 +1,32 @@
 package com.example.jiang.microblog.view.setting;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.bean.Skin;
-import com.example.jiang.microblog.view.setting.adapter.SkinAdapter;
+import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.bean.Setting;
+import com.example.jiang.microblog.utils.SkinTools;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
-import java.util.ArrayList;
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
-public class SkinActivity extends AppCompatActivity {
+public class SkinActivity extends BaseActivity implements View.OnClickListener {
 
-    private RecyclerView recyclerView;
-    private SkinAdapter adapter;
-
-    private List<Skin> skins;
-
+    private Oauth2AccessToken token;
+    private Button defaultSkin;
+    private Button nightSkin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skin);
         ActionBar actionBar = getSupportActionBar();
@@ -31,24 +34,14 @@ public class SkinActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("点击确认皮肤");
         }
-        initData();
-        recyclerView = (RecyclerView) findViewById(R.id.skin_recyclerview);
-        adapter = new SkinAdapter(this, skins);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        token = AccessTokenKeeper.readAccessToken(this);
+        defaultSkin = (Button) findViewById(R.id.default_skin);
+        nightSkin = (Button) findViewById(R.id.night_skin);
+        defaultSkin.setOnClickListener(this);
+        nightSkin.setOnClickListener(this);
     }
 
-    private void initData() {
-        skins = new ArrayList<>();
-        skins.add(new Skin(R.color.yellow, "yellow"));
-        skins.add(new Skin(R.color.orangered, "orangered"));
-        skins.add(new Skin(R.color.aliceblue, "aliceblue"));
-        skins.add(new Skin(R.color.fuchsia, "fuchsia"));
-        skins.add(new Skin(R.color.violet, "violet"));
-        skins.add(new Skin(R.color.saddlebrown, "saddlebrown"));
-        skins.add(new Skin(R.color.iconCoverDark, "iconCoverDark"));
-    }
+
 
 
     @Override
@@ -59,5 +52,49 @@ public class SkinActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.default_skin:
+                setSkinPlugin("default");
+                break;
+            case R.id.night_skin:
+                setSkinPlugin("night");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setSkinPlugin(String skinName) {
+        SkinManager.getInstance().changeSkin(skinName);
+        List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
+        if (settings.isEmpty()) {
+            Setting setting = new Setting(true, true, true, true, "default", "default", token.getUid());
+            setting.setSkinFuffix(skinName);
+            setting.save();
+            if ("default".equals(skinName))
+                SkinTools.setMoreStatusBarColor(SkinTools.DEFAULT);
+             else
+                SkinTools.setMoreStatusBarColor(SkinTools.NIGHT);
+        } else {
+            Setting setting = settings.get(0);
+            setting.setSkinFuffix(skinName);
+            if ("default".equals(skinName))
+                SkinTools.setMoreStatusBarColor(SkinTools.DEFAULT);
+            else
+                SkinTools.setMoreStatusBarColor(SkinTools.NIGHT);
+            ContentValues values = new ContentValues();
+            values.put("skinFuffix", setting.getSkinFuffix());
+            DataSupport.update(Setting.class, values, setting.getId());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

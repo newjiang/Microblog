@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import org.jsoup.Jsoup;
 
@@ -105,6 +106,7 @@ public class CommentActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         token = AccessTokenKeeper.readAccessToken(this);
@@ -369,4 +371,9 @@ public class CommentActivity extends BaseActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
+    }
 }

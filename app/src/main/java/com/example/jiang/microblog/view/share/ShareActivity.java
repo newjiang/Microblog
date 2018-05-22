@@ -35,7 +35,7 @@ import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TextColorTools;
-import com.example.jiang.microblog.view.main.MainActivity;
+import com.example.jiang.microblog.view.activity.MainActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
 import com.example.jiang.microblog.view.share.at.AtActivity;
 import com.sina.weibo.sdk.WbSdk;
@@ -48,6 +48,7 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
 import com.sina.weibo.sdk.web.WeiboPageUtils;
+import com.zhy.changeskin.SkinManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -105,6 +106,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         ActionBar actionBar = getSupportActionBar();
@@ -511,5 +513,11 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             Log.e("videoPath", "NNNNNNNNNNN");
         }
         return videoSourceObject;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

@@ -19,6 +19,7 @@ import com.example.jiang.microblog.view.share.at.adapter.FriendAdapter;
 import com.example.jiang.microblog.view.share.at.adapter.HeaderAdapter;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at);
         token = AccessTokenKeeper.readAccessToken(this);
@@ -133,4 +135,9 @@ public class AtActivity extends AppCompatActivity implements UserContract.View {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
+    }
 }

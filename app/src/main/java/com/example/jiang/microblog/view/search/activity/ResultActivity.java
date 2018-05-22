@@ -15,6 +15,7 @@ import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
 import com.example.jiang.microblog.view.search.fragment.AccountFragment;
 import com.example.jiang.microblog.view.search.fragment.WeiboFragment;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ResultActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         ActionBar actionBar = getSupportActionBar();
@@ -75,7 +77,6 @@ public class ResultActivity extends BaseActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -84,5 +85,11 @@ public class ResultActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

@@ -16,6 +16,7 @@ import com.example.jiang.microblog.view.message.fragment.AtMeCommentsFragment;
 import com.example.jiang.microblog.view.message.fragment.AtMeWeibosFragment;
 import com.example.jiang.microblog.view.message.fragment.ToMeFragment;
 import com.example.jiang.microblog.view.message.fragment.ByMeFragment;
+import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         ActionBar actionBar = getSupportActionBar();
@@ -86,4 +88,9 @@ public class MessageActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
+    }
 }

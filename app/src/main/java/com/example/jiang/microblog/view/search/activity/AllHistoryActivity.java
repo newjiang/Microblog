@@ -12,6 +12,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.view.search.adapter.AllHistoryAdapter;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.crud.DataSupport;
 
@@ -30,6 +31,7 @@ public class AllHistoryActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_history);
         ActionBar actionBar = getSupportActionBar();
@@ -65,4 +67,9 @@ public class AllHistoryActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
+    }
 }

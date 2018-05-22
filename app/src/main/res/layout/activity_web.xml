@@ -4,6 +4,7 @@
     android:id="@+id/activity_web"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.home.WebActivity">
     <WebView
         android:id="@+id/web_view"

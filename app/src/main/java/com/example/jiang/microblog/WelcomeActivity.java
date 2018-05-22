@@ -1,5 +1,6 @@
 package com.example.jiang.microblog;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,11 +10,18 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 
 import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.bean.Setting;
+import com.example.jiang.microblog.utils.SkinTools;
 import com.example.jiang.microblog.view.activity.LoginActivity;
-import com.example.jiang.microblog.view.main.MainActivity;
+import com.example.jiang.microblog.view.activity.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
+import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
+
+import java.util.List;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -21,6 +29,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().changeSkin("");
         super.onCreate(savedInstanceState);
         //TODO 沉浸式启动欢迎界面
         if (Build.VERSION.SDK_INT >= 21) {
@@ -41,6 +50,7 @@ public class WelcomeActivity extends BaseActivity {
         boolean isLogin = AccessTokenKeeper.readAccessToken(this).isSessionValid();
         if (isLogin) {
             //TODO　进入主页
+            setSkinPlugin("default");
            intent = new Intent(WelcomeActivity.this, MainActivity.class);
         } else {
             //TODO　进入登陆页面
@@ -56,5 +66,29 @@ public class WelcomeActivity extends BaseActivity {
                 finish();
             }
         }, 1000);
+    }
+
+    private void setSkinPlugin(String skinName) {
+        Oauth2AccessToken token = AccessTokenKeeper.readAccessToken(this);
+        SkinManager.getInstance().changeSkin(skinName);
+        List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
+        if (settings.isEmpty()) {
+            Setting setting = new Setting(true, true, true, true, "default", "default", token.getUid());
+            setting.setSkinFuffix(skinName);
+            setting.save();
+            SkinTools.setMoreStatusBarColor(SkinTools.DEFAULT);
+        } else {
+            Setting setting = settings.get(0);
+            setting.setSkinFuffix(skinName);
+            SkinTools.setMoreStatusBarColor(SkinTools.DEFAULT);
+            ContentValues values = new ContentValues();
+            values.put("skinFuffix", setting.getSkinFuffix());
+            DataSupport.update(Setting.class, values, setting.getId());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity android:name=".view.activity.ShowPictureActivity" />
@@ -78,7 +78,8 @@
         <activity android:name=".view.favourites.FavoriteActivity" />
         <activity android:name=".view.setting.SkinActivity" />
         <activity android:name=".test.TestActivity" />
-        <activity android:name=".view.home.WebActivity"></activity>
+        <activity android:name=".view.home.WebActivity" />
+        <activity android:name=".view.activity.AboutActivity"></activity>
     </application>
 
 </manifest>

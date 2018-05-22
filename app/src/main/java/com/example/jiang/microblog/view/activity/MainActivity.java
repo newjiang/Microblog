@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.main;
+package com.example.jiang.microblog.view.activity;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
@@ -54,6 +53,7 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.crud.DataSupport;
 
@@ -122,6 +122,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startService(new Intent(MainActivity.this, PollingService.class)); // 启动定时任务
@@ -411,21 +412,25 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         } else if (id == R.id.nav_favorite) {
             startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
         } else if (id == R.id.nav_about) {
-            Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
         } else if (id == R.id.nav_skin) {
             startActivity(new Intent(MainActivity.this, SkinActivity.class));
         } else if (id == R.id.nav_setting) {
             startActivity(new Intent(this, SettingActivity.class));
-        } else if (id == R.id.nav_switch_account) {//　切换账号
+        } else if (id == R.id.nav_switch_account) {
+            //TODO　切换账号
             AccessTokenKeeper.clear(MainActivity.this);
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, true));
-        } else if (id == R.id.nav_quit) {//　退出
+        } else if (id == R.id.nav_quit) {
+            //TODO　退出
             startActivity(new Intent(MainActivity.this, GoodbyeActivity.class).putExtra(IntentKey.SWITCH_ACCOUNT, false));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -440,7 +445,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // 按下back键时，不退出，返回桌面
+            //TODO 按下back键时，不退出，返回桌面
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             home.addCategory(Intent.CATEGORY_HOME);

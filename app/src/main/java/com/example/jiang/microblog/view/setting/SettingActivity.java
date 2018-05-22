@@ -17,6 +17,7 @@ import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.crud.DataSupport;
 
@@ -36,6 +37,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private Setting setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ActionBar actionBar = getSupportActionBar();
@@ -199,5 +201,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             return ring.substring(start, end);
         }
         return ring;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SkinManager.getInstance().unregister(this);
     }
 }

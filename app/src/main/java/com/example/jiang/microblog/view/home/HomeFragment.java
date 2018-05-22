@@ -17,7 +17,7 @@ import com.example.jiang.microblog.mvp.contract.MicroblogContract;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
-import com.example.jiang.microblog.view.main.MainActivity;
+import com.example.jiang.microblog.view.activity.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
