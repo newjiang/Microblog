@@ -17,7 +17,6 @@
             android:padding="10dp"
             android:gravity="top|left"
             android:hint="说点什么..."
-            android:textColor="#AAAAAA"
             android:background="@null"/>
         <TextView
             android:id="@+id/char_count"
@@ -34,77 +33,72 @@
         android:columnWidth="66dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:layout_weight="1"/>
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/video_frame"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="200dp"
+        android:visibility="gone">
+        <com.example.jiang.microblog.widget.VideoPlayerView
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+        </com.example.jiang.microblog.widget.VideoPlayerView>
+        <ImageView
+            android:id="@+id/delete_video"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/dynamic_del_focused"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_gravity="bottom">
         <ImageView
             android:id="@+id/take_video"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_videocam_black"
-            android:layout_centerVertical="true"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_videocam_black"/>
         <ImageView
             android:id="@+id/take_photo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/take_video"
-            android:src="@drawable/ic_camera_black"
-            android:layout_centerVertical="true"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_camera_black"/>
         <ImageView
             android:id="@+id/select_gallery"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/take_photo"
-            android:src="@drawable/ic_menu_gallery"
-            android:layout_centerVertical="true"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_menu_gallery"/>
         <ImageView
             android:id="@+id/at_friend"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/select_gallery"
-            android:layout_centerVertical="true"
-            android:padding="2dp"
-            android:src="@drawable/ic_at"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_at"/>
         <ImageView
             android:id="@+id/topic"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/at_friend"
-            android:layout_centerVertical="true"
-            android:padding="2dp"
-            android:src="@drawable/ic_topic"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_topic"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+        </TextView>
         <ImageView
             android:id="@+id/share_weibo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_send"
-            android:tint="#cc393939"
-            android:tintMode="multiply"/>
-    </RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_send"/>
+    </LinearLayout>
 </LinearLayout>

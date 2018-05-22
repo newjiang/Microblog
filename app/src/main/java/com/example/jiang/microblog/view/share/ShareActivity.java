@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.view.activity.MainActivity;
 import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
 import com.example.jiang.microblog.view.share.at.AtActivity;
+import com.example.jiang.microblog.widget.VideoPlayerView;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.MultiImageObject;
@@ -88,6 +90,10 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     private ImageView atFrient;
     private ImageView topic;
     private ImageView shareWeibo;
+
+    private FrameLayout frameLayout;
+    private VideoPlayerView playerView;
+    private ImageView deleteVideo;
 
     private GridView gridView;
     private GridViewImageAdapter adapter;
@@ -143,13 +149,25 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         topic = (ImageView) findViewById(R.id.topic);
         shareWeibo = (ImageView) findViewById(share_weibo);
 
+        frameLayout = (FrameLayout) findViewById(R.id.video_frame);
+        playerView = (VideoPlayerView) findViewById(R.id.video_player);
+        deleteVideo = (ImageView) findViewById(R.id.delete_video);
+
         takeVideo.setOnClickListener(this);
         takePhoto.setOnClickListener(this);
         takeGallery.setOnClickListener(this);
         atFrient.setOnClickListener(this);
         topic.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
-
+        deleteVideo.setOnClickListener(this);
+        adapter.setOnDeleteListener(new GridViewImageAdapter.onDeleteListener() {
+            @Override
+            public void onDeleteListener(int position) {
+                if (pictures.size() < 1) {
+                    gridView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -195,6 +213,11 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                 String text = String.valueOf(editText.getText());
                 shareWeiboByH5(text,pictures,videoPath);
                 break;
+            case R.id.delete_video:
+                frameLayout.setVisibility(View.GONE);
+                playerView.onStatePause();
+                videoPath = null;
+                break;
         }
     }
 
@@ -206,6 +229,9 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                     String path = data.getStringExtra(IntentKey.VIDEO_PATH);
                     videoPath = path;
                     Log.e("视频路径：", videoPath);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    playerView.setUp(videoPath, VideoPlayerView.SCREEN_WINDOW_FULLSCREEN, "");
+                    playerView.startVideo();
                 }
                 break;
             case TAKE_CAMERA:
@@ -315,6 +341,9 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         Map<String, Object> map = new HashMap<>();
         map.put("path", path);
         pictures.add(map);
+        if (pictures.size() > 0) {
+            gridView.setVisibility(View.VISIBLE);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -437,7 +466,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             weiboMessage.multiImageObject = getMultiImageObject(pictures);
         }
         if (videoPath != null || !videoPath.equals("")) {
-            Log.e("videoPath", "111111111");
             weiboMessage.videoSourceObject = getVideoObject(videoPath);
         }
         shareHandler.shareMessage(weiboMessage, false);
@@ -503,15 +531,8 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private VideoSourceObject getVideoObject(String videoPath) {
-        Log.e("videoPath", "2222222222");
         VideoSourceObject videoSourceObject = new VideoSourceObject();
         videoSourceObject.videoPath = Uri.fromFile(new File(videoPath));
-        File file = new File(videoPath);
-        if (file.exists()) {
-            Log.e("videoPath", videoSourceObject.videoPath.toString());
-        } else {
-            Log.e("videoPath", "NNNNNNNNNNN");
-        }
         return videoSourceObject;
     }
 

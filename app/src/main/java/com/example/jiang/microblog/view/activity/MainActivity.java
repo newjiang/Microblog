@@ -170,7 +170,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
      * 初始化控件
      */
     private void initViews() {
-        composeMicroblog = (CircleImageView) findViewById(R.id.home_share_microblog);
+        composeMicroblog = (CircleImageView) findViewById(R.id.share_microblog);
         homeSearch = (ImageView) findViewById(R.id.home_search);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         viewPager = (ViewPager) findViewById(R.id.home_view_pager);
@@ -271,7 +271,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
                 overridePendingTransition(R.anim.right_in, R.anim.reft_out);
                 break;
-            case R.id.home_share_microblog:
+            case R.id.share_microblog:
                 boolean isInstall = WbSdk.isWbInstall(MainActivity.this);
                 if (isInstall) {
                     List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);

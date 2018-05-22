@@ -95,6 +95,9 @@ public class GridViewImageAdapter extends BaseAdapter {
                         file.delete();
                     }
                     datas.remove(position);
+                    if (onDeleteListener != null) {
+                        onDeleteListener.onDeleteListener(position);
+                    }
                     notifyDataSetChanged();
                 }
             });
@@ -108,5 +111,15 @@ public class GridViewImageAdapter extends BaseAdapter {
     public void notifyDataSetChanged(List<Map<String, Object>> datas) {
         this.datas = datas;
         this.notifyDataSetChanged();
+    }
+
+    public interface onDeleteListener {
+        void onDeleteListener(int position);
+    }
+
+    private onDeleteListener onDeleteListener;
+
+    public void setOnDeleteListener(GridViewImageAdapter.onDeleteListener onDeleteListener) {
+        this.onDeleteListener = onDeleteListener;
     }
 }
