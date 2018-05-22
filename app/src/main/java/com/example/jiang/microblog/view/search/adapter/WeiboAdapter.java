@@ -33,21 +33,34 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        CircleImageView header;     // 用户头像
-        TextView username;          // 用户名字
-        TextView content;           // 微博文字内容
-        NineGridImageView picture;  // 微博配图
-        TextView time;              // 发布时间
-        TextView from;              // 来源
-        TextView like;              // 点赞数
-        TextView redirect;          // 转发数
-        TextView comment;           // 评论数
-        ImageView likeImage;        // 点赞图标
-        ImageView redirectImage;    // 转发图标
-        ImageView commentImage;     // 评论图标
-        TextView retweetedContent;  // 微博文字内容
-        NineGridImageView retweetedPicture;// 微博配图
+        // 用户头像
+        CircleImageView header;
+        // 用户名字
+        TextView username;
+        // 微博文字内容
+        TextView content;
+        // 微博配图
+        NineGridImageView picture;
+        // 发布时间
+        TextView time;
+        // 来源
+        TextView from;
+        // 点赞数
+        TextView like;
+        // 转发数
+        TextView redirect;
+        // 评论数
+        TextView comment;
+        // 点赞图标
+        ImageView likeImage;
+        // 转发图标
+        ImageView redirectImage;
+        // 评论图标
+        ImageView commentImage;
+        // 微博文字内容
+        TextView retweetedContent;
+        // 微博配图
+        NineGridImageView retweetedPicture;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -96,7 +109,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         holder.username.setText(weibos.get(position).getName());
         // 微博文字内容
         holder.content.setText(Html.fromHtml(weibos.get(position).getContent()));
-// 微博配图
+        // 微博配图
         holder.picture.setAdapter(new SearchNineImgAdapter());
         // 微博配图数据源
         holder.picture.setImagesData(weibos.get(position).getPictureList());
@@ -127,6 +140,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             // 微博配图数据源
             holder.retweetedPicture.setImagesData(weibos.get(position).getRetweetedPicture());
         }
+        weibos.get(position).getMid();
     }
 
     @Override

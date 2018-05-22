@@ -42,7 +42,6 @@ public class WeiboFragment extends BaseFragment {
     @Override
     public void initData() {
         final String key = (String) getArguments().get(IntentKey.KEY_WORD);
-        Log.e("WeiboFragment", key);
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_at"/>
+            android:src="@drawable/ic_at_silver"/>
         <ImageView
             android:id="@+id/topic"
             android:layout_width="wrap_content"
@@ -99,6 +99,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_send"/>
+            android:src="@drawable/ic_send_silver"/>
     </LinearLayout>
 </LinearLayout>
