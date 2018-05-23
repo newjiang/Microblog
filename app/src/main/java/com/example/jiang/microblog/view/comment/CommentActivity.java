@@ -6,15 +6,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.base.BaseActivity;
+import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.CommentsBean;
 import com.example.jiang.microblog.bean.Statuses;
@@ -30,7 +33,9 @@ import com.example.jiang.microblog.view.comment.fragment.DialogFragmentDataCallb
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 import com.zhy.changeskin.SkinManager;
 
 import org.jsoup.Jsoup;
@@ -47,10 +52,11 @@ public class CommentActivity extends BaseActivity implements
 
     private static final String FRAGMENT = "CommentDialogFragment";
 
-    private Oauth2AccessToken token;
-
     private CommentContract.Presenter presenter;
 
+    private WeiboPageUtils weiboPageUtils;
+    private Oauth2AccessToken token;
+    private AuthInfo mAuthInfo;
     // 用户头像
     private CircleImageView userProfile;
     // 用户名字
@@ -70,7 +76,7 @@ public class CommentActivity extends BaseActivity implements
     // 转发数
     private TextView redirect;
     // 评论数
-    private TextView comment;
+    private TextView commentText;
     // 点赞图标
     private ImageView likeImage;
     // 转发图标
@@ -102,18 +108,22 @@ public class CommentActivity extends BaseActivity implements
     private boolean isList = true;
     private ActionBar actionBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+
+        mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+        weiboPageUtils = WeiboPageUtils.getInstance(this, mAuthInfo);
         token = AccessTokenKeeper.readAccessToken(this);
+        presenter = new CommentPresenter(this);
+
         actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        presenter = new CommentPresenter(this);
 
         Intent intent = getIntent();
         String mid = intent.getStringExtra(IntentKey.MICROBLOG_MID);
@@ -131,7 +141,6 @@ public class CommentActivity extends BaseActivity implements
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("接收数据：", new Gson().toJson(object));
         if (commentsBeen.isEmpty() && isList) {
             Comment comment = (Comment) object;
             commentsBeen = comment.getComments();
@@ -225,7 +234,6 @@ public class CommentActivity extends BaseActivity implements
 
     @Override // 模拟评论
     public void sendComment(String comment, int comment_ori) {
-        Log.e("模拟评论", comment + "|" + comment_ori);
         if (currentPosition == -1) {
             //TODO 添加新评论
             try {
@@ -272,7 +280,7 @@ public class CommentActivity extends BaseActivity implements
         // 转发数
         redirect = (TextView) findViewById(R.id.reposts_count);
         // 评论数
-        comment = (TextView) findViewById(R.id.comments_count);
+        commentText = (TextView) findViewById(R.id.comments_count);
         // 点赞图标
         likeImage = (ImageView) findViewById(R.id.attitudes_count_iv);
         // 转发图标
@@ -314,7 +322,7 @@ public class CommentActivity extends BaseActivity implements
         // 转发数
         redirect.setText(String.valueOf(statuses.getReposts_count()));
         // 评论数
-        comment.setText(String.valueOf(statuses.getComments_count()));
+        commentText.setText(String.valueOf(statuses.getComments_count()));
         // 微博配图
         picture.setAdapter(new NineImageAdapter());
         // 微博配图数据源
@@ -375,12 +383,34 @@ public class CommentActivity extends BaseActivity implements
             return f;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.microblog_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.to_favourites:
+                Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.to_like:
+                Toast.makeText(this, "去点赞", Toast.LENGTH_SHORT).show();
+                weiboPageUtils.startWeiboDetailPage(statuses.getMid(), statuses.getUser().getIdstr());
+                break;
+            case R.id.to_comment:
+                Toast.makeText(this, "启动H5评论", Toast.LENGTH_SHORT).show();
+                weiboPageUtils.commentWeibo(statuses.getIdstr());
+                break;
+            case R.id.to_share:
+                Toast.makeText(this, "分享到微博", Toast.LENGTH_SHORT).show();
+                weiboPageUtils.shareToWeibo("测试测试");
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -13,7 +13,7 @@ import android.view.View;
 import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.utils.SkinTools;
 import com.example.jiang.microblog.view.activity.LoginActivity;
-import com.example.jiang.microblog.view.activity.MainActivity;
+import com.example.jiang.microblog.view.setting.SettingActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.zhy.changeskin.SkinManager;
@@ -51,7 +51,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (isLogin) {
             //TODO　进入主页
             setSkinPlugin("default");
-          intent = new Intent(WelcomeActivity.this, MainActivity.class);
+          intent = new Intent(WelcomeActivity.this, SettingActivity.class);
         } else {
             //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);

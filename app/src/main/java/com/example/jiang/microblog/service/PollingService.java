@@ -75,9 +75,8 @@ public class PollingService extends Service implements MessageContract.View {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        presenter.unread_count(token.getToken(), token.getUid());
-
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int time = 1000 * 2000;   //TODO 请求间隔时间2000秒
+        int time = 1000 * 20;   //TODO 请求间隔时间2000秒
         long triggerTime = SystemClock.elapsedRealtime() + time;
         Intent i = new Intent(this, PollingService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);

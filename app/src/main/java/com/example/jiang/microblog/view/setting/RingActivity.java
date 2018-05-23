@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ import java.util.List;
 public class RingActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
-    private TextView back;
+    private ImageView back;
     private TextView sure;
 
     private List<String> list;
@@ -51,7 +52,7 @@ public class RingActivity extends BaseActivity implements View.OnClickListener {
         list = new ArrayList<>();
         initData();
         player = new MediaPlayer();
-        back = (TextView) findViewById(R.id.back);
+        back = (ImageView) findViewById(R.id.back);
         sure = (TextView) findViewById(R.id.sure);
         back.setOnClickListener(this);
         sure.setOnClickListener(this);

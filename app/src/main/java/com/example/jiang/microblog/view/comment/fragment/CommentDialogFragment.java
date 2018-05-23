@@ -3,9 +3,11 @@ package com.example.jiang.microblog.view.comment.fragment;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
@@ -16,9 +18,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.TextColorTools;
+import com.example.jiang.microblog.view.share.at.AtActivity;
+
+import static android.app.Activity.RESULT_OK;
+import static com.example.jiang.microblog.view.share.ShareActivity.AT_FRIENDS;
 
 /**
  * Created by jiang on 2018/4/16.
@@ -137,10 +144,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_ic_at:
-                Toast.makeText(getActivity(), "点击了图片", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.is_retweeted:
-                Toast.makeText(getActivity(), "点击了@", Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(getActivity(), AtActivity.class), AT_FRIENDS);
                 break;
             case R.id.image_comment_send:
                 int comment_ori;
@@ -153,6 +157,21 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
                 dataCallback.sendComment(commentText.getText().toString(), comment_ori);
                 commentText.setText("");
                 dismiss();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case AT_FRIENDS:
+                if (resultCode == RESULT_OK) {
+                    String friends = data.getStringExtra(IntentKey.AT_FRIEND);
+                    SpannableStringBuilder highlight = TextColorTools.highlight(commentText.getText() + friends, friends);
+                    commentText.setText(highlight);
+                }
                 break;
             default:
                 break;

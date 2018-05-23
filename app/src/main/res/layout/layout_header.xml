@@ -8,5 +8,5 @@
         android:id="@+id/at_header"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/logo"/>
+        android:src="@mipmap/logo"/>
 </LinearLayout>

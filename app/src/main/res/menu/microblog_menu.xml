@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/to_favourites"
+        android:orderInCategory="100"
+        android:title="收藏"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/to_like"
+        android:orderInCategory="100"
+        android:title="去点赞"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/to_comment"
+        android:orderInCategory="100"
+        android:title="去评论"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/to_share"
+        android:orderInCategory="100"
+        android:title="分享到微博"
+        app:showAsAction="never" />
+</menu>
