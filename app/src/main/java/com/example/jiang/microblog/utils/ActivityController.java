@@ -1,7 +1,6 @@
 package com.example.jiang.microblog.utils;
 
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.jiang.microblog.bean.Setting;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -26,12 +25,15 @@ public class ActivityController {
      * @param activity
      */
     public static void add(AppCompatActivity activity) {
+
         activities.add(activity);
+
         Oauth2AccessToken token = AccessTokenKeeper.readAccessToken(activity);
+
         List<Setting> settings = DataSupport.where("uid = ?", token.getUid()).find(Setting.class);
-        Log.e("设置设置设置", settings.toString());
+
         if (settings.isEmpty()) {
-            SkinTools.setStatusBarColor(activity, 0xff00aff);
+            SkinTools.setStatusBarColor(activity, SkinTools.DEFAULT);
         } else {
             String fuffix = settings.get(0).getSkinFuffix();
             if ("default".equals(fuffix)) {
@@ -45,6 +47,7 @@ public class ActivityController {
 
     /**
      * 移除Activity
+     *
      * @param activity
      */
     public static void remove(AppCompatActivity activity) {
@@ -54,7 +57,7 @@ public class ActivityController {
     /**
      * 移除全部Activity
      */
-    public static void finishAll(){
+    public static void finishAll() {
         for (AppCompatActivity activity : activities) {
             if (!activity.isFinishing()) {
                 activity.finish();

@@ -116,7 +116,11 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
     private void initTab() {
         navList = new ArrayList<>();
         navList.add("关于");
-        navList.add("微博(" + userBean.getStatuses_count() + ")");
+        if (userBean == null) {
+            navList.add("微博");
+        } else {
+            navList.add("微博(" + userBean.getStatuses_count() + ")");
+        }
         navList.add("相册");
         // 添加fragment
         fragmentList = new ArrayList<>();
@@ -167,20 +171,22 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
      * 初始化数据
      */
     private void initData() {
-        coll.setTitle(userBean.getName());
-        coll.setExpandedTitleGravity(Gravity.CENTER_VERTICAL);
-        Glide.with(this).load(userBean.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
-        Glide.with(this).load(userBean.getCover_image_phone()).into(background);
-        friends_count.setText("关注(" + userBean.getFriends_count() + ")");
-        followers_count.setText("粉丝(" + userBean.getFollowers_count() + ")");
-        favourites_count.setText("收藏(" + userBean.getFavourites_count() + ")");
-        description.setText(userBean.getDescription());
-        if (userBean.getGender().equals(MALE)) {
-            Glide.with(ProfileActivity.this).load(R.drawable.icon_male).into(gender);
-        } else if (userBean.getGender().equals(FEMALE)) {
-            Glide.with(ProfileActivity.this).load(R.drawable.icon_female).into(gender);
-        } else {
-            Glide.with(ProfileActivity.this).load(R.drawable.icon_gender).into(gender);
+        if (userBean != null) {
+            coll.setTitle(userBean.getName());
+            coll.setExpandedTitleGravity(Gravity.CENTER_VERTICAL);
+            Glide.with(this).load(userBean.getAvatar_large()).transform(new GlideRoundTransform(this, 50)).into(fab);
+            Glide.with(this).load(userBean.getCover_image_phone()).into(background);
+            friends_count.setText("关注(" + userBean.getFriends_count() + ")");
+            followers_count.setText("粉丝(" + userBean.getFollowers_count() + ")");
+            favourites_count.setText("收藏(" + userBean.getFavourites_count() + ")");
+            description.setText(userBean.getDescription());
+            if (userBean.getGender().equals(MALE)) {
+                Glide.with(ProfileActivity.this).load(R.drawable.icon_male).into(gender);
+            } else if (userBean.getGender().equals(FEMALE)) {
+                Glide.with(ProfileActivity.this).load(R.drawable.icon_female).into(gender);
+            } else {
+                Glide.with(ProfileActivity.this).load(R.drawable.icon_gender).into(gender);
+            }
         }
     }
 

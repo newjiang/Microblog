@@ -15,6 +15,7 @@ public interface CommentContract {
 
         /**
          * 获取微博评论列表
+         *
          * @param access_token
          * @param id
          * @param page
@@ -24,7 +25,8 @@ public interface CommentContract {
 
         /**
          * 获取@用户的微博列表
-          * @param access_token
+         *
+         * @param access_token
          * @param page
          * @return
          */
@@ -32,6 +34,7 @@ public interface CommentContract {
 
         /**
          * 获取@用户的评论列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -40,6 +43,7 @@ public interface CommentContract {
 
         /**
          * 用户收到的评论列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -48,6 +52,7 @@ public interface CommentContract {
 
         /**
          * 用户发出的评论列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -56,6 +61,7 @@ public interface CommentContract {
 
         /**
          * 对一条微博进行评论
+         *
          * @param access_token
          * @param comment
          * @param id
@@ -66,6 +72,7 @@ public interface CommentContract {
 
         /**
          * 回复一条评论
+         *
          * @param access_token
          * @param cid
          * @param id
@@ -79,6 +86,7 @@ public interface CommentContract {
 
         /**
          * 删除一条评论
+         *
          * @param access_token
          * @param cid
          * @return
@@ -89,12 +97,14 @@ public interface CommentContract {
     interface View {
         /**
          * 请求成功
+         *
          * @param object
          */
         void onSuccess(Object object);
 
         /**
          * 请求错误
+         *
          * @param result
          */
         void onError(String result);
@@ -104,6 +114,7 @@ public interface CommentContract {
 
         /**
          * 获取微博评论列表
+         *
          * @param access_token
          * @param id
          * @param page
@@ -113,6 +124,7 @@ public interface CommentContract {
 
         /**
          * 获取@用户的微博列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -121,6 +133,7 @@ public interface CommentContract {
 
         /**
          * 获取@用户的评论列表
+         *
          * @param access_token
          * @param page
          */
@@ -128,6 +141,7 @@ public interface CommentContract {
 
         /**
          * 用户收到的评论列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -136,6 +150,7 @@ public interface CommentContract {
 
         /**
          * 用户发出的评论列表
+         *
          * @param access_token
          * @param page
          * @return
@@ -143,6 +158,7 @@ public interface CommentContract {
         void byMeComment(String access_token, int page);
         /**
          * 对一条微博进行评论
+         *
          * @param access_token
          * @param comment
          * @param id
@@ -153,6 +169,7 @@ public interface CommentContract {
 
         /**
          * 回复一条评论
+         *
          * @param access_token
          * @param cid
          * @param id
@@ -166,6 +183,7 @@ public interface CommentContract {
 
         /**
          * 删除一条评论
+         *
          * @param access_token
          * @param cid
          * @return

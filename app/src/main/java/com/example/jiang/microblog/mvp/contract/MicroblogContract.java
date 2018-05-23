@@ -17,6 +17,7 @@ public interface MicroblogContract {
     interface Model {
         /**
          * 获取用户及用户关注好友的微博
+         *
          * @param access_token
          * @param page
          * @return
@@ -25,6 +26,7 @@ public interface MicroblogContract {
 
         /**
          * 获取双向关注用户的最新微博
+         *
          * @param access_token
          * @param page
          * @return
@@ -33,6 +35,7 @@ public interface MicroblogContract {
 
         /**
          * 获取最新的公共微博
+         *
          * @param access_token
          * @param page
          * @return
@@ -41,6 +44,7 @@ public interface MicroblogContract {
 
         /**
          * 当前用户的微博
+         *
          * @param access_token
          * @param page
          * @param feature
@@ -52,12 +56,14 @@ public interface MicroblogContract {
     interface View {
         /**
          * 成功
+         *
          * @param object
          */
         void onSuccess(Object object);
 
         /**
          * 错误
+         *
          * @param result
          */
         void onError(String result);
@@ -66,6 +72,7 @@ public interface MicroblogContract {
     interface Presenter {
         /**
          * 获取用户及用户关注好友的微博
+         *
          * @param access_token
          * @param page
          */
@@ -73,6 +80,7 @@ public interface MicroblogContract {
 
         /**
          * 获取双向关注用户的最新微博
+         *
          * @param access_token
          * @param page
          */
@@ -80,6 +88,7 @@ public interface MicroblogContract {
 
         /**
          * 获取最新的公共微博
+         *
          * @param access_token
          * @param page
          */
@@ -87,6 +96,7 @@ public interface MicroblogContract {
 
         /**
          * 当前用户的微博
+         *
          * @param access_token
          * @param page
          * @param feature

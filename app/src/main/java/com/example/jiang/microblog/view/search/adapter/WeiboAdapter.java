@@ -1,6 +1,7 @@
 package com.example.jiang.microblog.view.search.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Weibo;
+import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.view.comment.CommentActivity;
+import com.example.jiang.microblog.view.profile.ProfileActivity;
 import com.jaeger.ninegridimageview.NineGridImageView;
 
 import java.util.List;
@@ -33,6 +37,8 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        View view;
+
         // 用户头像
         CircleImageView header;
         // 用户名字
@@ -64,34 +70,35 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             // 用户头像
-            header = (CircleImageView) itemView.findViewById(R.id.microblog_user_proflie);
+            header = (CircleImageView) view.findViewById(R.id.microblog_user_proflie);
             // 用户名字
-            username = (TextView) itemView.findViewById(R.id.microblog_remark);
+            username = (TextView) view.findViewById(R.id.microblog_remark);
             // 微博文字内容
-            content = (TextView) itemView.findViewById(R.id.microblog_content);
+            content = (TextView) view.findViewById(R.id.microblog_content);
             // 微博配图
-            picture = (NineGridImageView) itemView.findViewById(R.id.microblog_picture);
+            picture = (NineGridImageView) view.findViewById(R.id.microblog_picture);
             // 发布时间
-            time = (TextView) itemView.findViewById(R.id.microblog_time);
+            time = (TextView) view.findViewById(R.id.microblog_time);
             // 来源
-            from = (TextView) itemView.findViewById(R.id.microblog_from);
+            from = (TextView) view.findViewById(R.id.microblog_from);
             // 点赞数
-            like = (TextView) itemView.findViewById(R.id.attitudes_count);
+            like = (TextView) view.findViewById(R.id.attitudes_count);
             // 转发数
-            redirect = (TextView) itemView.findViewById(R.id.reposts_count);
+            redirect = (TextView) view.findViewById(R.id.reposts_count);
             // 评论数
-            comment = (TextView) itemView.findViewById(R.id.comments_count);
+            comment = (TextView) view.findViewById(R.id.comments_count);
             // 点赞图标
-            likeImage = (ImageView) itemView.findViewById(R.id.attitudes_count_iv);
+            likeImage = (ImageView) view.findViewById(R.id.attitudes_count_iv);
             // 转发图标
-            redirectImage = (ImageView) itemView.findViewById(R.id.reposts_count_iv);
+            redirectImage = (ImageView) view.findViewById(R.id.reposts_count_iv);
             // 评论图标
-            commentImage = (ImageView) itemView.findViewById(R.id.comments_count_iv);
+            commentImage = (ImageView) view.findViewById(R.id.comments_count_iv);
             // 转发微博文字内容
-            retweetedContent = (TextView) itemView.findViewById(R.id.retweeted_content);
+            retweetedContent = (TextView) view.findViewById(R.id.retweeted_content);
             // 转发微博配图
-            retweetedPicture = (NineGridImageView) itemView.findViewById(R.id.retweeted_picture);
+            retweetedPicture = (NineGridImageView) view.findViewById(R.id.retweeted_picture);
         }
     }
 
@@ -102,7 +109,7 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         // 用户头像
         Glide.with(context).load("http:" + weibos.get(position).getHeader()).into(holder.header);
         // 用户名字
@@ -140,7 +147,23 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             // 微博配图数据源
             holder.retweetedPicture.setImagesData(weibos.get(position).getRetweetedPicture());
         }
-        weibos.get(position).getMid();
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra(IntentKey.MICROBLOG_MID, weibos.get(position).getMid());
+                context.startActivity(intent);
+            }
+        });
+        holder.header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(IntentKey.USERNAME, weibos.get(position).getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

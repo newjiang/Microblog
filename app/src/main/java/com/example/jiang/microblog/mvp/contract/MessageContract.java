@@ -12,6 +12,7 @@ public interface MessageContract {
     interface Model {
         /**
          * 获取未读消息
+         *
          * @param access_token
          * @param uid
          * @return
@@ -21,12 +22,14 @@ public interface MessageContract {
     interface View {
         /**
          * 成功
+         *
          * @param object
          */
         void onSuccess(Object object);
 
         /**
          * 错误
+         *
          * @param result
          */
         void onError(String result);
@@ -34,6 +37,7 @@ public interface MessageContract {
     interface Presenter {
         /**
          * 获取未读消息
+         *
          * @param access_token
          * @param uid
          */

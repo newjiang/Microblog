@@ -30,7 +30,6 @@ public class RetrofitHelper {
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
 
     private static RetrofitHelper instance = null;
-    private FavoriteService favoriteService;
 
     private RetrofitHelper(Context mContext) {
         mCntext = mContext;

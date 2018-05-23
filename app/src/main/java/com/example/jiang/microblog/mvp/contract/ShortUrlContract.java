@@ -12,6 +12,7 @@ public interface ShortUrlContract {
     interface Model {
         /**
          * 获取微博评论列表
+         *
          * @param access_token
          * @param url_short
          * @return
@@ -21,12 +22,14 @@ public interface ShortUrlContract {
     interface View {
         /**
          * 成功
+         *
          * @param object
          */
         void onSuccess(Object object);
 
         /**
          * 错误
+         *
          * @param result
          */
         void onError(String result);
@@ -34,6 +37,7 @@ public interface ShortUrlContract {
     interface Presenter {
         /**
          * 获取微博评论列表
+         *
          * @param access_token
          * @param url_short
          */

@@ -18,7 +18,14 @@ public class SkinTools {
     public static final int DEFAULT = 0xff00afff;
     public static final int NIGHT = 0xff383838;
 
+    /**
+     * 设置当前的activity的actionbar和tatusBar
+     *
+     * @param activity
+     * @param statusColor
+     */
     public static void setStatusBarColor(AppCompatActivity activity, int statusColor) {
+
         Window window = activity.getWindow();
         //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -32,7 +39,13 @@ public class SkinTools {
         }
     }
 
+    /**
+     * 设置已经加载的activity的actionbar和tatusBar
+     *
+     * @param statusColor
+     */
     public static void setMoreStatusBarColor(int statusColor) {
+
         List<AppCompatActivity> activities = ActivityController.activities;
         for (AppCompatActivity activity : activities) {
             Log.e("setMoreStatusBarColor", activity.toString());

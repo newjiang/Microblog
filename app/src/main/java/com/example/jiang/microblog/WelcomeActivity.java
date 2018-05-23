@@ -7,9 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.utils.SkinTools;
 import com.example.jiang.microblog.view.activity.LoginActivity;
@@ -23,7 +23,7 @@ import org.litepal.tablemanager.Connector;
 
 import java.util.List;
 
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends AppCompatActivity {
 
     private Intent intent;
 

@@ -13,7 +13,6 @@ public class IntentKey {
     public static final String MICROBLOG_PICTURE = "microblog_picture";
     // 一条微博配图数量
     public static final String MICROBLOG_PICTURE_NUMBER = "microblog_picture_number";
-
     // 向ProfileFragment传递用户信息
     public static final String PROFILE_FRAGMENT = "profile_fragment";
     // ProfileActivity显示对应的Fragment索引
@@ -41,4 +40,8 @@ public class IntentKey {
     public static final String RETURN_RING = "return_ring";
     // 微博内容中的url
     public static final String WEIBO_URL = "weibo_url";
+    // 微博的mid
+    public static final String MICROBLOG_MID = "microblog_mid";
+
+
 }

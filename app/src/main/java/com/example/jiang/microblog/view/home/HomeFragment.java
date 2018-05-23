@@ -49,7 +49,6 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     private boolean isTypeChange = false;
     @Override
     public View initView() {
-        Log.e("HomeFragment", "HomeFragment init ...");
         token = AccessTokenKeeper.readAccessToken(context);
         presenter = new MicroblogPresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_home, null);
@@ -66,7 +65,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         activity.setListener(new MainActivity.OnTypeListener() {
             @Override
             public void onTypeListener(int type) {
-                handleTypeChange(type);
+//                handleTypeChange(type);
             }
         });
     }

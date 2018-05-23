@@ -86,12 +86,11 @@ public class CommentActivity extends BaseActivity implements
     // 评论的adapter
     private CommentAdapter adapter;
     // 该微博内容
-    private Statuses bean;
+    private Statuses statuses;
     // 转发微博文字内容
     private TextView retweetedContent;
     // 转发微博配图
     private NineGridImageView retweetedPicture;
-
 
     //TODO  该微博评论内容
     private List<CommentsBean> commentsBeen = new ArrayList<>();
@@ -101,8 +100,7 @@ public class CommentActivity extends BaseActivity implements
     private boolean isAdd = true;
     //TODO 返回的数据是否是List
     private boolean isList = true;
-
-    private CommentsBean newComment = new CommentsBean();
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,15 +108,24 @@ public class CommentActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         token = AccessTokenKeeper.readAccessToken(this);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        getUserInfo();
-        actionBar.setTitle(bean.getUser().getName());
+
         presenter = new CommentPresenter(this);
-        if (commentsBeen.isEmpty()) {
-            presenter.getComments(token.getToken(), bean.getMid(), 1);
+
+        Intent intent = getIntent();
+        String mid = intent.getStringExtra(IntentKey.MICROBLOG_MID);
+        if (mid == null || "".equals(mid)) {
+            getUserInfo();
+            if (commentsBeen.isEmpty()) {
+                presenter.getComments(token.getToken(), statuses.getMid(), 1);
+            }
+        } else {
+            if (commentsBeen.isEmpty()) {
+                presenter.getComments(token.getToken(), mid, 1);
+            }
         }
     }
 
@@ -128,6 +135,10 @@ public class CommentActivity extends BaseActivity implements
         if (commentsBeen.isEmpty() && isList) {
             Comment comment = (Comment) object;
             commentsBeen = comment.getComments();
+            if (statuses == null) {
+                statuses = comment.getStatus();
+                actionBar.setTitle(statuses.getUser().getName());
+            }
             initViews();
             initDatas();
         } else {
@@ -135,7 +146,7 @@ public class CommentActivity extends BaseActivity implements
                 if (object != null) {
                     commentsBeen.clear();
                     adapter.clear();
-                    presenter.getComments(token.getToken(), bean.getMid(), 1);
+                    presenter.getComments(token.getToken(), statuses.getMid(), 1);
                 }
             } else {
                 CommentsBean bean = null;
@@ -154,12 +165,15 @@ public class CommentActivity extends BaseActivity implements
         Log.e("CommentActivity-E", result);
     }
 
-    // 获取传递过来用户数据，减少请求次数
+    /**
+     * 获取传递过来用户数据，减少请求次数
+     */
     private void getUserInfo() {
         Intent intent = getIntent();
         String json = intent.getStringExtra(IntentKey.MICROBLOG_JSON);
         Gson gson = new Gson();
-        bean = gson.fromJson(json, Statuses.class);
+        statuses = gson.fromJson(json, Statuses.class);
+        actionBar.setTitle(statuses.getUser().getName());
     }
 
     private void initViews() {
@@ -215,7 +229,7 @@ public class CommentActivity extends BaseActivity implements
         if (currentPosition == -1) {
             //TODO 添加新评论
             try {
-                presenter.create(token.getToken(), comment, bean.getId(), comment_ori);
+                presenter.create(token.getToken(), comment, statuses.getId(), comment_ori);
                 isAdd = true;
                 isList = false;
             } catch (Exception e) {
@@ -226,7 +240,7 @@ public class CommentActivity extends BaseActivity implements
             try {
                 presenter.reply(token.getToken(),
                         commentsBeen.get(currentPosition).getId(),
-                        bean.getId(),
+                        statuses.getId(),
                         comment,
                         1, comment_ori);
                 isAdd = true;
@@ -275,38 +289,38 @@ public class CommentActivity extends BaseActivity implements
     // 初始化微博视图数据
     private void initMicroblogData() {
         // 用户头像
-        Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(userProfile);
-        if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
+        Glide.with(App.getContext()).load(statuses.getUser().getProfile_image_url()).into(userProfile);
+        if (statuses.getUser().getRemark().equals("") || statuses.getUser().getRemark() == null) {
             // 用户备注显示用户的名字
-            remark.setText(bean.getUser().getRemark());
+            remark.setText(statuses.getUser().getRemark());
             // 用户名字内容是空
-            username.setText(bean.getUser().getName());
+            username.setText(statuses.getUser().getName());
         } else {
             // 用户备注
-            remark.setText(bean.getUser().getName());
+            remark.setText(statuses.getUser().getName());
             // 用户名字
-            username.setText(bean.getUser().getRemark());
+            username.setText(statuses.getUser().getRemark());
         }
         // 微博文字内容
-        content.setText(bean.getText());
+        content.setText(statuses.getText());
         // 微博内容
-        content.setText(bean.getText());
+        content.setText(statuses.getText());
         // 发布时间
-        time.setText(getTimeFormat(bean.getCreated_at()));
+        time.setText(getTimeFormat(statuses.getCreated_at()));
         // 来源
-        from.setText(getFormFormat(bean.getSource()));
+        from.setText(getFormFormat(statuses.getSource()));
         // 点赞数
-        like.setText(String.valueOf(bean.getAttitudes_count()));
+        like.setText(String.valueOf(statuses.getAttitudes_count()));
         // 转发数
-        redirect.setText(String.valueOf(bean.getReposts_count()));
+        redirect.setText(String.valueOf(statuses.getReposts_count()));
         // 评论数
-        comment.setText(String.valueOf(bean.getComments_count()));
+        comment.setText(String.valueOf(statuses.getComments_count()));
         // 微博配图
         picture.setAdapter(new NineImageAdapter());
         // 微博配图数据源
-        picture.setImagesData(bean.getPic_urls());
+        picture.setImagesData(statuses.getPic_urls());
         // 设置转发微博配图
-        setRetweetedData(bean);
+        setRetweetedData(statuses);
     }
 
     /**

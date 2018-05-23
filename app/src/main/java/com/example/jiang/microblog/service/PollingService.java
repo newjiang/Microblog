@@ -50,7 +50,7 @@ public class PollingService extends Service implements MessageContract.View {
     private MessageReceiver receiver;
 
     public PollingService() {
-        Log.e("PollingService", "PollingService");
+
     }
 
     @Override
@@ -74,7 +74,6 @@ public class PollingService extends Service implements MessageContract.View {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("请求－－－－", token.getToken() + "|" + token.getUid());
 //        presenter.unread_count(token.getToken(), token.getUid());
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);

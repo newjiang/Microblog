@@ -36,7 +36,6 @@ public class TextColorTools {
             spannable.setSpan(span, m.start(), m.end(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-
         return spannable;
     }
 

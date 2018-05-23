@@ -13,6 +13,7 @@ public interface UserContract {
     interface Model {
         /**
          * 通过uid获取用户信息
+         *
          * @param access_token
          * @param uid
          * @return
@@ -21,6 +22,7 @@ public interface UserContract {
 
         /**
          * 通过用户名获取用户信息
+         *
          * @param access_token
          * @param screen_name
          * @return

@@ -56,7 +56,6 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
 
     @Override
     public void initData() {
-
         String screen_name = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
         if (screen_name == null || screen_name.equals("")) {
             presenter.getProfileByName(token.getToken(), screen_name);
@@ -65,17 +64,18 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
             String json = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
             Gson gson = new Gson();
             userBean = gson.fromJson(json, User.class);
-            //TODO 设置显示数据
-            name.setText(userBean.getRemark());
-            location.setText(userBean.getLocation());
-            blogUrl.setText(userBean.getUrl());
-            created_at.setText(getTimeFormat(userBean.getCreated_at()));
+            if (userBean != null) {
+                //TODO 设置显示数据
+                name.setText(userBean.getRemark());
+                location.setText(userBean.getLocation());
+                blogUrl.setText(userBean.getUrl());
+                created_at.setText(getTimeFormat(userBean.getCreated_at()));
+            }
         }
     }
 
     @Override
     public void onSuccess(Object object) {
-        relationship.setText(FOCUS_ON_EACH_OTHER);
         userBean = (User) object;
         //TODO 设置显示数据
         name.setText(userBean.getRemark());
