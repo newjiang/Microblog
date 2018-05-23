@@ -42,6 +42,4 @@ public class IntentKey {
     public static final String WEIBO_URL = "weibo_url";
     // 微博的mid
     public static final String MICROBLOG_MID = "microblog_mid";
-
-
 }

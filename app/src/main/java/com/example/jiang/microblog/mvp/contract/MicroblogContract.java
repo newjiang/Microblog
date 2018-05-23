@@ -50,7 +50,7 @@ public interface MicroblogContract {
          * @param feature
          * @return
          */
-        public Observable<Microblog> user_timeline(String access_token, int page, int feature);
+        public Observable<Microblog> user_timeline(String access_token,  int page, int feature);
     }
 
     interface View {

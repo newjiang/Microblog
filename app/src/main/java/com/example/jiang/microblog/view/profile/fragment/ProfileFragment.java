@@ -1,5 +1,6 @@
 package com.example.jiang.microblog.view.profile.fragment;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -58,7 +59,8 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
     public void initData() {
         String screen_name = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
         if (screen_name == null || screen_name.equals("")) {
-            presenter.getProfileByName(token.getToken(), screen_name);
+            User user = new Gson().fromJson(screen_name, User.class);
+            presenter.getProfileByName(token.getToken(), user.getName());
         } else {
             //TODO　获取传递过来的数据
             String json = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
@@ -66,10 +68,7 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
             userBean = gson.fromJson(json, User.class);
             if (userBean != null) {
                 //TODO 设置显示数据
-                name.setText(userBean.getRemark());
-                location.setText(userBean.getLocation());
-                blogUrl.setText(userBean.getUrl());
-                created_at.setText(getTimeFormat(userBean.getCreated_at()));
+                initInfo();
             }
         }
     }
@@ -78,15 +77,51 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
     public void onSuccess(Object object) {
         userBean = (User) object;
         //TODO 设置显示数据
-        name.setText(userBean.getRemark());
+        initInfo();
+    }
+
+    /**
+     * 设置显示数据
+     */
+    private void initInfo() {
+
         location.setText(userBean.getLocation());
-        blogUrl.setText(userBean.getUrl());
         created_at.setText(getTimeFormat(userBean.getCreated_at()));
+
+        //TODO 判断备注
+        if (userBean.getIdstr().equals(token.getUid())) {
+            name.setText(userBean.getName());
+        } else {
+            if ("".equals(userBean.getRemark()) || userBean.getRemark() == null) {
+                name.setText("无备注");
+            } else {
+                name.setText(userBean.getRemark());
+            }
+        }
+        //TODO 判断博客
+        if ("".equals(userBean.getUrl()) || userBean.getUrl() == null) {
+            blogUrl.setText("无博客");
+        } else {
+            blogUrl.setText(userBean.getUrl());
+        }
+        //TODO 判断关系
+        if (userBean.isFollow_me() && userBean.isFollowing()) {
+            relationship.setText(FOCUS_ON_EACH_OTHER);
+        } else if (userBean.isFollow_me() && !userBean.isFollowing()) {
+            relationship.setText(FOLLOWED_ME);
+        } else if (!userBean.isFollow_me() && userBean.isFollowing()) {
+            relationship.setText(FOCUSED);
+        } else {
+            relationship.setText(UNFOCUSED);
+            if (userBean.getIdstr().equals(token.getUid())) {
+                relationship.setText("你是最棒的！");
+            }
+        }
     }
 
     @Override
     public void onError(String result) {
-
+        Log.e("ProfileFragment-E", result);
     }
 
     /**

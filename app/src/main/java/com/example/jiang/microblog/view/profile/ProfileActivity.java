@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
-import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
@@ -38,12 +38,13 @@ import com.zhy.changeskin.SkinManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileActivity extends BaseActivity implements UserContract.View ,View.OnClickListener {
+public class ProfileActivity extends AppCompatActivity implements UserContract.View ,View.OnClickListener {
 
     private static final String MALE = "m";
     private static final String FEMALE = "f";
 
     private UserContract.Presenter presenter;
+    private Oauth2AccessToken token;
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
@@ -67,7 +68,7 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
 
     private User userBean;
     private int index = 0;
-    private Oauth2AccessToken token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +78,13 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
         initViews();
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new UserPresenter(this);
-        getUserInfo();
+        getData();
     }
 
     @Override
     public void onSuccess(Object object) {
         userBean = (User) object;
+        Log.e("请求-用户用户用户：", new Gson().toJson(userBean));
         initData();
         initEvents();
         initTab();
@@ -98,15 +100,15 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
         Log.e("ProfileActivity-E", result);
     }
 
-    private void getUserInfo() {
+    private void getData() {
         String json = getIntent().getStringExtra(IntentKey.USER_INFORMATION);
+        Log.e("获取-用户用户用户：", json + "");
         index = getIntent().getIntExtra(IntentKey.PROFILE_FRAGMENT_INDEX, 0);
         if (json == null || json.equals("")) {
             String username = getIntent().getStringExtra(IntentKey.USERNAME);
             presenter.getProfileByName(token.getToken(), username);
         } else {
             userBean = new Gson().fromJson(json, User.class);
-            initViews();
             initData();
             initEvents();
             initTab();
@@ -131,11 +133,12 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
         fragmentList.add(profileFragment);
         fragmentList.add(microblogFragment);
         fragmentList.add(albumFragment);
-
+        String json = new Gson().toJson(userBean);
         Bundle bundle = new Bundle();
-        bundle.putString(IntentKey.PROFILE_FRAGMENT, getIntent().getStringExtra(IntentKey.USER_INFORMATION));
+        bundle.putString(IntentKey.PROFILE_FRAGMENT, json);
         profileFragment.setArguments(bundle);
-
+        microblogFragment.setArguments(bundle);
+        albumFragment.setArguments(bundle);
         // 初始化viewpager适配器
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(viewPagerAdapter);
@@ -186,6 +189,11 @@ public class ProfileActivity extends BaseActivity implements UserContract.View ,
                 Glide.with(ProfileActivity.this).load(R.drawable.icon_female).into(gender);
             } else {
                 Glide.with(ProfileActivity.this).load(R.drawable.icon_gender).into(gender);
+            }
+            if (userBean.getIdstr().equals(token.getUid())) {
+                favourites_count.setVisibility(View.VISIBLE);
+            } else {
+                favourites_count.setVisibility(View.GONE);
             }
         }
     }

@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         initViews();
         initTabs();
         initEvents();
-        // 请求获取用户信息
+        //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
         if (user == null) {
             presenter.getProfile(token.getToken(),token.getUid());

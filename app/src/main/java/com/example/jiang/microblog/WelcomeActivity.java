@@ -51,7 +51,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (isLogin) {
             //TODO　进入主页
             setSkinPlugin("default");
-           intent = new Intent(WelcomeActivity.this, MainActivity.class);
+          intent = new Intent(WelcomeActivity.this, MainActivity.class);
         } else {
             //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);

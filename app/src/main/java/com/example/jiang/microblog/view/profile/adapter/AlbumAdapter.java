@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.profile;
+package com.example.jiang.microblog.view.profile.adapter;
 
 import android.content.Context;
 import android.content.Intent;
