@@ -23,7 +23,7 @@ public interface FavoriteService {
     Observable<Favorites> createFavorites(@Field("access_token") String access_token, @Field("id") long id);
 
     @FormUrlEncoded
-    @GET("favorites/destroy.json")
+    @POST("favorites/destroy.json")
     Observable<Favorites> destroyFavorites(@Field("access_token") String access_token, @Field("id") long id);
 
 }

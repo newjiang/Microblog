@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.GoodbyeActivity;
@@ -163,7 +164,9 @@ public class MainActivity extends BaseActivity implements UserContract.View,
 
     @Override
     public void onError(String result) {
-        Log.e("MainActivity-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(this, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

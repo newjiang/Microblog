@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,9 +15,12 @@ import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.bean.User;
+import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.mvp.presenter.FavoritePresenter;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.OnFavouritesListener;
 import com.example.jiang.microblog.view.profile.adapter.MicroblogAdapter;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -33,13 +35,14 @@ import java.util.List;
  * Created by jiang on 2018/4/14.
  */
 
-public class MicroblogFragment extends BaseFragment implements MicroblogContract.View {
+public class MicroblogFragment extends BaseFragment implements MicroblogContract.View ,FavoriteContract.View{
 
     private WeiboPageUtils weiboPageUtils;
     private Oauth2AccessToken token;
     private AuthInfo mAuthInfo;
 
     private MicroblogContract.Presenter presenter;
+    private FavoriteContract.Presenter favoritePresenter;
 
     private List<Statuses> microblogList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -47,11 +50,13 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
     private ProgressBar loadingBar;
     private TextView openView;
     private User user;
-
+    // 是否是收藏操作
+    private boolean isFavouritsOption = false;
     @Override
     public View initView() {
         token = AccessTokenKeeper.readAccessToken(context);
         presenter = new MicroblogPresenter(this, context);
+        favoritePresenter = new FavoritePresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_microblog, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         loadingBar = (ProgressBar) view.findViewById(R.id.loading_bar);
@@ -97,6 +102,10 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
 
     @Override
     public void onSuccess(Object object) {
+        if (isFavouritsOption) {
+            isFavouritsOption = false;
+            return;
+        }
         Microblog microblog = (Microblog) object;
         List<Statuses> m = microblog.getStatuses();
         // 如果是null 则表示是初始化
@@ -108,12 +117,16 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
                     initRecyclerView();
                 }
             }, 2000);
+        } else {
+            Toast.makeText(context, "收藏成功", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onError(String result) {
-        Log.e("MicroblogFragment-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initRecyclerView() {
@@ -124,6 +137,16 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         loadingBar.setVisibility(View.GONE);
+        adapter.setOnFavouritesListener(new OnFavouritesListener() {
+            @Override
+            public void onFavouritesListener(Statuses statuses, boolean isFavouritd) {
+                isFavouritsOption = true;
+                if (isFavouritd) {
+                    favoritePresenter.destroyFavorites(token.getToken(), statuses.getId());
+                } else {
+                    favoritePresenter.createFavorites(token.getToken(), statuses.getId());
+                }
+            }
+        });
     }
-
 }

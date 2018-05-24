@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
@@ -69,7 +70,6 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("onSuccess","onSuccess");
         Comment comment = (Comment) object;
         List<CommentsBean> comments = comment.getComments();
         if (commentsBeen.isEmpty()) {
@@ -80,7 +80,9 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
 
     @Override
     public void onError(String result) {
-        Log.e("onError",result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setListView() {

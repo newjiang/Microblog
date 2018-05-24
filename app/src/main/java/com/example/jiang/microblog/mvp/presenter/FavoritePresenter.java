@@ -2,6 +2,7 @@ package com.example.jiang.microblog.mvp.presenter;
 
 import android.content.Context;
 
+import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Favorites;
 import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.model.FavoriteModel;
@@ -29,6 +30,12 @@ public class FavoritePresenter implements FavoriteContract.Presenter {
      */
     public FavoritePresenter(Context context) {
         this.view = (FavoriteContract.View) context;
+        this.model = new FavoriteModel(context);
+        subscription = new CompositeSubscription();
+    }
+
+    public FavoritePresenter(BaseFragment fragment, Context context) {
+        this.view = (FavoriteContract.View) fragment;
         this.model = new FavoriteModel(context);
         subscription = new CompositeSubscription();
     }
@@ -64,11 +71,55 @@ public class FavoritePresenter implements FavoriteContract.Presenter {
 
     @Override
     public void createFavorites(String access_token, long id) {
+        subscription.add(
+                model.createFavorites(access_token, id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Favorites>() {
+                            @Override
+                            public void onCompleted() {
+                                if (favorites != null) {
+                                    view.onSuccess(favorites);
+                                }
+                            }
 
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(Favorites f) {
+                                favorites = f;
+                            }
+                        })
+        );
     }
 
     @Override
     public void destroyFavorites(String access_token, long id) {
+        subscription.add(
+                model.destroyFavorites(access_token, id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Favorites>() {
+                            @Override
+                            public void onCompleted() {
+                                if (favorites != null) {
+                                    view.onSuccess(favorites);
+                                }
+                            }
 
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(Favorites f) {
+                                favorites = f;
+                            }
+                        })
+        );
     }
 }

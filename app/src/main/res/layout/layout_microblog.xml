@@ -90,49 +90,14 @@
                app:imgGap="3dp"
                app:showStyle="fill"
                app:singleImgSize="180dp"/>
-           <!---微博底部 点赞,评论,转发-->
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_marginTop="5dp"
                android:gravity="center"
                android:layout_below="@id/retweeted_picture">
-               <!--转发数-->
-               <ImageView
-                   android:id="@+id/reposts_count_iv"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="20dp"
-                   android:src="@drawable/timeline_icon_redirect"/>
-               <TextView
-                   android:id="@+id/reposts_count"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="wrap_content"/>
-               <!--评论数-->
-               <ImageView
-                   android:id="@+id/comments_count_iv"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="20dp"
-                   android:src="@drawable/timeline_icon_comment"/>
-               <TextView
-                   android:id="@+id/comments_count"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="wrap_content"/>
-               <!--点赞数-->
-               <ImageView
-                   android:id="@+id/attitudes_count_iv"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="20dp"
-                   android:src="@drawable/timeline_icon_unlike"/>
-               <TextView
-                   android:id="@+id/attitudes_count"
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="wrap_content"/>
+               <!---微博底部 点赞,评论,转发-->
+               <include layout="@layout/layout_info_count" />
            </LinearLayout>
        </RelativeLayout>
 </LinearLayout>

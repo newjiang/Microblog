@@ -12,8 +12,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,11 +109,16 @@ public class ExampleUnitTest {
 
     @Test
     public void test7(){
-        try {
-            String s = URLEncoder.encode("http://t.cn/R3HR8dZ", "GBK");
-            System.out.println(s);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (false) {
+            return;
+        } else {
+            System.out.println("kkkkkkkk");
+        }
+        if (true) {
+            System.out.println("1222222");
+        }
+        if (true) {
+            System.out.println("1222222");
         }
     }
 

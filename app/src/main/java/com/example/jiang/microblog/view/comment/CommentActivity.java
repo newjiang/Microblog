@@ -22,7 +22,9 @@ import com.example.jiang.microblog.bean.Comment;
 import com.example.jiang.microblog.bean.CommentsBean;
 import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.mvp.contract.CommentContract;
+import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
+import com.example.jiang.microblog.mvp.presenter.FavoritePresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
@@ -48,11 +50,13 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentActivity extends BaseActivity implements
-        CommentContract.View, View.OnClickListener, DialogFragmentDataCallback {
+        CommentContract.View, View.OnClickListener, DialogFragmentDataCallback,
+        FavoriteContract.View {
 
     private static final String FRAGMENT = "CommentDialogFragment";
 
     private CommentContract.Presenter presenter;
+    private FavoriteContract.Presenter favoritePresenter;
 
     private WeiboPageUtils weiboPageUtils;
     private Oauth2AccessToken token;
@@ -83,6 +87,8 @@ public class CommentActivity extends BaseActivity implements
     private ImageView redirectImage;
     // 评论图标
     private ImageView commentImage;
+    // 收藏图标
+    private ImageView favorited;
     // 评论提示文本
     private TextView commentTextView;
     // 微博评论的RecyclerView
@@ -108,6 +114,7 @@ public class CommentActivity extends BaseActivity implements
     private boolean isList = true;
     private ActionBar actionBar;
 
+    private boolean isFavouritesOption = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +126,7 @@ public class CommentActivity extends BaseActivity implements
         weiboPageUtils = WeiboPageUtils.getInstance(this, mAuthInfo);
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new CommentPresenter(this);
+        favoritePresenter = new FavoritePresenter(this);
 
         actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -141,6 +149,12 @@ public class CommentActivity extends BaseActivity implements
 
     @Override
     public void onSuccess(Object object) {
+        // 判断是否是收藏操作，是则跳出
+        if (isFavouritesOption) {
+            isFavouritesOption = false;
+            return;
+        }
+        //判断是否是初始化
         if (commentsBeen.isEmpty() && isList) {
             Comment comment = (Comment) object;
             commentsBeen = comment.getComments();
@@ -151,6 +165,7 @@ public class CommentActivity extends BaseActivity implements
             initViews();
             initDatas();
         } else {
+            //不是初始化，判断是否是添加评论
             if (isAdd) {
                 if (object != null) {
                     commentsBeen.clear();
@@ -158,6 +173,7 @@ public class CommentActivity extends BaseActivity implements
                     presenter.getComments(token.getToken(), statuses.getMid(), 1);
                 }
             } else {
+                // 删除评论
                 CommentsBean bean = null;
                 try {
                     bean = (CommentsBean) object;
@@ -171,7 +187,9 @@ public class CommentActivity extends BaseActivity implements
 
     @Override
     public void onError(String result) {
-        Log.e("CommentActivity-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(this, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -287,6 +305,8 @@ public class CommentActivity extends BaseActivity implements
         redirectImage = (ImageView) findViewById(R.id.reposts_count_iv);
         // 评论图标
         commentImage = (ImageView) findViewById(R.id.comments_count_iv);
+        // 收藏图标
+        favorited = (ImageView) findViewById(R.id.favorited_iv);
         // 转发微博文字内容
         retweetedContent = (TextView) findViewById(R.id.retweeted_content);
         // 转发微博配图
@@ -323,12 +343,34 @@ public class CommentActivity extends BaseActivity implements
         redirect.setText(String.valueOf(statuses.getReposts_count()));
         // 评论数
         commentText.setText(String.valueOf(statuses.getComments_count()));
+        if (statuses.isFavorited()) {
+            favorited.setImageResource(R.drawable.ic_favorited);
+        } else {
+            favorited.setImageResource(R.drawable.ic_favorite_border);
+        }
         // 微博配图
         picture.setAdapter(new NineImageAdapter());
         // 微博配图数据源
         picture.setImagesData(statuses.getPic_urls());
         // 设置转发微博配图
         setRetweetedData(statuses);
+
+        favorited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFavouritesOption = true;
+                Log.e("评论收藏收藏", token.getToken() + "|" + statuses.getId());
+                if (statuses.isFavorited()) {
+                    favorited.setImageResource(R.drawable.ic_favorite_border);
+                    favoritePresenter.destroyFavorites(token.getToken(), statuses.getId());
+                    statuses.setFavorited(false);
+                } else {
+                    favorited.setImageResource(R.drawable.ic_favorited);
+                    favoritePresenter.createFavorites(token.getToken(),statuses.getId());
+                    statuses.setFavorited(true);
+                }
+            }
+        });
     }
 
     /**
@@ -396,9 +438,6 @@ public class CommentActivity extends BaseActivity implements
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.to_favourites:
-                Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.to_like:
                 Toast.makeText(this, "去点赞", Toast.LENGTH_SHORT).show();
                 weiboPageUtils.startWeiboDetailPage(statuses.getMid(), statuses.getUser().getIdstr());

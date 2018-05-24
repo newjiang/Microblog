@@ -3,7 +3,6 @@ package com.example.jiang.microblog.view.profile.fragment;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -123,7 +122,9 @@ public class AlbumFragment extends BaseFragment implements MicroblogContract.Vie
 
     @Override
     public void onError(String result) {
-        Log.e("MicroblogFragment-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

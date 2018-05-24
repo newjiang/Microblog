@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
@@ -78,7 +79,9 @@ public class ToMeFragment extends BaseFragment implements CommentContract.View {
 
     @Override
     public void onError(String result) {
-        Log.e("onError",result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setListView() {

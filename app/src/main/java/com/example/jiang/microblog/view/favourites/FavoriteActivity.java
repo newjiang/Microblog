@@ -18,6 +18,7 @@ import com.example.jiang.microblog.bean.Favorites;
 import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.presenter.FavoritePresenter;
+import com.example.jiang.microblog.utils.OnFavouritesListener;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -43,6 +44,7 @@ public class FavoriteActivity extends BaseActivity implements
     private boolean isRefreshing = false;  // 是否正在刷新
     private int page = 2;                    // 上拉操作的起始页
     private Oauth2AccessToken token;
+    private boolean isFavouritsOption = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,10 @@ public class FavoriteActivity extends BaseActivity implements
 
     @Override
     public void onSuccess(Object object) {
+        if (isFavouritsOption) {
+            isFavouritsOption = false;
+            return;
+        }
         Favorites f = (Favorites) object;
         List<Statuses> s = new ArrayList<>();
         for (int i = 0; i < f.getFavorites().size(); i++) {
@@ -116,11 +122,24 @@ public class FavoriteActivity extends BaseActivity implements
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         loadingBar.setVisibility(View.GONE);
         handlerUpPullUpdate();
+        adapter.setOnFavouritesListener(new OnFavouritesListener() {
+            @Override
+            public void onFavouritesListener(Statuses statuses, boolean isFavouritd) {
+                isFavouritsOption = true;
+                if (isFavouritd) {
+                    presenter.destroyFavorites(token.getToken(),statuses.getId());
+                } else {
+                    presenter.createFavorites(token.getToken(),statuses.getId());
+                }
+            }
+        });
     }
 
     @Override
     public void onError(String result) {
-
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(this, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //TODO 上拉刷新

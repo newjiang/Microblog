@@ -20,6 +20,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.utils.IntentKey;
+import com.example.jiang.microblog.utils.OnFavouritesListener;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
@@ -49,16 +50,20 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
 
     private Context context;
     private List<Statuses> statusesList;
+    private OnFavouritesListener onFavouritesListener;
 
     public MicroblogAdapter(Context context, List<Statuses> statusesList) {
         this.statusesList = statusesList;
         this.context = context;
     }
 
+    public void setOnFavouritesListener(OnFavouritesListener onFavouritesListener) {
+        this.onFavouritesListener = onFavouritesListener;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         View view;
-
         // 用户头像
         CircleImageView header;
         // 用户名字
@@ -85,7 +90,8 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
         ImageView redirectImage;
         // 评论图标
         ImageView commentImage;
-
+        // 收藏图标
+        ImageView favorited;
         // 微博文字内容
         TextView retweetedContent;
         // 微博配图
@@ -120,6 +126,8 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
             redirectImage = (ImageView) view.findViewById(R.id.reposts_count_iv);
             // 评论图标
             commentImage = (ImageView) view.findViewById(R.id.comments_count_iv);
+            // 收藏图标
+            favorited = (ImageView) itemView.findViewById(R.id.favorited_iv);
             // 转发微博文字内容
             retweetedContent = (TextView) view.findViewById(R.id.retweeted_content);
             // 转发微博配图
@@ -134,7 +142,7 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         Glide.with(App.getContext()).load(statusesList.get(position).getUser().getProfile_image_url()).into(holder.header);
         if (statusesList.get(position).getUser().getRemark().equals("") || statusesList.get(position).getUser().getRemark() == null) {
@@ -169,6 +177,11 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
         holder.redirect.setText(String.valueOf(statusesList.get(position).getReposts_count()));
         // 评论数
         holder.comment.setText(String.valueOf(statusesList.get(position).getComments_count()));
+        if (statusesList.get(position).isFavorited()) {
+            holder.favorited.setImageResource(R.drawable.ic_favorited);
+        } else {
+            holder.favorited.setImageResource(R.drawable.ic_favorite_border);
+        }
         // 微博配图
         holder.picture.setAdapter(new NineImageAdapter());
         // 微博配图数据源
@@ -189,10 +202,27 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
                 context.startActivity(intent);
             }
         });
+        holder.favorited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onFavouritesListener != null) {
+                    if (statusesList.get(position).isFavorited()) {
+                        holder.favorited.setImageResource(R.drawable.ic_favorite_border);
+                        onFavouritesListener.onFavouritesListener(statusesList.get(position),statusesList.get(position).isFavorited());
+                    } else {
+                        holder.favorited.setImageResource(R.drawable.ic_favorited);
+                        onFavouritesListener.onFavouritesListener(statusesList.get(position),statusesList.get(position).isFavorited());
+                    }
+                }
+            }
+        });
 
     }
 
-
+    @Override
+    public int getItemCount() {
+        return statusesList.size();
+    }
     /**
      * 微博内容是否含有url
      *
@@ -282,7 +312,6 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
         }
     }
 
-
     /**
      * 格式转化来源信息
      *
@@ -321,8 +350,4 @@ public class MicroblogAdapter extends RecyclerView.Adapter<MicroblogAdapter.View
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return statusesList.size();
-    }
 }

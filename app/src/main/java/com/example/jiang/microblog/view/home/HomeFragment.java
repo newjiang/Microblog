@@ -8,29 +8,32 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Microblog;
 import com.example.jiang.microblog.bean.Statuses;
+import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.contract.MicroblogContract;
+import com.example.jiang.microblog.mvp.presenter.FavoritePresenter;
 import com.example.jiang.microblog.mvp.presenter.MicroblogPresenter;
+import com.example.jiang.microblog.utils.OnFavouritesListener;
+import com.example.jiang.microblog.view.activity.MainActivity;
 import com.example.jiang.microblog.view.home.adapter.ListViewAdapter;
 import com.example.jiang.microblog.view.home.adapter.RecyclerViewBaseAdapter;
-import com.example.jiang.microblog.view.activity.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements MicroblogContract.View{
+public class HomeFragment extends BaseFragment implements MicroblogContract.View,FavoriteContract.View{
 
-    //安装登陆进入后不能显示微博数据的原因的App.getToken().getToken()得到的token是空，所以请求会失败
-    //其他的View也会这样。故现在获取token的方式统一改为通过对应的context获取
     private Oauth2AccessToken token;
 
     private MicroblogContract.Presenter presenter;
+    private FavoriteContract.Presenter favoritePresenter;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar loadingBar;
@@ -46,11 +49,15 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
     private int page = 2;
     // 当前显示微博类型
     private int currentType = -1;
+    // 当前显示微博类型是否变化
     private boolean isTypeChange = false;
+    // 是否是收藏操作
+    private boolean isFavouritsOption = false;
     @Override
     public View initView() {
         token = AccessTokenKeeper.readAccessToken(context);
         presenter = new MicroblogPresenter(this, context);
+        favoritePresenter = new FavoritePresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_refresh);
@@ -65,7 +72,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         activity.setListener(new MainActivity.OnTypeListener() {
             @Override
             public void onTypeListener(int type) {
-//                handleTypeChange(type);
+                handleTypeChange(type);
             }
         });
     }
@@ -109,6 +116,10 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
 
     @Override
     public void onSuccess(Object object) {
+        if (isFavouritsOption) {
+            isFavouritsOption = false;
+            return;
+        }
         Microblog microblog = (Microblog) object;
         List<Statuses> m = microblog.getStatuses();
         // 如果是null 则表示是初始化
@@ -143,13 +154,14 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
                     }, 2000);
                 }
             }
-
         }
     }
 
     @Override
     public void onError(String result) {
-        Log.e("HomeFragment-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setListView() {
@@ -161,6 +173,18 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         loadingBar.setVisibility(View.GONE);
         handlerUpPullUpdate();
+        adapter.setOnFavouritesListener(new OnFavouritesListener() {
+            @Override
+            public void onFavouritesListener(Statuses statuses, boolean isFavouritd) {
+                Log.e("收藏收藏", isFavouritd + "|" + statuses.toString());
+                isFavouritsOption = true;
+                if (isFavouritd) {
+                    favoritePresenter.destroyFavorites(token.getToken(), statuses.getId());
+                } else {
+                    favoritePresenter.createFavorites(token.getToken(), statuses.getId());
+                }
+            }
+        });
     }
 
     // 下拉刷新

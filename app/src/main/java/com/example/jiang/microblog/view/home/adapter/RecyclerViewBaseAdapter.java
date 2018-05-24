@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.example.jiang.microblog.base.App;
 import com.example.jiang.microblog.bean.Statuses;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.ListUtils;
+import com.example.jiang.microblog.utils.OnFavouritesListener;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
@@ -48,10 +50,15 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
 
     private Context context;
     protected final List<Statuses> beanList;
+    private OnFavouritesListener onFavouritesListener;
 
     public RecyclerViewBaseAdapter(Context context, List<Statuses> data) {
         this.context = context;
         this.beanList = data;
+    }
+
+    public void setOnFavouritesListener(OnFavouritesListener onFavouritesListener) {
+        this.onFavouritesListener = onFavouritesListener;
     }
 
     @Override
@@ -115,7 +122,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         ImageView redirectImage;
         // 评论图标
         ImageView commentImage;
-
+        // 收藏图标
+        ImageView favorited;
         // 微博文字内容
         TextView retweetedContent;
         // 微博配图
@@ -152,6 +160,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             redirectImage = (ImageView) itemView.findViewById(R.id.reposts_count_iv);
             // 评论图标
             commentImage = (ImageView) itemView.findViewById(R.id.comments_count_iv);
+            // 收藏图标
+            favorited = (ImageView) itemView.findViewById(R.id.favorited_iv);
             // 转发微博文字内容
             retweetedContent = (TextView) itemView.findViewById(R.id.retweeted_content);
             // 转发微博配图
@@ -168,6 +178,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                     context.startActivity(intent);
                 }
             });
+
         }
 
         /**
@@ -210,6 +221,12 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             // 评论数
             comment.setText(String.valueOf(bean.getComments_count()));
             // 微博配图
+            if (bean.isFavorited()) {
+                favorited.setImageResource(R.drawable.ic_favorited);
+            } else {
+                favorited.setImageResource(R.drawable.ic_favorite_border);
+            }
+
             picture.setAdapter(new NineImageAdapter());
             // 微博配图数据源
             picture.setImagesData(beanList.get(position).getPic_urls());
@@ -218,6 +235,24 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             setRetweetedData(bean);
             // 设置头像点击事件,根据传递用户的信息
             setHeaderOnClickListener(header, new Gson().toJson(bean.getUser()));
+
+            favorited.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onFavouritesListener != null) {
+                        Log.e("适配器收藏收藏", bean.isFavorited() + "|" + beanList.get(mPosition).toString());
+                        if (bean.isFavorited()) {
+                            favorited.setImageResource(R.drawable.ic_favorite_border);
+                            onFavouritesListener.onFavouritesListener(beanList.get(mPosition), bean.isFavorited());
+                            bean.setFavorited(false);
+                        } else {
+                            favorited.setImageResource(R.drawable.ic_favorited);
+                            onFavouritesListener.onFavouritesListener(beanList.get(mPosition), bean.isFavorited());
+                            bean.setFavorited(true);
+                        }
+                    }
+                }
+            });
         }
 
         /**
@@ -278,24 +313,28 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             }
         };
 
-        class Clickable extends ClickableSpan{
+        class Clickable extends ClickableSpan {
             private final View.OnClickListener mListener;
 
             public Clickable(View.OnClickListener listener) {
                 mListener = listener;
             }
+
             @Override
             public void onClick(View v) {
                 mListener.onClick(v);
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 ds.setColor(TextColorTools.COLOR);
             }
         }
     }
+
     /**
      * 微博内容是否含有url
+     *
      * @param text
      * @return
      */

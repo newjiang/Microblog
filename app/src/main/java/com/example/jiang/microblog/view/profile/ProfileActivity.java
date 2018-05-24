@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
@@ -84,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity implements UserContract.V
     @Override
     public void onSuccess(Object object) {
         userBean = (User) object;
-        Log.e("请求-用户用户用户：", new Gson().toJson(userBean));
         initData();
         initEvents();
         initTab();
@@ -97,7 +97,9 @@ public class ProfileActivity extends AppCompatActivity implements UserContract.V
 
     @Override
     public void onError(String result) {
-        Log.e("ProfileActivity-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(this, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void getData() {

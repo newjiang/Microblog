@@ -1,8 +1,8 @@
 package com.example.jiang.microblog.view.profile.fragment;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
@@ -121,7 +121,9 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
 
     @Override
     public void onError(String result) {
-        Log.e("ProfileFragment-E", result);
+        if ("HTTP 403 Forbidden".equals(result)) {
+            Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

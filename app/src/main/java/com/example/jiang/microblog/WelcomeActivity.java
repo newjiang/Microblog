@@ -13,7 +13,7 @@ import android.view.View;
 import com.example.jiang.microblog.bean.Setting;
 import com.example.jiang.microblog.utils.SkinTools;
 import com.example.jiang.microblog.view.activity.LoginActivity;
-import com.example.jiang.microblog.view.setting.SettingActivity;
+import com.example.jiang.microblog.view.activity.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.zhy.changeskin.SkinManager;
@@ -29,7 +29,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SkinManager.getInstance().changeSkin("");
         super.onCreate(savedInstanceState);
         //TODO 沉浸式启动欢迎界面
         if (Build.VERSION.SDK_INT >= 21) {
@@ -51,7 +50,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (isLogin) {
             //TODO　进入主页
             setSkinPlugin("default");
-          intent = new Intent(WelcomeActivity.this, SettingActivity.class);
+          intent = new Intent(WelcomeActivity.this, MainActivity.class);
         } else {
             //TODO　进入登陆页面
             intent = new Intent(WelcomeActivity.this, LoginActivity.class);
@@ -85,10 +84,5 @@ public class WelcomeActivity extends AppCompatActivity {
             values.put("skinFuffix", setting.getSkinFuffix());
             DataSupport.update(Setting.class, values, setting.getId());
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }
