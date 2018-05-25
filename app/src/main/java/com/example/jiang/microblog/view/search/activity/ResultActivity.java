@@ -54,8 +54,8 @@ public class ResultActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(2);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         navList = new ArrayList<>();
-        navList.add("用户");
         navList.add("微博");
+        navList.add("用户");
         // 添加fragment
         fragmentList = new ArrayList<>();
         AccountFragment af = new AccountFragment();
@@ -66,8 +66,8 @@ public class ResultActivity extends BaseActivity {
         af.setArguments(bundle);
         wf.setArguments(bundle);
 
-        fragmentList.add(af);
         fragmentList.add(wf);
+        fragmentList.add(af);
         // 初始化viewpager适配器
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, navList);
         viewPager.setAdapter(adapter);

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:tag="skin:main_bg:background"
     tools:context="com.example.jiang.microblog.view.share.ShareActivity">
     <FrameLayout
@@ -23,18 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end|right"
-            android:textColor="@color/orangered"
+            android:textColor="@color/colorPrimary"
             android:text="140"
             android:layout_margin="10dp"/>
     </FrameLayout>
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/photo_gridview"
-        android:numColumns="5"
-        android:columnWidth="66dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content"/>
     <FrameLayout
         android:id="@+id/video_frame"
         android:layout_width="match_parent"
@@ -42,7 +39,7 @@
         android:visibility="gone">
         <com.example.jiang.microblog.widget.VideoPlayerView
             android:id="@+id/video_player"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="200dp">
         </com.example.jiang.microblog.widget.VideoPlayerView>
         <ImageView
@@ -53,52 +50,5 @@
             android:layout_height="20dp"
             android:src="@mipmap/dynamic_del_focused"/>
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
-        <ImageView
-            android:id="@+id/take_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_videocam_black"/>
-        <ImageView
-            android:id="@+id/take_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_camera_black"/>
-        <ImageView
-            android:id="@+id/select_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_menu_gallery"/>
-        <ImageView
-            android:id="@+id/at_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_at_silver"/>
-        <ImageView
-            android:id="@+id/topic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_topic"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-        </TextView>
-        <ImageView
-            android:id="@+id/share_weibo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/ic_send_silver"/>
-    </LinearLayout>
+    <include layout="@layout/layout_item_choose" />
 </LinearLayout>

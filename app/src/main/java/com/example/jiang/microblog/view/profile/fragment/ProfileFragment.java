@@ -6,13 +6,16 @@ import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseFragment;
+import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.bean.User;
 import com.example.jiang.microblog.mvp.contract.UserContract;
 import com.example.jiang.microblog.mvp.presenter.UserPresenter;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +24,7 @@ import java.util.Date;
  * Created by jiang on 2018/4/14.
  */
 
-public class ProfileFragment extends BaseFragment implements UserContract.View {
+public class ProfileFragment extends BaseFragment implements UserContract.View, View.OnClickListener {
 
     private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
@@ -32,26 +35,36 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
 
     private User userBean;
 
+    private TextView option;
+
     private TextView relationship;
     private TextView name;
     private TextView location;
     private TextView blogUrl;
     private TextView created_at;
 
-    private UserPresenter presenter;
+    private WeiboPageUtils weiboPageUtils;
     private Oauth2AccessToken token;
+    private AuthInfo mAuthInfo;
 
+    private UserPresenter presenter;
 
     @Override
     public View initView() {
         presenter = new UserPresenter(this, context);
+
         token = AccessTokenKeeper.readAccessToken(context);
+        mAuthInfo = new AuthInfo(context, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+        weiboPageUtils = WeiboPageUtils.getInstance(context, mAuthInfo);
+
         View view = View.inflate(context, R.layout.fragment_profile, null);
+        option = (TextView) view.findViewById(R.id.option);
         relationship = (TextView) view.findViewById(R.id.relationship);
         name = (TextView) view.findViewById(R.id.name);
         location = (TextView) view.findViewById(R.id.location);
         blogUrl = (TextView) view.findViewById(R.id.blog_url);
         created_at = (TextView) view.findViewById(R.id.created_at);
+        option.setOnClickListener(this);
         return view;
     }
 
@@ -135,5 +148,15 @@ public class ProfileFragment extends BaseFragment implements UserContract.View {
     public String getTimeFormat(String time) {
         SimpleDateFormat f = new SimpleDateFormat(TIME_FORMAT);
         return f.format(new Date(time));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.option:
+                weiboPageUtils.startUserMainPage(userBean.getIdstr());
+                break;
+        }
+
     }
 }

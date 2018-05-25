@@ -5,6 +5,18 @@
     android:layout_height="wrap_content"
     android:tag="skin:main_bg:background"
     android:background="#efefef">
+
+    <TextView
+        android:id="@+id/option"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="20dp"
+        android:textColor="@color/colorPrimary"
+        android:text="更多的操作"
+        android:textSize="16sp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

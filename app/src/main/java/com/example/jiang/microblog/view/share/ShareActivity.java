@@ -18,6 +18,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -26,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ import com.example.jiang.microblog.base.Constants;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.view.activity.MainActivity;
-import com.example.jiang.microblog.view.share.adapter.GridViewImageAdapter;
+import com.example.jiang.microblog.view.share.adapter.PictureAdapter;
 import com.example.jiang.microblog.view.share.at.AtActivity;
 import com.example.jiang.microblog.widget.VideoPlayerView;
 import com.sina.weibo.sdk.WbSdk;
@@ -64,7 +65,6 @@ import top.zibin.luban.OnCompressListener;
 
 import static com.example.jiang.microblog.R.id.share_weibo;
 
-
 public class ShareActivity extends BaseActivity implements View.OnClickListener ,WbShareCallback{
 
     public static final int TAKE_RECORD = 0;
@@ -88,15 +88,14 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     private ImageView takePhoto;
     private ImageView takeGallery;
     private ImageView atFrient;
-    private ImageView topic;
     private ImageView shareWeibo;
 
     private FrameLayout frameLayout;
     private VideoPlayerView playerView;
     private ImageView deleteVideo;
 
-    private GridView gridView;
-    private GridViewImageAdapter adapter;
+    private RecyclerView recyclerView;
+    private PictureAdapter adapter;
 
     private List<Map<String, Object>> pictures = new ArrayList<>();
 
@@ -135,10 +134,10 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
-        gridView = (GridView) findViewById(R.id.photo_gridview);
-        adapter = new GridViewImageAdapter(this, pictures);
-        gridView.setAdapter(adapter);
-
+        recyclerView = (RecyclerView) findViewById(R.id.photo_gridview);
+        adapter = new PictureAdapter(this, pictures);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         editText = (EditText) findViewById(R.id.share_content);
         charCount = (TextView) findViewById(R.id.char_count);
         editText .addTextChangedListener(watcher);
@@ -146,7 +145,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         takePhoto = (ImageView) findViewById(R.id.take_photo);
         takeGallery = (ImageView) findViewById(R.id.select_gallery);
         atFrient = (ImageView) findViewById(R.id.at_friend);
-        topic = (ImageView) findViewById(R.id.topic);
         shareWeibo = (ImageView) findViewById(share_weibo);
 
         frameLayout = (FrameLayout) findViewById(R.id.video_frame);
@@ -157,14 +155,13 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         takePhoto.setOnClickListener(this);
         takeGallery.setOnClickListener(this);
         atFrient.setOnClickListener(this);
-        topic.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
         deleteVideo.setOnClickListener(this);
-        adapter.setOnDeleteListener(new GridViewImageAdapter.onDeleteListener() {
+        adapter.setOnDeleteListener(new PictureAdapter.onDeleteListener() {
             @Override
             public void onDeleteListener(int position) {
                 if (pictures.size() < 1) {
-                    gridView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
                 }
             }
         });
@@ -204,9 +201,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.at_friend:
                 startActivityForResult(new Intent(ShareActivity.this, AtActivity.class), AT_FRIENDS);
-                break;
-            case R.id.topic:
-                pageUtils.shareToWeibo("");
                 break;
             case share_weibo:
                 Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
@@ -276,6 +270,9 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
+    /**
+     * 打开相机
+     */
     private void openCamera() {
         //TODO 创建File的对象，用于存储拍照后图片的文件夹
         File dir = new File(IMAGE_DIR);
@@ -302,6 +299,9 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
         startActivityForResult(intent, TAKE_CAMERA);
     }
 
+    /**
+     * 打卡相册
+     */
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
@@ -337,12 +337,17 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                 }).launch();
     }
 
+    /**
+     * 添加显示图片
+     *
+     * @param path
+     */
     public void photoPath(String path) {
         Map<String, Object> map = new HashMap<>();
         map.put("path", path);
         pictures.add(map);
         if (pictures.size() > 0) {
-            gridView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
     }

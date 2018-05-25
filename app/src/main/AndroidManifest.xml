@@ -78,7 +78,8 @@
         <activity android:name=".view.setting.SkinActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".view.home.WebActivity" />
-        <activity android:name=".view.activity.AboutActivity"></activity>
+        <activity android:name=".view.activity.AboutActivity" />
+        <activity android:name=".view.message.ReplyActivity"></activity>
     </application>
 
 </manifest>

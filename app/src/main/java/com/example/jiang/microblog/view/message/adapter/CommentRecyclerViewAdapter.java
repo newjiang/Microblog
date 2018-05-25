@@ -1,6 +1,7 @@
 package com.example.jiang.microblog.view.message.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.CommentsBean;
+import com.example.jiang.microblog.bean.Statuses;
+import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
+import com.example.jiang.microblog.view.comment.CommentActivity;
+import com.example.jiang.microblog.view.message.ReplyActivity;
+import com.google.gson.Gson;
 
 import org.jsoup.Jsoup;
 
@@ -92,12 +98,23 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
             content = (TextView) itemView.findViewById(R.id.content);
             user = (TextView) itemView.findViewById(R.id.user);
             weiboContent = (TextView) itemView.findViewById(R.id.weibo_content);
+            // 进入微博详情页面
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, CommentActivity.class);
+                    Statuses statuses = beanList.get(mPosition).getStatus();
+                    // 通过json传递过去
+                    intent.putExtra(IntentKey.MICROBLOG_JSON, new Gson().toJson(statuses));
+                    context.startActivity(intent);
+                }
+            });
         }
 
         /**
          * 这个方法用于设置数据
          */
-        public void setData(final CommentsBean bean, int position) {
+        public void setData(final CommentsBean bean, final int position) {
             this.mPosition = position;
             Glide.with(context).load(bean.getUser().getAvatar_large()).into(header);
             if (bean.getStatus().getPic_urls() == null) {
@@ -115,8 +132,16 @@ public abstract class CommentRecyclerViewAdapter extends RecyclerView.Adapter<Re
             content.setText(bean.getText());
             user.setText(bean.getStatus().getUser().getName());
             weiboContent.setText(bean.getStatus().getText());
-        }
 
+            reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ReplyActivity.class);
+                    intent.putExtra(IntentKey.COMMENT_CONTENT, new Gson().toJson(beanList.get(position)));
+                    context.startActivity(intent);
+                }
+            });
+        }
 
         /**
          * 格式转化来源信息

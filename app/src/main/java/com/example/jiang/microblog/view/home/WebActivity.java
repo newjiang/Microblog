@@ -43,7 +43,7 @@ public class WebActivity extends BaseActivity implements ShortUrlContract.View {
         int end = text.length();
         final String url_short = text.substring(start, end).trim();
         token = AccessTokenKeeper.readAccessToken(this);
-//        presenter.expand(token.getToken(), url_short);
+        presenter.expand(token.getToken(), url_short);
     }
 
     @Override

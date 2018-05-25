@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
 
-    private Context mCntext;
+    private Context context;
 
     private Retrofit mRetrofit = null;
 
@@ -31,8 +31,8 @@ public class RetrofitHelper {
 
     private static RetrofitHelper instance = null;
 
-    private RetrofitHelper(Context mContext) {
-        mCntext = mContext;
+    private RetrofitHelper(Context context) {
+        this.context = context;
         init();
     }
 

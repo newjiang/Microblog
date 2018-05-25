@@ -136,11 +136,13 @@ public class CommentActivity extends BaseActivity implements
         Intent intent = getIntent();
         String mid = intent.getStringExtra(IntentKey.MICROBLOG_MID);
         if (mid == null || "".equals(mid)) {
+            //从主页打开
             getUserInfo();
             if (commentsBeen.isEmpty()) {
                 presenter.getComments(token.getToken(), statuses.getMid(), 1);
             }
         } else {
+            //从搜索页打开
             if (commentsBeen.isEmpty()) {
                 presenter.getComments(token.getToken(), mid, 1);
             }
@@ -250,7 +252,7 @@ public class CommentActivity extends BaseActivity implements
         return commentTextView.getText().toString();
     }
 
-    @Override // 模拟评论
+    @Override
     public void sendComment(String comment, int comment_ori) {
         if (currentPosition == -1) {
             //TODO 添加新评论
@@ -439,16 +441,13 @@ public class CommentActivity extends BaseActivity implements
                 finish();
                 return true;
             case R.id.to_like:
-                Toast.makeText(this, "去点赞", Toast.LENGTH_SHORT).show();
                 weiboPageUtils.startWeiboDetailPage(statuses.getMid(), statuses.getUser().getIdstr());
                 break;
             case R.id.to_comment:
-                Toast.makeText(this, "启动H5评论", Toast.LENGTH_SHORT).show();
                 weiboPageUtils.commentWeibo(statuses.getIdstr());
                 break;
             case R.id.to_share:
-                Toast.makeText(this, "分享到微博", Toast.LENGTH_SHORT).show();
-                weiboPageUtils.shareToWeibo("测试测试");
+                weiboPageUtils.shareToWeibo("转发微博");
                 break;
         }
         return super.onOptionsItemSelected(item);

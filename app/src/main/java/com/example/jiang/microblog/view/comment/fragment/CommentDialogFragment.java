@@ -71,9 +71,9 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
         }
 
         commentText = (EditText) mDialog.findViewById(R.id.edit_comment);
-        icAt = (ImageView) mDialog.findViewById(R.id.image_ic_at);
+        icAt = (ImageView) mDialog.findViewById(R.id.at_icon);
         isRetweeted = (CheckBox) mDialog.findViewById(R.id.is_retweeted);
-        sendCommemt = (ImageView) mDialog.findViewById(R.id.image_comment_send);
+        sendCommemt = (ImageView) mDialog.findViewById(R.id.send_icon);
 
         fillEditText();
         setSoftKeyboard();
@@ -143,10 +143,10 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_ic_at:
+            case R.id.at_icon:
                 startActivityForResult(new Intent(getActivity(), AtActivity.class), AT_FRIENDS);
                 break;
-            case R.id.image_comment_send:
+            case R.id.send_icon:
                 int comment_ori;
                 boolean checked = isRetweeted.isChecked();
                 if (checked) {

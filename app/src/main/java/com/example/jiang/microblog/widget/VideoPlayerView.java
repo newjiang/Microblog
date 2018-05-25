@@ -12,6 +12,7 @@ import cn.jzvd.JZVideoPlayerStandard;
  */
 
 public class VideoPlayerView extends JZVideoPlayerStandard {
+
     public VideoPlayerView(Context context) {
         super(context);
     }
