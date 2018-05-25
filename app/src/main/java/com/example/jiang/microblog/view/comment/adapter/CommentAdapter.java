@@ -85,7 +85,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     public void clear() {
-        beanList.clear();
         notifyDataSetChanged();
     }
 

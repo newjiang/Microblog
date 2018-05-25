@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:tag="skin:main_bg:background"
-    tools:context=".view.search.activity.ResultActivity">
+    tools:context=".view.discover.activity.ResultActivity">
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"

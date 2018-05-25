@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.adapter;
+package com.example.jiang.microblog.view.discover.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,9 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.History;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.activity.AllHistoryActivity;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
+import com.example.jiang.microblog.view.discover.DiscoverFragment;
+import com.example.jiang.microblog.view.discover.activity.AllHistoryActivity;
+import com.example.jiang.microblog.view.discover.activity.ResultActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -23,23 +24,28 @@ import java.util.List;
  * Created by jiang on 2018/4/26.
  */
 
-public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.ViewHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     private List<History> historys;
     private Context context;
+    DiscoverFragment discoverFragment;
 
-    public AllHistoryAdapter(Context context, List<History> historys) {
+    public HistoryAdapter(Context context, List<History> historys, DiscoverFragment discoverFragment) {
         this.historys = historys;
         this.context = context;
+        this.discoverFragment = discoverFragment;
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView content;
         ImageView clearIcon;
+        ImageView historyIcon;
         public ViewHolder(View itemView) {
             super(itemView);
             content = (TextView) itemView.findViewById(R.id.history_content);
             clearIcon = (ImageView) itemView.findViewById(R.id.clear_icon);
+            historyIcon = (ImageView) itemView.findViewById(R.id.history_icon);
         }
     }
 
@@ -52,6 +58,7 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.content.setText(historys.get(position).getHistory());
+
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +73,12 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
                 removeHistory(position);
             }
         });
+        holder.historyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, AllHistoryActivity.class));
+            }
+        });
     }
 
     @Override
@@ -73,6 +86,21 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
         return historys.size();
     }
 
+    /**
+     * 添加历史记录
+     * @param history
+     */
+        public void addHistory(History history) {
+        historys.add(0, history);
+        history.save();
+        notifyItemInserted(0);
+        if (historys.size() > 5) {
+            historys.remove(historys.size() - 1);
+        }
+        showTips();
+        notifyDataSetChanged();
+
+    }
 
     /**
      * 删除对应的历史记录
@@ -83,7 +111,12 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
         historys.remove(position);
         notifyItemRemoved(position);
         showTips();
+        List<History> all = DataSupport.findAll(History.class);
+        if (all.size() > 5) {
+            historys.add(all.get(4));
+        }
         notifyDataSetChanged();
+
     }
 
     /**
@@ -91,7 +124,6 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
      */
     public void clearHistory() {
         historys.clear();
-        DataSupport.deleteAll(History.class);
         showTips();
         notifyDataSetChanged();
     }
@@ -100,12 +132,11 @@ public class AllHistoryAdapter extends RecyclerView.Adapter<AllHistoryAdapter.Vi
      * 是否显示清除所有的历史记录
      */
     public void showTips(){
-        AllHistoryActivity activity = (AllHistoryActivity) context;
+
         if (historys.isEmpty()) {
-            activity.getClearHistory().setVisibility(View.GONE);
+            discoverFragment.getClearText().setVisibility(View.GONE);
         } else {
-            activity.getClearHistory().setVisibility(View.VISIBLE);
+            discoverFragment.getClearText().setVisibility(View.VISIBLE);
         }
     }
-
 }

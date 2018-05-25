@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.adapter;
+package com.example.jiang.microblog.view.discover.adapter;
 
 import android.content.Context;
 import android.content.Intent;

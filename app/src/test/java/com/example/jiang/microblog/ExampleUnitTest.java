@@ -109,16 +109,14 @@ public class ExampleUnitTest {
 
     @Test
     public void test7(){
-        if (false) {
-            return;
+        List<String> list = new ArrayList<>();
+        list.add("123");
+        list.add("123");
+        list.clear();
+        if (list.isEmpty()) {
+            System.out.println("00000");
         } else {
-            System.out.println("kkkkkkkk");
-        }
-        if (true) {
-            System.out.println("1222222");
-        }
-        if (true) {
-            System.out.println("1222222");
+            System.out.printf(list.toString());
         }
     }
 

@@ -41,7 +41,6 @@ import com.example.jiang.microblog.view.favourites.FavoriteActivity;
 import com.example.jiang.microblog.view.home.HomeFragment;
 import com.example.jiang.microblog.view.message.MessageFragment;
 import com.example.jiang.microblog.view.profile.ProfileActivity;
-import com.example.jiang.microblog.view.search.SearchActivity;
 import com.example.jiang.microblog.view.setting.SettingActivity;
 import com.example.jiang.microblog.view.setting.SkinActivity;
 import com.example.jiang.microblog.view.share.ShareActivity;
@@ -74,8 +73,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     private UserContract.Presenter presenter;
     //　发布微博按钮
     private CircleImageView composeMicroblog;
-    // 搜索按钮
-    private ImageView homeSearch;
     //　信息导航栏
     private NavigationView navigationView;
     //　旋转效果
@@ -145,7 +142,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
         if (user == null) {
-            presenter.getProfile(token.getToken(),token.getUid());
+            //测试
+//            presenter.getProfile(token.getToken(),token.getUid());
         }
     }
 
@@ -174,7 +172,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
      */
     private void initViews() {
         composeMicroblog = (CircleImageView) findViewById(R.id.share_microblog);
-        homeSearch = (ImageView) findViewById(R.id.home_search);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         viewPager = (ViewPager) findViewById(R.id.home_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
@@ -225,7 +222,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
      */
     private void initEvents() {
         composeMicroblog.setOnClickListener(this);
-        homeSearch.setOnClickListener(this);
         header.setOnClickListener(this);
         usernaem.setOnClickListener(this);
         description.setOnClickListener(this);
@@ -270,10 +266,6 @@ public class MainActivity extends BaseActivity implements UserContract.View,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.home_search:
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-                overridePendingTransition(R.anim.right_in, R.anim.reft_out);
-                break;
             case R.id.share_microblog:
                 boolean isInstall = WbSdk.isWbInstall(MainActivity.this);
                 if (isInstall) {
@@ -365,6 +357,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                toolbar.setTitleMargin((int) positionOffset, positionOffsetPixels, 0, 0);
             }
 
             @Override
@@ -373,22 +366,19 @@ public class MainActivity extends BaseActivity implements UserContract.View,
                     // home页面
                     toolbar.setTitle("");
                     spinner.setVisibility(View.VISIBLE);
-                    homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                     homeNotice.setVisibility(View.INVISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                 } else if (position == 1) {
                     // message页面
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle("消息");
-                    homeSearch.setVisibility(View.GONE);
                     composeMicroblog.setVisibility(View.VISIBLE);
                     messageNotice.setVisibility(View.INVISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                 } else if (position == 2) {
                     // discover页面
-                    spinner.setVisibility(View.GONE);
-                    toolbar.setTitle("热门");
-                    homeSearch.setVisibility(View.VISIBLE);
-                    composeMicroblog.setVisibility(View.GONE);
+                    toolbar.setVisibility(View.GONE);
                 }
             }
             @Override

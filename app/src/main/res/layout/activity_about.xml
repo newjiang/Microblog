@@ -12,7 +12,7 @@
     tools:context="com.example.jiang.microblog.view.activity.AboutActivity">
     <com.example.jiang.microblog.widget.PrinterView
         android:id="@+id/about"
-        android:textColor="@color/text_style_night"
+        android:textColor="@color/iconCoverDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <LinearLayout

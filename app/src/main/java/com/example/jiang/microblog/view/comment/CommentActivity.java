@@ -31,7 +31,7 @@ import com.example.jiang.microblog.view.adapter.NineImageAdapter;
 import com.example.jiang.microblog.view.adapter.RetweetedImageAdapter;
 import com.example.jiang.microblog.view.comment.adapter.CommentAdapter;
 import com.example.jiang.microblog.view.comment.fragment.CommentDialogFragment;
-import com.example.jiang.microblog.view.comment.fragment.DialogFragmentDataCallback;
+import com.example.jiang.microblog.utils.DialogFragmentDataCallback;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -139,21 +139,25 @@ public class CommentActivity extends BaseActivity implements
             //从主页打开
             getUserInfo();
             if (commentsBeen.isEmpty()) {
-                presenter.getComments(token.getToken(), statuses.getMid(), 1);
+                //测试
+//                presenter.getComments(token.getToken(), statuses.getMid(), 1);
             }
         } else {
             //从搜索页打开
             if (commentsBeen.isEmpty()) {
-                presenter.getComments(token.getToken(), mid, 1);
+                //测试
+//                presenter.getComments(token.getToken(), mid, 1);
             }
         }
     }
 
     @Override
     public void onSuccess(Object object) {
+        Log.e("标记：", "1");
         // 判断是否是收藏操作，是则跳出
         if (isFavouritesOption) {
             isFavouritesOption = false;
+            Log.e("标记：", "2");
             return;
         }
         //判断是否是初始化

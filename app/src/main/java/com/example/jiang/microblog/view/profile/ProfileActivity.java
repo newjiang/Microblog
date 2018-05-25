@@ -108,7 +108,8 @@ public class ProfileActivity extends AppCompatActivity implements UserContract.V
         index = getIntent().getIntExtra(IntentKey.PROFILE_FRAGMENT_INDEX, 0);
         if (json == null || json.equals("")) {
             String username = getIntent().getStringExtra(IntentKey.USERNAME);
-            presenter.getProfileByName(token.getToken(), username);
+            //测试
+//            presenter.getProfileByName(token.getToken(), username);
         } else {
             userBean = new Gson().fromJson(json, User.class);
             initData();

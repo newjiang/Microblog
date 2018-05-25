@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.adapter;
+package com.example.jiang.microblog.view.discover.adapter;
 
 /**
  * Created by jiang on 2018/4/21.

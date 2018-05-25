@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.activity;
+package com.example.jiang.microblog.view.discover.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.view.adapter.ViewPagerAdapter;
-import com.example.jiang.microblog.view.search.fragment.AccountFragment;
-import com.example.jiang.microblog.view.search.fragment.WeiboFragment;
+import com.example.jiang.microblog.view.discover.fragment.AccountFragment;
+import com.example.jiang.microblog.view.discover.fragment.WeiboFragment;
 import com.zhy.changeskin.SkinManager;
 
 import java.util.ArrayList;

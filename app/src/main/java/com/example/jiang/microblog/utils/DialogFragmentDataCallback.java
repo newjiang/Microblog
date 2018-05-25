@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.comment.fragment;
+package com.example.jiang.microblog.utils;
 
 /**
  * Created by jiang on 2018/4/16.

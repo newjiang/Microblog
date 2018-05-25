@@ -61,8 +61,8 @@ public class ToMeFragment extends BaseFragment implements CommentContract.View {
     @Override
     public void initData() {
         if (commentsBeen.isEmpty()) {
-            Log.e(TAG,"第一次请求");
-            presenter.toMeComment(token.getToken(), 1);
+            //测试
+//            presenter.toMeComment(token.getToken(), 1);
         }
     }
 

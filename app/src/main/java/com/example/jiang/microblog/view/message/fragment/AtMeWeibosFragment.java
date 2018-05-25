@@ -49,7 +49,6 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
 
     @Override
     public View initView() {
-        Log.e(TAG, TAG + " ...init ...");
         token = AccessTokenKeeper.readAccessToken(context);
         presenter = new CommentPresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_at_me_weibos, null);
@@ -62,10 +61,9 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
     }
     @Override
     public void initData() {
-        Log.e(TAG, TAG + " ...data...init ...");
         if (microblogList.isEmpty()) {
-            Log.e("请求", "第一次");
-            presenter.getAtMeWeibo(token.getToken(), 1);
+            //测试
+//            presenter.getAtMeWeibo(token.getToken(), 1);
         }
     }
 

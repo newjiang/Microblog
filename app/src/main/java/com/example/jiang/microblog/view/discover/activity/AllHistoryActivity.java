@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.activity;
+package com.example.jiang.microblog.view.discover.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.History;
-import com.example.jiang.microblog.view.search.adapter.AllHistoryAdapter;
+import com.example.jiang.microblog.view.discover.adapter.AllHistoryAdapter;
 import com.zhy.changeskin.SkinManager;
 
 import org.litepal.crud.DataSupport;

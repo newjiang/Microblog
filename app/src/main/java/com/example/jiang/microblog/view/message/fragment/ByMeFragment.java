@@ -61,8 +61,9 @@ public class ByMeFragment extends BaseFragment implements CommentContract.View {
     @Override
     public void initData() {
         if (commentsBeen.isEmpty()) {
-            Log.e(TAG,"第一次请求");
-            presenter.byMeComment(token.getToken(), 1);
+            Log.e(TAG, "第一次请求");
+            //测试
+//            presenter.byMeComment(token.getToken(), 1);
         }
     }
 

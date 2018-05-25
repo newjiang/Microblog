@@ -48,7 +48,6 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
 
     @Override
     public View initView() {
-        Log.e(TAG, TAG + " ...init ...");
         token = AccessTokenKeeper.readAccessToken(context);
         presenter = new CommentPresenter(this, context);
         View view = View.inflate(context, R.layout.fragment_at_me_weibos, null);
@@ -63,8 +62,8 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
     @Override
     public void initData() {
         if (commentsBeen.isEmpty()) {
-            Log.e(TAG,"第一次请求");
-            presenter.getAtMeComment(token.getToken(), 1);
+            //测试
+//            presenter.getAtMeComment(token.getToken(), 1);
         }
     }
 

@@ -34,12 +34,12 @@
         android:layout_weight="1"
         android:layout_height="20dp"
         android:src="@drawable/timeline_icon_unlike"/>
+    <!--点赞数-->
     <TextView
         android:id="@+id/attitudes_count"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"/>
-    <!--点赞数-->
     <ImageView
         android:id="@+id/favorited_iv"
         android:layout_width="0dp"

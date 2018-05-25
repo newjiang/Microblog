@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.jiang.microblog.R;
+import com.example.jiang.microblog.utils.DialogFragmentDataCallback;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TextColorTools;
 import com.example.jiang.microblog.view.share.at.AtActivity;

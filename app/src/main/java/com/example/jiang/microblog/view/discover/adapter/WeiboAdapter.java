@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.adapter;
+package com.example.jiang.microblog.view.discover.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,6 +63,8 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         ImageView redirectImage;
         // 评论图标
         ImageView commentImage;
+        // 收藏图标
+        ImageView favourites;
         // 微博文字内容
         TextView retweetedContent;
         // 微博配图
@@ -95,6 +97,9 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
             redirectImage = (ImageView) view.findViewById(R.id.reposts_count_iv);
             // 评论图标
             commentImage = (ImageView) view.findViewById(R.id.comments_count_iv);
+            // 收藏图标
+            favourites = (ImageView) view.findViewById(R.id.favorited_iv);
+            favourites.setVisibility(View.GONE);
             // 转发微博文字内容
             retweetedContent = (TextView) view.findViewById(R.id.retweeted_content);
             // 转发微博配图
@@ -125,11 +130,23 @@ public class WeiboAdapter extends RecyclerView.Adapter<WeiboAdapter.ViewHolder> 
         // 来源
         holder.from.setText(Html.fromHtml(weibos.get(position).getFrom()));
         // 点赞数
-        holder.like.setText(weibos.get(position).getLike());
+        if (weibos.get(position).getLike() == null || "".equals(weibos.get(position).getLike())) {
+            holder.like.setText("0");
+        } else {
+            holder.like.setText(weibos.get(position).getLike());
+        }
         // 转发数
-        holder.redirect.setText(weibos.get(position).getRedirect());
+        if (weibos.get(position).getRedirect() == null || "".equals(weibos.get(position).getRedirect())) {
+            holder.redirect.setText("0");
+        } else {
+            holder.redirect.setText(weibos.get(position).getRedirect());
+        }
         // 评论数
-        holder.comment.setText(weibos.get(position).getComment());
+        if (weibos.get(position).getComment() == null || "".equals(weibos.get(position).getComment())) {
+            holder.comment.setText("0");
+        } else {
+            holder.comment.setText(weibos.get(position).getComment());
+        }
         // 点赞图标
         // 转发图标
         // 评论图标

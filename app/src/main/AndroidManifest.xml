@@ -49,9 +49,9 @@
         <activity android:name=".GoodbyeActivity" />
         <activity android:name=".view.share.ShareActivity" />
         <activity android:name=".view.search.SearchActivity" />
-        <activity android:name=".view.search.activity.ResultActivity" />
-        <activity android:name=".view.search.activity.AllHistoryActivity" />
-        <activity android:name=".view.search.activity.MoreActivity" />
+        <activity android:name=".view.discover.activity.ResultActivity" />
+        <activity android:name=".view.discover.activity.AllHistoryActivity" />
+        <activity android:name=".view.discover.activity.MoreActivity" />
 
         <service
             android:name=".service.PollingService"

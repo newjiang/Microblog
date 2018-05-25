@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:tag="skin:main_bg:background"
-    tools:context="com.example.jiang.microblog.view.search.activity.MoreActivity">
+    tools:context=".view.discover.activity.MoreActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/more_recyclerview"

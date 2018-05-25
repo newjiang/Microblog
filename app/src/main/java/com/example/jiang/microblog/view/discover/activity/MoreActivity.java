@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.activity;
+package com.example.jiang.microblog.view.discover.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.base.BaseActivity;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.adapter.HotAdapter;
+import com.example.jiang.microblog.view.discover.adapter.HotAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhy.changeskin.SkinManager;
@@ -42,7 +42,7 @@ public class MoreActivity extends BaseActivity {
 
     private void initView() {
         recyclerView = (RecyclerView) findViewById(R.id.more_recyclerview);
-        adapter = new HotAdapter(MoreActivity.this, hots);
+        adapter = new HotAdapter(MoreActivity.this, hots, true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MoreActivity.this, LinearLayoutManager.VERTICAL, false));
     }

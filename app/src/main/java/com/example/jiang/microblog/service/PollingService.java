@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.jiang.microblog.R;
@@ -40,7 +39,6 @@ public class PollingService extends Service implements MessageContract.View {
     private static final int CMT = 3;            //TODO 新评论
     private static final int MENTION_STATUS = 4;//TODO 新提及我的微博数
     private static final int MENTION_CMT = 5;   //TODO 新提及我的评论数
-    private LocalBroadcastManager broadcastManager;
 
     private Oauth2AccessToken token;
     private MessagePresenter presenter;
@@ -74,9 +72,11 @@ public class PollingService extends Service implements MessageContract.View {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //测试
 //        presenter.unread_count(token.getToken(), token.getUid());
+
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int time = 1000 * 20;   //TODO 请求间隔时间2000秒
+        int time = 1000 * 2000;   //TODO 请求间隔时间2000秒
         long triggerTime = SystemClock.elapsedRealtime() + time;
         Intent i = new Intent(this, PollingService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);

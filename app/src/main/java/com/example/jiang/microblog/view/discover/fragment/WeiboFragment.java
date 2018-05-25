@@ -1,8 +1,7 @@
-package com.example.jiang.microblog.view.search.fragment;
+package com.example.jiang.microblog.view.discover.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -11,8 +10,8 @@ import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Weibo;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
-import com.example.jiang.microblog.view.search.adapter.WeiboAdapter;
+import com.example.jiang.microblog.view.discover.activity.ResultActivity;
+import com.example.jiang.microblog.view.discover.adapter.WeiboAdapter;
 
 import java.util.List;
 

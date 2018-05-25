@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteActivity extends BaseActivity implements
-        FavoriteContract.View ,View.OnLongClickListener{
+        FavoriteContract.View{
 
     private FavoriteContract.Presenter presenter;
     private RecyclerView recyclerView;
@@ -57,7 +57,6 @@ public class FavoriteActivity extends BaseActivity implements
         }
         setContentView(R.layout.activity_favorite);
         recyclerView = (RecyclerView) findViewById(R.id.favourites);
-        recyclerView.setOnLongClickListener(this);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipere_freshlayout);
         loadingBar = (ProgressBar) findViewById(R.id.progress_bar);
         // 下拉刷新
@@ -65,7 +64,8 @@ public class FavoriteActivity extends BaseActivity implements
         token = AccessTokenKeeper.readAccessToken(this);
         presenter = new FavoritePresenter(this);
         if (microblogList.isEmpty()) {
-            presenter.getFavorites(token.getToken(), 1);
+            //测试
+//            presenter.getFavorites(token.getToken(), 1);
         }
 
     }
@@ -186,12 +186,6 @@ public class FavoriteActivity extends BaseActivity implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        Toast.makeText(this, "长安", Toast.LENGTH_SHORT).show();
-        return true;
     }
 
     @Override

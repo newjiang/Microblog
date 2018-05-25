@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.fragment;
+package com.example.jiang.microblog.view.discover.fragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -11,8 +11,8 @@ import com.example.jiang.microblog.base.BaseFragment;
 import com.example.jiang.microblog.bean.Account;
 import com.example.jiang.microblog.utils.CrawlerTools;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
-import com.example.jiang.microblog.view.search.adapter.AccountAdapter;
+import com.example.jiang.microblog.view.discover.activity.ResultActivity;
+import com.example.jiang.microblog.view.discover.adapter.AccountAdapter;
 
 import java.util.List;
 

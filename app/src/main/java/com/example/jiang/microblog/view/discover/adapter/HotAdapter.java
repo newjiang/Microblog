@@ -1,4 +1,4 @@
-package com.example.jiang.microblog.view.search.adapter;
+package com.example.jiang.microblog.view.discover.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.example.jiang.microblog.R;
 import com.example.jiang.microblog.bean.Hot;
 import com.example.jiang.microblog.utils.IntentKey;
-import com.example.jiang.microblog.view.search.SearchActivity;
-import com.example.jiang.microblog.view.search.activity.MoreActivity;
-import com.example.jiang.microblog.view.search.activity.ResultActivity;
+import com.example.jiang.microblog.view.discover.activity.ResultActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -31,10 +29,12 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
 
     private Context context;
     private List<Hot> hots;
+    private boolean isShowCount;
 
-    public HotAdapter(Context context, List<Hot> hots) {
+    public HotAdapter(Context context, List<Hot> hots, boolean isShowCount) {
         this.context = context;
         this.hots = hots;
+        this.isShowCount = isShowCount;
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
@@ -79,12 +79,12 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.ViewHolder> {
             //TODO 设置透明
             holder.degree.setBackgroundColor(0x00000000);
         }
-        if (context instanceof SearchActivity) {
-            holder.count.setVisibility(View.GONE);
-        }
-        if (context instanceof MoreActivity) {
+        if (isShowCount) {
             holder.count.setText(hots.get(position).getCount());
             holder.count.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.count.setVisibility(View.GONE);
         }
     }
     @Override

@@ -73,7 +73,8 @@ public class ProfileFragment extends BaseFragment implements UserContract.View, 
         String screen_name = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
         if (screen_name == null || screen_name.equals("")) {
             User user = new Gson().fromJson(screen_name, User.class);
-            presenter.getProfileByName(token.getToken(), user.getName());
+            //测试
+//            presenter.getProfileByName(token.getToken(), user.getName());
         } else {
             //TODO　获取传递过来的数据
             String json = (String) getArguments().get(IntentKey.PROFILE_FRAGMENT);
