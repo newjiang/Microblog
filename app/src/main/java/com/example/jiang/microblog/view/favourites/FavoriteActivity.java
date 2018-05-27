@@ -65,7 +65,7 @@ public class FavoriteActivity extends BaseActivity implements
         presenter = new FavoritePresenter(this);
         if (microblogList.isEmpty()) {
             //测试
-//            presenter.getFavorites(token.getToken(), 1);
+            presenter.getFavorites(token.getToken(), 1);
         }
 
     }

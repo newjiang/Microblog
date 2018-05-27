@@ -9,7 +9,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -186,6 +185,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
          */
         public void setData(final Statuses bean, int position) {
             this.mPosition = position;
+
             // 用户头像
             Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
             if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
@@ -220,7 +220,8 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
             redirect.setText(String.valueOf(bean.getReposts_count()));
             // 评论数
             comment.setText(String.valueOf(bean.getComments_count()));
-            // 微博配图
+            // 收藏
+            //主页页面不能获取到收藏信息
             if (bean.isFavorited()) {
                 favorited.setImageResource(R.drawable.ic_favorited);
             } else {
@@ -240,15 +241,16 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
                 @Override
                 public void onClick(View v) {
                     if (onFavouritesListener != null) {
-                        Log.e("适配器收藏收藏", bean.isFavorited() + "|" + beanList.get(mPosition).toString());
                         if (bean.isFavorited()) {
+                            //已收藏
                             favorited.setImageResource(R.drawable.ic_favorite_border);
                             onFavouritesListener.onFavouritesListener(beanList.get(mPosition), bean.isFavorited());
-                            bean.setFavorited(false);
+                            beanList.get(mPosition).setFavorited(false);
                         } else {
+                            //未收藏
                             favorited.setImageResource(R.drawable.ic_favorited);
                             onFavouritesListener.onFavouritesListener(beanList.get(mPosition), bean.isFavorited());
-                            bean.setFavorited(true);
+                            beanList.get(mPosition).setFavorited(true);
                         }
                     }
                 }
@@ -261,6 +263,7 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
          * @param bean
          */
         private void setRetweetedData(Statuses bean) {
+
             if (bean.getRetweeted_status() != null) {
                 // 转发微博的内容
                 if (bean.getRetweeted_status().getUser() != null) {

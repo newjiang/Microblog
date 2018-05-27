@@ -25,13 +25,13 @@ import com.example.jiang.microblog.mvp.contract.CommentContract;
 import com.example.jiang.microblog.mvp.contract.FavoriteContract;
 import com.example.jiang.microblog.mvp.presenter.CommentPresenter;
 import com.example.jiang.microblog.mvp.presenter.FavoritePresenter;
+import com.example.jiang.microblog.utils.DialogFragmentDataCallback;
 import com.example.jiang.microblog.utils.IntentKey;
 import com.example.jiang.microblog.utils.TimeFormat;
 import com.example.jiang.microblog.view.adapter.NineImageAdapter;
 import com.example.jiang.microblog.view.adapter.RetweetedImageAdapter;
 import com.example.jiang.microblog.view.comment.adapter.CommentAdapter;
 import com.example.jiang.microblog.view.comment.fragment.CommentDialogFragment;
-import com.example.jiang.microblog.utils.DialogFragmentDataCallback;
 import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -115,6 +115,8 @@ public class CommentActivity extends BaseActivity implements
     private ActionBar actionBar;
 
     private boolean isFavouritesOption = false;
+    private boolean isRefresh = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,24 +142,22 @@ public class CommentActivity extends BaseActivity implements
             getUserInfo();
             if (commentsBeen.isEmpty()) {
                 //测试
-//                presenter.getComments(token.getToken(), statuses.getMid(), 1);
+                presenter.getComments(token.getToken(), statuses.getMid(), 1);
             }
         } else {
             //从搜索页打开
             if (commentsBeen.isEmpty()) {
                 //测试
-//                presenter.getComments(token.getToken(), mid, 1);
+                presenter.getComments(token.getToken(), mid, 1);
             }
         }
     }
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("标记：", "1");
         // 判断是否是收藏操作，是则跳出
         if (isFavouritesOption) {
             isFavouritesOption = false;
-            Log.e("标记：", "2");
             return;
         }
         //判断是否是初始化
@@ -174,13 +174,26 @@ public class CommentActivity extends BaseActivity implements
             //不是初始化，判断是否是添加评论
             if (isAdd) {
                 if (object != null) {
-                    commentsBeen.clear();
-                    adapter.clear();
-                    presenter.getComments(token.getToken(), statuses.getMid(), 1);
+                    //添加评论
+                    if (isRefresh) {
+                        //清空评论数
+                        commentsBeen.clear();
+                        adapter.clear();
+                        isRefresh = false;
+                        //请求获取第一条评论
+                        presenter.getComments(token.getToken(), statuses.getMid(), 1);
+                    } else {
+                        //获取到最新评论数据
+                        Comment comment = (Comment) object;
+                        commentsBeen.addAll(comment.getComments());
+                        //刷新显示
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             } else {
                 // 删除评论
                 CommentsBean bean = null;
+                Log.e("收到评论数据", "8");
                 try {
                     bean = (CommentsBean) object;
                 } catch (ClassCastException e) {
@@ -264,6 +277,7 @@ public class CommentActivity extends BaseActivity implements
                 presenter.create(token.getToken(), comment, statuses.getId(), comment_ori);
                 isAdd = true;
                 isList = false;
+                isRefresh = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }

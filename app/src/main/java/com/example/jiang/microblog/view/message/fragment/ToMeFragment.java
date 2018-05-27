@@ -62,13 +62,12 @@ public class ToMeFragment extends BaseFragment implements CommentContract.View {
     public void initData() {
         if (commentsBeen.isEmpty()) {
             //测试
-//            presenter.toMeComment(token.getToken(), 1);
+            presenter.toMeComment(token.getToken(), 1);
         }
     }
 
     @Override
     public void onSuccess(Object object) {
-        Log.e("onSuccess","onSuccess");
         Comment comment = (Comment) object;
         List<CommentsBean> comments = comment.getComments();
         if (commentsBeen.isEmpty()) {

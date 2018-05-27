@@ -35,23 +35,23 @@ public class ShortUrlPresenter implements ShortUrlContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<ShortUrl>() {
-                                       @Override
-                                       public void onCompleted() {
-                                           if (shortUrl != null) {
-                                               view.onSuccess(shortUrl);
-                                           }
-                                       }
+                            @Override
+                            public void onCompleted() {
+                                if (shortUrl != null) {
+                                    view.onSuccess(shortUrl);
+                                }
+                            }
 
-                                       @Override
-                                       public void onError(Throwable e) {
-                                           view.onError(e.getMessage());
-                                       }
+                            @Override
+                            public void onError(Throwable e) {
+                                view.onError(e.getMessage());
+                            }
 
-                                       @Override
-                                       public void onNext(ShortUrl url) {
-                                           shortUrl = url;
-                                       }
-                                   })
+                            @Override
+                            public void onNext(ShortUrl url) {
+                                shortUrl = url;
+                            }
+                        })
         );
     }
 }

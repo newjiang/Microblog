@@ -63,7 +63,7 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
     public void initData() {
         if (microblogList.isEmpty()) {
             //测试
-//            presenter.getAtMeWeibo(token.getToken(), 1);
+            presenter.getAtMeWeibo(token.getToken(), 1);
         }
     }
 
@@ -71,7 +71,6 @@ public class AtMeWeibosFragment extends BaseFragment implements CommentContract.
     public void onSuccess(Object object) {
         Microblog microblog = (Microblog) object;
         List<Statuses> m = microblog.getStatuses();
-        Log.e("onSuccess", m.toString());
         // 如果是null 则表示是初始化
         if (microblogList.isEmpty()) {
             microblogList = m;

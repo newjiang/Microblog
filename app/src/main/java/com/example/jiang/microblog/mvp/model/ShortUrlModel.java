@@ -21,11 +21,8 @@ public class ShortUrlModel implements ShortUrlContract.Model {
         this.shortUrlService = RetrofitHelper.getInstance(context).getShortUrlService();
     }
 
-
     @Override
     public Observable<ShortUrl> expand(String access_token, String url_short) {
-        Log.e("Model-token", access_token);
-        Log.e("Model-url", url_short);
         return shortUrlService.expand(access_token, url_short);
     }
 }

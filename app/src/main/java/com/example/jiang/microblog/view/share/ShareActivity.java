@@ -180,6 +180,15 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             case R.id.take_photo:
                 if (videoPath == null || videoPath.equals("")) {
                     if (pictures.size() < 9) {
+                        if (pictures.size() == 1) {
+                            boolean isSupport = WbSdk.supportMultiImage(this);
+                            if (isSupport) {
+                                openCamera();
+                            } else {
+                                Toast.makeText(this, "不支持多图分享", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
                         openCamera();
                     } else {
                         Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
@@ -191,6 +200,15 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             case R.id.select_gallery:
                 if (videoPath == null || videoPath.equals("")) {
                     if (pictures.size() < 9) {
+                        if (pictures.size() == 1) {
+                            boolean isSupport = WbSdk.supportMultiImage(this);
+                            if (isSupport) {
+                                openAlbum();
+                            } else {
+                                Toast.makeText(this, "不支持多图分享", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
                         openAlbum();
                     } else {
                         Toast.makeText(this, "最多分享9张图片", Toast.LENGTH_SHORT).show();
@@ -203,13 +221,16 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                 startActivityForResult(new Intent(ShareActivity.this, AtActivity.class), AT_FRIENDS);
                 break;
             case share_weibo:
-                Toast.makeText(ShareActivity.this, "share", Toast.LENGTH_SHORT).show();
                 String text = String.valueOf(editText.getText());
                 shareWeiboByH5(text,pictures,videoPath);
                 break;
             case R.id.delete_video:
                 frameLayout.setVisibility(View.GONE);
                 playerView.onStatePause();
+                File file = new File(videoPath);
+                if (file.exists()) {
+                    file.delete();
+                }
                 videoPath = null;
                 break;
         }
@@ -305,7 +326,8 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
-        startActivityForResult(intent, OPEN_ALBUM); //TODO 打开相册
+        //TODO 打开相册
+        startActivityForResult(intent, OPEN_ALBUM);
     }
 
     /**
@@ -471,6 +493,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             weiboMessage.multiImageObject = getMultiImageObject(pictures);
         }
         if (videoPath != null || !videoPath.equals("")) {
+            Log.e("视频路i纪念馆", videoPath);
             weiboMessage.videoSourceObject = getVideoObject(videoPath);
         }
         shareHandler.shareMessage(weiboMessage, false);
@@ -516,17 +539,6 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
      */
     private MultiImageObject getMultiImageObject(List<Map<String, Object>> pictures){
         MultiImageObject multiImageObject = new MultiImageObject();
-        //pathList设置的是本地本件的路径,并且是当前应用可以访问的路径，
-        // 现在不支持网络路径（多图分享依靠微博最新版本的支持，所以当分享到低版本的微博应用时，多图分享失效
-        // 可以通过WbSdk.hasSupportMultiImage 方法判断是否支持多图分享,h5分享微博暂时不支持多图）
-        // 多图分享接入程序必须有文件读写权限，否则会造成分享失败
-        boolean b = WbSdk.supportMultiImage(this);
-
-        if (b) {
-            Log.e("yyyyyy", "yyyyyy");
-        } else {
-            Log.e("nnnnnn", "nnnnnn");
-        }
 
         ArrayList<Uri> pathList = new ArrayList<Uri>();
         for (int i = 0; i < pictures.size(); i++) {

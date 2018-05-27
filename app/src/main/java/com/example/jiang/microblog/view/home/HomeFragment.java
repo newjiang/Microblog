@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -73,7 +72,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
             @Override
             public void onTypeListener(int type) {
                 //测试
-//                handleTypeChange(type);
+                handleTypeChange(type);
             }
         });
     }
@@ -140,7 +139,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
                         refreshLayout.setRefreshing(false);
                         isRefreshing = false;
                     }
-                }, 2000);
+                }, 1000);
             } else {
                 if (m.isEmpty()) {
                     loaderHolder.update(loaderHolder.LOADER_STATE_COMPLETED);
@@ -152,7 +151,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
                             loaderHolder.update(loaderHolder.LOADER_STATE_NORMAL);
                             isRefreshing = false;
                         }
-                    }, 2000);
+                    }, 1000);
                 }
             }
         }
@@ -160,6 +159,7 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
 
     @Override
     public void onError(String result) {
+        loadingBar.setVisibility(View.GONE);
         if ("HTTP 403 Forbidden".equals(result)) {
             Toast.makeText(context, "访问次数已用完", Toast.LENGTH_SHORT).show();
         }
@@ -177,11 +177,12 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         adapter.setOnFavouritesListener(new OnFavouritesListener() {
             @Override
             public void onFavouritesListener(Statuses statuses, boolean isFavouritd) {
-                Log.e("收藏收藏", isFavouritd + "|" + statuses.toString());
                 isFavouritsOption = true;
                 if (isFavouritd) {
+                    //已收藏,取消收藏
                     favoritePresenter.destroyFavorites(token.getToken(), statuses.getId());
                 } else {
+                    //未收藏，进行收藏
                     favoritePresenter.createFavorites(token.getToken(), statuses.getId());
                 }
             }

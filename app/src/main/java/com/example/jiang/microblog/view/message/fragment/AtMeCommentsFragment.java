@@ -63,7 +63,7 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
     public void initData() {
         if (commentsBeen.isEmpty()) {
             //测试
-//            presenter.getAtMeComment(token.getToken(), 1);
+            presenter.getAtMeComment(token.getToken(), 1);
         }
     }
 

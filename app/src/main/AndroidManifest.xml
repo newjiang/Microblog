@@ -79,7 +79,8 @@
         <activity android:name=".test.TestActivity" />
         <activity android:name=".view.home.WebActivity" />
         <activity android:name=".view.activity.AboutActivity" />
-        <activity android:name=".view.message.ReplyActivity"></activity>
+        <activity android:name=".view.message.ReplyActivity" />
+        <activity android:name=".test.TestActivity"></activity>
     </application>
 
 </manifest>
