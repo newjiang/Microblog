@@ -68,8 +68,7 @@ public class AlbumFragment extends BaseFragment implements MicroblogContract.Vie
         if (user != null) {
             if (user.getIdstr().equals(token.getUid())) {
                 if (picUrlsBeen.isEmpty()) {
-                    //测试
-//                    presenter.user_timeline(token.getToken(), 1, 2);
+                    presenter.user_timeline(token.getToken(), 1, 2);
                 }
             } else {
                 recyclerView.setVisibility(View.GONE);

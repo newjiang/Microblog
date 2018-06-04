@@ -72,8 +72,8 @@ public class PollingService extends Service implements MessageContract.View {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //测试
-//        presenter.unread_count(token.getToken(), token.getUid());
+
+        presenter.unread_count(token.getToken(), token.getUid());
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         int time = 1000 * 2000;   //TODO 请求间隔时间2000秒

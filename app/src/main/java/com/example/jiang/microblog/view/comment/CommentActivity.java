@@ -141,13 +141,11 @@ public class CommentActivity extends BaseActivity implements
             //从主页打开
             getUserInfo();
             if (commentsBeen.isEmpty()) {
-                //测试
                 presenter.getComments(token.getToken(), statuses.getMid(), 1);
             }
         } else {
             //从搜索页打开
             if (commentsBeen.isEmpty()) {
-                //测试
                 presenter.getComments(token.getToken(), mid, 1);
             }
         }
@@ -270,11 +268,11 @@ public class CommentActivity extends BaseActivity implements
     }
 
     @Override
-    public void sendComment(String comment, int comment_ori) {
+    public void sendComment(String comment) {
         if (currentPosition == -1) {
             //TODO 添加新评论
             try {
-                presenter.create(token.getToken(), comment, statuses.getId(), comment_ori);
+                presenter.create(token.getToken(), comment, statuses.getId());
                 isAdd = true;
                 isList = false;
                 isRefresh = true;
@@ -287,8 +285,7 @@ public class CommentActivity extends BaseActivity implements
                 presenter.reply(token.getToken(),
                         commentsBeen.get(currentPosition).getId(),
                         statuses.getId(),
-                        comment,
-                        1, comment_ori);
+                        comment);
                 isAdd = true;
                 isList = false;
             } catch (Exception e) {

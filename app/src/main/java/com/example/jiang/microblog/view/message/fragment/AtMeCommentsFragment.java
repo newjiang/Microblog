@@ -4,7 +4,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -62,7 +61,6 @@ public class AtMeCommentsFragment extends BaseFragment implements CommentContrac
     @Override
     public void initData() {
         if (commentsBeen.isEmpty()) {
-            //测试
             presenter.getAtMeComment(token.getToken(), 1);
         }
     }

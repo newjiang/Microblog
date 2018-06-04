@@ -71,7 +71,6 @@ public class HomeFragment extends BaseFragment implements MicroblogContract.View
         activity.setListener(new MainActivity.OnTypeListener() {
             @Override
             public void onTypeListener(int type) {
-                //测试
                 handleTypeChange(type);
             }
         });

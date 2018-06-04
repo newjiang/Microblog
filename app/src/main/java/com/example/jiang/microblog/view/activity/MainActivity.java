@@ -123,7 +123,8 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         SkinManager.getInstance().register(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(MainActivity.this, PollingService.class)); // 启动定时任务
+        // 启动定时任务
+        startService(new Intent(MainActivity.this, PollingService.class));
         //注册广播接收器
         messageReceiver = new MessageReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -142,8 +143,7 @@ public class MainActivity extends BaseActivity implements UserContract.View,
         //TODO 请求获取用户信息
         presenter = new UserPresenter(this);
         if (user == null) {
-            //测试
-//            presenter.getProfile(token.getToken(),token.getUid());
+            presenter.getProfile(token.getToken(),token.getUid());
         }
     }
 

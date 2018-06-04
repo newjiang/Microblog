@@ -48,13 +48,13 @@ public class CommentModel implements CommentContract.Model {
     }
 
     @Override
-    public Observable<Comment> create(String access_token, String comment, long id, int comment_ori) {
-        return commentService.create(access_token, comment, id, comment_ori);
+    public Observable<Comment> create(String access_token, String comment, long id) {
+        return commentService.create(access_token, comment, id);
     }
 
     @Override
-    public Observable<Comment> reply(String access_token, long cid, long id, String comment, int without_mention, int comment_ori) {
-        return commentService.reply(access_token, cid, id, comment, without_mention, comment_ori);
+    public Observable<Comment> reply(String access_token, long cid, long id, String comment) {
+        return commentService.reply(access_token, cid, id, comment);
     }
 
     @Override

@@ -185,19 +185,20 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
          */
         public void setData(final Statuses bean, int position) {
             this.mPosition = position;
-
-            // 用户头像
-            Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
-            if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
-                // 用户备注显示用户的名字
-                remark.setText(bean.getUser().getRemark());
-                // 用户名字内容是空
-                username.setText(bean.getUser().getName());
-            } else {
-                // 用户备注
-                remark.setText(bean.getUser().getName());
-                // 用户名字
-                username.setText(bean.getUser().getRemark());
+            if (bean.getUser() != null) {
+                // 用户头像
+                Glide.with(App.getContext()).load(bean.getUser().getProfile_image_url()).into(header);
+                if (bean.getUser().getRemark().equals("") || bean.getUser().getRemark() == null) {
+                    // 用户备注显示用户的名字
+                    remark.setText(bean.getUser().getRemark());
+                    // 用户名字内容是空
+                    username.setText(bean.getUser().getName());
+                } else {
+                    // 用户备注
+                    remark.setText(bean.getUser().getName());
+                    // 用户名字
+                    username.setText(bean.getUser().getRemark());
+                }
             }
             // 微博文字内容
             if (hasWeiboUrl(bean.getText())) {

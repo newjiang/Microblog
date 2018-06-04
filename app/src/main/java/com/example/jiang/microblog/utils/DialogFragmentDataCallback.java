@@ -20,7 +20,6 @@ public interface DialogFragmentDataCallback {
      * 发送评论内容
      *
      * @param comment
-     * @param comment_ori
      */
-    void sendComment(String comment, int comment_ori);
+    void sendComment(String comment);
 }

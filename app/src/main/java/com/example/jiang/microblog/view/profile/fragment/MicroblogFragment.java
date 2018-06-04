@@ -73,8 +73,7 @@ public class MicroblogFragment extends BaseFragment implements MicroblogContract
         if (user != null) {
             if (user.getIdstr().equals(token.getUid())) {
                 if (microblogList.isEmpty()) {
-                    //测试
-//                    presenter.user_timeline(token.getToken(), 1, 0);
+                    presenter.user_timeline(token.getToken(), 1, 0);
                 }
             } else {
                 recyclerView.setVisibility(View.GONE);

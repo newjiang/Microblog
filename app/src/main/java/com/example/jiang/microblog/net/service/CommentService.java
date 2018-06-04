@@ -36,13 +36,12 @@ public interface CommentService {
     @FormUrlEncoded
     @POST("comments/create.json")
     Observable<Comment> create(@Field("access_token") String access_token, @Field("comment") String comment,
-                               @Field("id") long id, @Field("comment_ori") int comment_ori);
+                               @Field("id") long id);
 
     @FormUrlEncoded
     @POST("comments/reply.json")
     Observable<Comment> reply(@Field("access_token") String access_token, @Field("cid") long cid,
-                              @Field("id") long id, @Field("comment") String comment,
-                              @Field("without_mention") int without_mention, @Field("comment_ori") int comment_ori);
+                              @Field("id") long id, @Field("comment") String comment);
 
     @FormUrlEncoded
     @POST("comments/destroy.json")

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jiang.microblog">
-
     <!-- 用于联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 用于获取连接WiFi状态 -->
@@ -16,7 +15,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <!--相机-->
     <uses-feature android:name="android.hardware.camera" />
     <!-- 自动对焦 -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -48,7 +47,6 @@
         <activity android:name=".view.comment.CommentActivity" />
         <activity android:name=".GoodbyeActivity" />
         <activity android:name=".view.share.ShareActivity" />
-        <activity android:name=".view.search.SearchActivity" />
         <activity android:name=".view.discover.activity.ResultActivity" />
         <activity android:name=".view.discover.activity.AllHistoryActivity" />
         <activity android:name=".view.discover.activity.MoreActivity" />
@@ -76,11 +74,9 @@
         <activity android:name=".view.setting.RingActivity" />
         <activity android:name=".view.favourites.FavoriteActivity" />
         <activity android:name=".view.setting.SkinActivity" />
-        <activity android:name=".test.TestActivity" />
         <activity android:name=".view.home.WebActivity" />
         <activity android:name=".view.activity.AboutActivity" />
         <activity android:name=".view.message.ReplyActivity" />
-        <activity android:name=".test.TestActivity"></activity>
     </application>
 
 </manifest>

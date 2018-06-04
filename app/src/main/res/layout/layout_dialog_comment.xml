@@ -27,17 +27,6 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/ic_at_silver"/>
         <TextView
-            android:id="@+id/is_retweeted_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="是否转发到微博"/>
-        <CheckBox
-            android:id="@+id/is_retweeted"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"/>
-        <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />

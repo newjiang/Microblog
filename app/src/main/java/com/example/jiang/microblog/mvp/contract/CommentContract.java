@@ -65,10 +65,9 @@ public interface CommentContract {
          * @param access_token
          * @param comment
          * @param id
-         * @param comment_ori
          * @return
          */
-        Observable<Comment> create(String access_token, String comment, long id, int comment_ori);
+        Observable<Comment> create(String access_token, String comment, long id);
 
         /**
          * 回复一条评论
@@ -77,12 +76,9 @@ public interface CommentContract {
          * @param cid
          * @param id
          * @param comment
-         * @param without_mention
-         * @param comment_ori
          * @return
          */
-        Observable<Comment> reply(String access_token, long cid, long id,
-                                  String comment, int without_mention, int comment_ori);
+        Observable<Comment> reply(String access_token, long cid, long id, String comment);
 
         /**
          * 删除一条评论
@@ -162,10 +158,9 @@ public interface CommentContract {
          * @param access_token
          * @param comment
          * @param id
-         * @param comment_ori
          * @return
          */
-        void create(String access_token, String comment, long id, int comment_ori);
+        void create(String access_token, String comment, long id);
 
         /**
          * 回复一条评论
@@ -174,12 +169,10 @@ public interface CommentContract {
          * @param cid
          * @param id
          * @param comment
-         * @param without_mention
-         * @param comment_ori
          * @return
          */
         void reply(String access_token, long cid, long id,
-                   String comment, int without_mention, int comment_ori);
+                   String comment);
 
         /**
          * 删除一条评论

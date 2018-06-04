@@ -7,10 +7,8 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.jiang.microblog.R;
@@ -32,10 +30,8 @@ public class ReplyActivity extends BaseActivity implements CommentContract.View,
     private CommentContract.Presenter presenter;
     private Oauth2AccessToken token;
 
-    private RelativeLayout linearLayout;
     private EditText comment;
     private ImageView atIcon;
-    private CheckBox isRetweeted;
     private ImageView sengIcon;
 
     private CommentsBean commentsBean;
@@ -58,11 +54,10 @@ public class ReplyActivity extends BaseActivity implements CommentContract.View,
         presenter = new CommentPresenter(this);
         token = AccessTokenKeeper.readAccessToken(this);
 
-        linearLayout = (RelativeLayout) findViewById(R.id.activity_reply);
         comment = (EditText) findViewById(R.id.comment);
         atIcon = (ImageView) findViewById(R.id.at_icon);
         sengIcon = (ImageView) findViewById(R.id.send_icon);
-        isRetweeted = (CheckBox) findViewById(R.id.is_retweeted);
+        atIcon.setOnClickListener(this);
         sengIcon.setOnClickListener(this);
     }
 
@@ -84,15 +79,9 @@ public class ReplyActivity extends BaseActivity implements CommentContract.View,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send_icon:
-                if (isRetweeted.isChecked()) {
-                    presenter.reply(token.getToken(), commentsBean.getId(),
-                            commentsBean.getStatus().getId(), comment.getText().toString(), 1, 0);
-                    Log.e("转发回复：", commentsBean.getId() + "|" + commentsBean.getStatus().getId() + "|" + comment.getText().toString());
-                } else {
-                    presenter.reply(token.getToken(), commentsBean.getId(),
-                            commentsBean.getStatus().getId(), comment.getText().toString(), 1, 1);
-                    Log.e("不转发回复：", commentsBean.getId() + "|" + commentsBean.getStatus().getId() + "|" + comment.getText().toString());
-                }
+                presenter.reply(token.getToken(), commentsBean.getId(),
+                        commentsBean.getStatus().getId(), comment.getText().toString());
+                Log.e("回复：", commentsBean.getId() + "|" + commentsBean.getStatus().getId() + "|" + comment.getText().toString());
                 break;
             case R.id.at_icon:
                 startActivityForResult(new Intent(ReplyActivity.this, AtActivity.class), AT_FRIENDS);

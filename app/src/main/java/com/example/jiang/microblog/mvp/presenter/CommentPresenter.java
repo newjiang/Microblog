@@ -184,9 +184,9 @@ public class CommentPresenter implements CommentContract.Presenter {
     }
 
     @Override
-    public void create(String access_token, final String comment, long id, int comment_ori) {
+    public void create(String access_token, final String comment, long id) {
         subscription.add(
-                model.create(access_token, comment, id, comment_ori)
+                model.create(access_token, comment, id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -213,9 +213,9 @@ public class CommentPresenter implements CommentContract.Presenter {
     }
 
     @Override
-    public void reply(String access_token, long cid, long id, String comment, int without_mention, int comment_ori) {
+    public void reply(String access_token, long cid, long id, String comment) {
         subscription.add(
-                model.reply(access_token, cid, id, comment, without_mention, comment_ori)
+                model.reply(access_token, cid, id, comment)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

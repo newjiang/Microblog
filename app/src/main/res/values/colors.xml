@@ -6,7 +6,7 @@
 
     <!--换肤-背景颜色-->
     <color name="main_bg">#ffffff</color>
-    <color name="main_bg_default">#ffffffff</color>
+    <color name="main_bg_default">#afffffff</color>
     <color name="main_bg_night">#a7818181</color>
 
     <color name="textblack">#c8000000</color> <!-- 黑色 -->

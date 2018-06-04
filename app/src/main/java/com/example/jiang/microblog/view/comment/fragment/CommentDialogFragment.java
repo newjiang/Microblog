@@ -15,7 +15,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -38,8 +37,6 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
     private EditText commentText;
     //@图标
     private ImageView icAt;
-    //是否转发选择框
-    private CheckBox isRetweeted;
     //发送评论图片
     private ImageView sendCommemt;
 
@@ -73,7 +70,6 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
 
         commentText = (EditText) mDialog.findViewById(R.id.edit_comment);
         icAt = (ImageView) mDialog.findViewById(R.id.at_icon);
-        isRetweeted = (CheckBox) mDialog.findViewById(R.id.is_retweeted);
         sendCommemt = (ImageView) mDialog.findViewById(R.id.send_icon);
 
         fillEditText();
@@ -81,7 +77,6 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
 
         commentText.addTextChangedListener(mTextWatcher);
         icAt.setOnClickListener(this);
-        isRetweeted.setOnClickListener(this);
         sendCommemt.setOnClickListener(this);
         return mDialog;
     }
@@ -148,14 +143,7 @@ public class CommentDialogFragment extends DialogFragment implements View.OnClic
                 startActivityForResult(new Intent(getActivity(), AtActivity.class), AT_FRIENDS);
                 break;
             case R.id.send_icon:
-                int comment_ori;
-                boolean checked = isRetweeted.isChecked();
-                if (checked) {
-                    comment_ori = 0;
-                } else {
-                    comment_ori = 1;
-                }
-                dataCallback.sendComment(commentText.getText().toString(), comment_ori);
+                dataCallback.sendComment(commentText.getText().toString());
                 commentText.setText("");
                 dismiss();
                 break;

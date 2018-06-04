@@ -61,7 +61,6 @@ public class ByMeFragment extends BaseFragment implements CommentContract.View {
     @Override
     public void initData() {
         if (commentsBeen.isEmpty()) {
-            //测试
             presenter.byMeComment(token.getToken(), 1);
         }
     }
